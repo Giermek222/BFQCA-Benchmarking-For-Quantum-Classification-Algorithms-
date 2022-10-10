@@ -1,0 +1,202 @@
+openapi: 3.0.0
+info:
+  title: BFQCA
+  description: Community driven benchmarking platform for quantum classification algorithms
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: GNU GPL 3.0
+    url: https://github.com/Giermek222/BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-/blob/main/LICENSE
+  version: 1.0.0
+servers:
+- url: /v2
+tags:
+- name: benchmarks
+- name: algorithms
+- name: user
+paths:
+  /benchmarks:
+    get:
+      tags:
+      - benchmarks
+      summary: Get benchmark for specific problem
+      operationId: addRecipe
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: problem
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: benchmark information returned
+          content:
+            '*/*':
+              schema:
+                type: object
+                properties:
+                  total_algorithms:
+                    type: number
+                  stats:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/benchmark' 
+        400:
+          description: Bad request query 
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+  
+  /algorithm:
+    post:
+      tags:
+        - algorithms
+      summary: Add algorithm to be tested against specific problem
+      parameters:
+        - name: problem
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: algorithm file
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/algorithm_data'
+      responses:
+        200: 
+          description: algorithm sent
+        403:
+          description: Authorization exception - Incorrect credentials
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+      
+
+  /login:
+    post:
+      tags:
+        - user
+      summary: logging in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  token:
+                    type: "string"
+        403:
+          description: Validation exception - Incorrect credentials
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+  /registration:
+    post:
+      tags:
+        - user
+      summary: register new user
+      requestBody:
+        description: customer data needed to create profile. Password is hashed (SHA256)
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                username:
+                  type: "string"
+                password:
+                  type: "string"
+      responses:
+        200:
+          description: OK
+          content: {}
+        403:
+          description: Username already Exists
+          content: {}
+        500:
+          description: Internal server error
+          content: {}
+
+components:
+  schemas:
+    algorithm_data:
+      type: object
+      properties:
+        designated machine:
+          type: string
+        algorithm name:
+          type: string
+        params:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: number
+    benchmark:
+      type: object
+      properties:
+        problem name:
+          type: string
+        algorithm name:
+          type: string
+        accuracy  learning:
+          type: number
+        accuracy test:
+          type: number
+        loss  learning:
+          type: number
+        loss test:
+          type: number
+        max latency:
+         type: number
+        min latency:
+          type: number
+        avg latency:
+          type: number
+        latency percentile:
+          type: number
+        time:
+          type: number
+        params:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: number
+          

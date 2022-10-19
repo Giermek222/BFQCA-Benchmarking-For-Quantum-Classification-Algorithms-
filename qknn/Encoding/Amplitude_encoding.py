@@ -1,6 +1,6 @@
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister
-from Encoding.circuit_construction import to_basis_gates
+from Encoding.helper import to_basis_gates
 
 
 class Amplitude_Encoding:

@@ -22,8 +22,8 @@ def Create_Swap_test_Circuit(qc_alpha: QuantumCircuit, qc_beta: QuantumCircuit) 
     if not qubits_len == qc_beta.num_qubits:
         raise ValueError(
             f"quantum circuits provided into Swap_1 Test Gate must be equal length. Got alpha with {qc_alpha.num_qubits} qubits, beta with {qc_beta.num_qubits} qubits")
-    for alpha_qubit in range(qubits_len + 1):
-        qc.cswap(0, alpha_qubit, alpha_qubit + qubits_len)
+    for alpha_qubit in range(qubits_len):
+        qc.cswap(0, alpha_qubit+1, alpha_qubit + qubits_len+1)
 
     qc.barrier()
     # measure top qubit

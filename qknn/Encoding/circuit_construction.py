@@ -4,18 +4,6 @@ from qiskit import QuantumCircuit
 from typing import List
 from qiskit.tools import parallel_map
 from quantum_circuits.Swap_test_circuit import Create_Swap_test_Circuit
-from qiskit.converters import circuit_to_dag, dag_to_circuit
-from qiskit.transpiler.passes import Unroller
-
-
-def to_basis_gates(qcircuit, basis=None):
-    """Unrolls a given quantum circuit using basis gates
-    """
-    basis = ['u', 'cx'] if basis is None else basis
-
-    unroller = Unroller(basis=basis)
-    circuit_graph = circuit_to_dag(qcircuit)
-    return dag_to_circuit(unroller.run(circuit_graph))
 
 
 def _construct_circuit(feature_vector_1: np.ndarray,
@@ -34,8 +22,8 @@ def _construct_circuit(feature_vector_1: np.ndarray,
     return Create_Swap_test_Circuit(encoded_data1, encoded_data2)
 
 
-def _construct_circuits(self,
-                        test_data: np.ndarray, training_data: np.ndarray, encoding:Amplitude_Encoding) -> List[QuantumCircuit]:
+def _construct_circuits_from_test_data(
+                                       test_data: np.ndarray, training_data: np.ndarray, encoding:Amplitude_Encoding) -> List[QuantumCircuit]:
     """
     :param test_data: test data to be classified
     :return:

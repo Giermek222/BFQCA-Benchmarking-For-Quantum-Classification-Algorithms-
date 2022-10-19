@@ -1,7 +1,9 @@
 import numpy as np
-def _kneighbors(self,
-                y_train: np.ndarray,
+
+
+def _kneighbors(y_train: np.ndarray,
                 fidelities: np.ndarray,
+                n_neighbours,
                 *,
                 return_indices=False):
     """
@@ -38,9 +40,9 @@ def _kneighbors(self,
     # and dimension
     n_queries, _ = fidelities.shape
     if n_queries == 1:
-        neigh_indices = neigh_indices[-self.n_neighbors:]
+        neigh_indices = neigh_indices[n_neighbours:]
     else:
-        neigh_indices = neigh_indices[:, -self.n_neighbors:]
+        neigh_indices = neigh_indices[:, -n_neighbours:]
 
     neigh_labels = y_train[neigh_indices]
 

@@ -5,26 +5,24 @@ from qiskit.utils import QuantumInstance, algorithm_globals
 
 from Data.iris_data import load_iris
 
-seed = 42
+seed = 1234
 algorithm_globals.random_seed = seed
 
-train_size = 32
-test_size = 16
+train_size = 16
+test_size = 32
 n_features = 4  # all features
 
 # Use iris data set for training and test data
-X_train, X_test, y_train, y_test = load_iris(train_size, test_size, n_features)
+X_train, X_test, y_train, y_test = load_iris(train_size, test_size)
 
 quantum_instance = QuantumInstance(BasicAer.get_backend('qasm_simulator'),
                                    shots=1024,
-                                   optimization_level=1,
-                                   seed_simulator=seed,
-                                   seed_transpiler=seed)
+                                   optimization_level=1)
 
 encoding_map = Amplitude_Encoding(n_features=n_features)
 
 qknn = QKNeighborsClassifier(
-    n_neighbors=3,
+    n_neighbors=4,
     quantum_instance=quantum_instance,
     encoding_map=encoding_map
 )

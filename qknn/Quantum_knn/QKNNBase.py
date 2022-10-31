@@ -7,7 +7,7 @@ from qiskit import QuantumCircuit
 from qiskit.result import Result
 from qiskit.utils import QuantumInstance
 
-from Encoding import Amplitude_encoding
+from Encoding.Amplitude_encoding import Amplitude_Encoding
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class QKNN_Base:
     def __init__(self,
                  n_neighbors: int = 3,
-                 encoding: Amplitude_encoding = None,
+                 encoding: Amplitude_Encoding = None,
                  quantum_instance: QuantumInstance = None):
         """
         :param n_neighbors: number of neighbours that the algorithm will compare new data with
@@ -61,19 +61,18 @@ class QKNN_Base:
                         results: Result,
                         test_size: int) -> np.ndarray:
         """
-
         :param results: results from the simulation
         :param test_size: size of test data
         :return: np.ndarray with fidelities of each test data point
         """
         train_size = self.training_parameters.shape[0]
-        all_counts = results.get_counts()
+        all_counts = results.get_counts()  # List[Dict(str, int)]
 
         fidelities = np.empty(
             shape=(test_size, train_size)
         )
 
-        for i, counts in enumerate(all_counts):
+        for i, (counts) in enumerate(all_counts):
             fidelity = self._compute_fidelity(counts)
             # the i-th subarray of the ndarray `fidelities` contains
             # the values that we will use for the majority voting to
@@ -81,3 +80,7 @@ class QKNN_Base:
             fidelities[i // train_size][i % train_size] = fidelity
 
         return fidelities
+
+
+
+

@@ -41,9 +41,6 @@ class SwaptestCircuit(QuantumCircuit):
         n_total = qc_state_1.num_qubits + qc_state_2.num_qubits
         super().__init__(n_total + 1, 1, name=name)
 
-        # range_qc1 = [i + 1 for i in range(qc_state_1.num_qubits)]
-        # range_qc2 = [i + qc_state_1.num_qubits + 1 for i in range(qc_state_1.num_qubits)]
-
         self.compose(Create_Single_Circuit(qc_state_1, qc_state_2), inplace=True)
 
         # first apply hadamard
@@ -54,6 +51,6 @@ class SwaptestCircuit(QuantumCircuit):
         # eventually reapply hadamard
         self.h(0)
 
-        # Measurement on the auxiliary qubit
         self.barrier()
+        # measure
         self.measure(0, 0)

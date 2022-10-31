@@ -1,6 +1,5 @@
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister
-from Encoding.helper import to_basis_gates
 
 
 class Amplitude_Encoding:
@@ -30,15 +29,12 @@ class Amplitude_Encoding:
 
     def construct_circuit(self, x) -> QuantumCircuit:
         """
-
         :param x: data that we want to encode
         :return:
         """
         self._check_feature_vector(x)
         if self.num_features % 2 != 0:
-            # Number of features should be
-            # a positive power of 2 for `initialize`,
-            # then we add some padding
+            # if not power of 2, pad with zeros
             x = np.pad(x, (0, (1 << self.num_qubits) - len(x)))
 
         state_vector = self.encode(x)
@@ -47,10 +43,6 @@ class Amplitude_Encoding:
         qc = QuantumCircuit(q)
         qc.initialize(state_vector, [q[i] for i in range(self.num_qubits)])
 
-        # convert final circuit to basis gates
-        # to unwrap the "initialize" block
-        qc = to_basis_gates(qc)
-        # remove the reset gates the unroller added
         qc.data = [d for d in qc.data if d[0].name != "reset"]
         return qc
 

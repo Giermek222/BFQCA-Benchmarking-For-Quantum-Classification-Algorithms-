@@ -1,6 +1,7 @@
 package com.example.bfqca_backend.services.interfaces;
 
 import com.example.bfqca_backend.models.business.Algorithm;
+import com.example.bfqca_backend.models.filters.AlgorithmFilter;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,5 +12,5 @@ public interface AlgorithmService {
 
     public void ExecuteAlgorithm(Algorithm algorithm, List<String> params) throws IOException;
 
-
+    public List<Algorithm> GetAlgorithms(int page, int limit, AlgorithmFilter filter);
 }

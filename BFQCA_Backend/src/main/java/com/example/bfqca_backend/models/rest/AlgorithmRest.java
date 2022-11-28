@@ -21,6 +21,9 @@ public class AlgorithmRest implements Serializable {
     @JsonProperty(value = "description")
     private final String description;
 
+    @JsonProperty(value = "problemName")
+    private final String problemName;
+
     @JsonProperty(value = "params")
     private final List<String> params;
 }

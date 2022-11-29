@@ -27,4 +27,4 @@ hs_err_pid*
 BFQCA_Cowskit/build/
 BFQCA_Cowskit/dist/
 BFQCA_Cowskit/cowskit.egg-info/
-BFQCA_Cowskit/__pycache__/
+BFQCA_Cowskit/cowskit/__pycache__/

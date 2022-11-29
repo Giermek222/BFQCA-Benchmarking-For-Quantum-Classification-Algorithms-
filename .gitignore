@@ -21,3 +21,10 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+
+# Cowskit gitignore files
+BFQCA_Cowskit/build/
+BFQCA_Cowskit/dist/
+BFQCA_Cowskit/cowskit.egg-info/
+BFQCA_Cowskit/__pycache__/

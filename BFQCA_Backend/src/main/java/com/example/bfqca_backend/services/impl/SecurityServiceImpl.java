@@ -5,4 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
+    @Override
+    public boolean authenticateUser(String token) {
+        return false;
+    }
 }

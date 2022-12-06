@@ -11,6 +11,6 @@ public interface UserService {
     public void createUser(User user);
     public List<User> getUsers();
     public User getUser(long id);
-    public boolean deleteUser(long id);
+    public void deleteUser(long id);
     public boolean editUser(User user, long id);
 }

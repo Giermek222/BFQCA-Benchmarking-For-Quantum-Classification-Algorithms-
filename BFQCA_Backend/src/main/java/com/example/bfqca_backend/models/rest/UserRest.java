@@ -22,4 +22,5 @@ public class UserRest implements Serializable {
     @NonNull
     @JsonProperty(value = "password")
     private final String password;
+
 }

@@ -1,10 +1,9 @@
-package com.example.bfqca_backend.repositories;
+package com.example.bfqca_backend.repositories.interfaces;
 
 import com.example.bfqca_backend.models.dao.AlgorithmDTO;
-import com.example.bfqca_backend.models.dao.UserDTO;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends PagingAndSortingRepository<UserDTO, Long> {
+public interface AlgorithmRepository extends PagingAndSortingRepository<AlgorithmDTO, Long> {
 }

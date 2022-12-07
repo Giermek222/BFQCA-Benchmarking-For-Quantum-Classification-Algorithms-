@@ -16,21 +16,24 @@ import java.util.List;
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
 
-    private static final String TESTPATH = "./D:\\Wladek\repos\\BFQCA\\BFQCA_Backend\src\\main\resources\\hello.py ";
+    private static final String TESTPATH = "python D:\\Wladek\repos\\BFQCA\\BFQCA_Backend\src\\main\resources\\hello.py ";
     @Autowired
     AlgorithmRepository algorithmRepository;
 
 
     @Override
-    public void ExecuteAlgorithm(Algorithm algorithm, List<String> params) throws IOException {
+    public void ExecuteAlgorithm(Algorithm algorithm, List<String> params, String Code) throws IOException {
 
-        algorithmRepository.save(AlgorithmMapper.mapBusinessToDto(algorithm));
+        algorithmRepository.addAlgorithm(AlgorithmMapper.mapBusinessToDto(algorithm));
+        if (!Code.equals(null)) {
+            createNewPythonScript(Code);
+        }
         runAlgorithm(algorithm, params);
     }
 
     @Override
     public List<Algorithm> GetAlgorithms(int page, int limit, AlgorithmFilter filter) {
-        var algorithms = algorithmRepository.findAll();
+        var algorithms = algorithmRepository.getAlgorithms(filter);
         boolean filteredByName = filter.getAlgorithmname() != null;
         boolean filteredByProblem = filter.getProblem() != null;
         List<Algorithm> returned = new ArrayList<>(){};
@@ -57,5 +60,9 @@ public class AlgorithmServiceImpl implements AlgorithmService {
             command.append(" " + p);
         }
         Runtime.getRuntime().exec(command.toString());
+    }
+
+    private void createNewPythonScript(String Code) {
+       //It should create new file with algorithmin folder with new algorithms. But we have no idea where is that folder right now
     }
 }

@@ -1,9 +1,13 @@
 package com.example.bfqca_backend.repositories.interfaces;
 
 import com.example.bfqca_backend.models.dao.AlgorithmDTO;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.example.bfqca_backend.models.filters.AlgorithmFilter;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface AlgorithmRepository extends PagingAndSortingRepository<AlgorithmDTO, Long> {
+public interface AlgorithmRepository{
+    public void addAlgorithm(AlgorithmDTO algorithmDTO);
+    public List<AlgorithmDTO> getAlgorithms(AlgorithmFilter filter);
 }

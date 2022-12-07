@@ -1,10 +1,7 @@
 package com.example.bfqca_backend.models.business;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.io.Serial;
 
 @Getter
 @Builder(setterPrefix = "with")

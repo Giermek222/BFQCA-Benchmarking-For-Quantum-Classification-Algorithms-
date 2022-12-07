@@ -1,22 +1,21 @@
 package com.example.bfqca_backend.models.dao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
 
-@Entity
-@Table(name = "benchmark")
+@Getter
+@Builder(setterPrefix = "with")
 public class BenchmarkDTO {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private final Long id;
+    private final String problemName;
+    private final String algorithmName;
+    private final Long accuracyLearning;
+    private final Long accuracyTest;
+    private final Long lossTest;
+    private final Long maxLatency;
+    private final Long minLatency;
+    private final Long avgLatency;
+    private final Long latencyPercentile;
+    private final Long time;
 }

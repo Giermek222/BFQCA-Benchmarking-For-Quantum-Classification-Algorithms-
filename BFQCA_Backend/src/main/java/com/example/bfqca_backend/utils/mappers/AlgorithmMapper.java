@@ -23,11 +23,11 @@ public class AlgorithmMapper {
     }
 
     public static AlgorithmDTO mapBusinessToDto(Algorithm algorithm) {
-        AlgorithmDTO algorithmDTO = new AlgorithmDTO();
-        algorithmDTO.setAlgorithmName(algorithm.getAlgorithmName());
-        algorithmDTO.setDescription(algorithm.getDescription());
-        algorithmDTO.setProblemName(algorithm.getProblemName());
-        return algorithmDTO;
+        return AlgorithmDTO.builder()
+                .withAlgorithmName(algorithm.getAlgorithmName())
+                .withProblemName(algorithm.getProblemName())
+                .withDescription(algorithm.getDescription())
+                .build();
     }
 
     public static Algorithm mapDtoToBusiness(AlgorithmDTO algorithmDTO) {

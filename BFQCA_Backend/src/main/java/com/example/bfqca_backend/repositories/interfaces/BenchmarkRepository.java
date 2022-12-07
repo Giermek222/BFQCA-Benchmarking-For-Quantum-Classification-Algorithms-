@@ -1,4 +1,4 @@
-package com.example.bfqca_backend.repositories;
+package com.example.bfqca_backend.repositories.interfaces;
 
 import com.example.bfqca_backend.models.dao.AlgorithmDTO;
 import com.example.bfqca_backend.models.dao.BenchmarkDTO;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,6 +16,10 @@ public class UserRest implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Nullable
+    @JsonProperty(value = "id")
+    private final Long id;
+
     @NonNull
     @JsonProperty(value = "username")
     private final String username;
@@ -22,4 +27,5 @@ public class UserRest implements Serializable {
     @NonNull
     @JsonProperty(value = "password")
     private final String password;
+
 }

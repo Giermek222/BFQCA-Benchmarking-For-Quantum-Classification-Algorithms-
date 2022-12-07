@@ -16,7 +16,6 @@ class AlgorithmMapperTest {
     private final static String ALGORITHM_NAME = "test_algorithm";
     private final static String PROBLEM_NAME = "test_problem";
     private final static String DESCRIPTION = "test_description";
-    private final static long ALGORITHM_ID = 1L;
 
     @BeforeAll
     static void initializeData() {

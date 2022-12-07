@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "algorithm")
+@Table(name = "benchmark")
 public class BenchmarkDTO {
     @Id
     @Column(name = "id", nullable = false)

@@ -10,12 +10,12 @@ public class BenchmarkDTO {
     private final Long id;
     private final String problemName;
     private final String algorithmName;
-    private final Long accuracyLearning;
-    private final Long accuracyTest;
-    private final Long lossTest;
-    private final Long maxLatency;
-    private final Long minLatency;
-    private final Long avgLatency;
-    private final Long latencyPercentile;
-    private final Long time;
+    private final Double accuracyLearning;
+    private final Double accuracyTest;
+    private final Double lossTest;
+    private final Double maxLatency;
+    private final Double minLatency;
+    private final Double avgLatency;
+    private final Double latencyPercentile;
+    private final Double time;
 }

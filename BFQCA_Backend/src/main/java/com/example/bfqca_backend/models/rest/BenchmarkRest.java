@@ -21,27 +21,26 @@ public class BenchmarkRest implements Serializable {
     private final String algorithmName;
 
     @JsonProperty(value = "accuracyLearning")
-    private final Number accuracyLearning;
+    private final Double accuracyLearning;
 
     @JsonProperty(value = "accuracyTest")
-    private final Number accuracyTest;
+    private final Double accuracyTest;
 
     @JsonProperty(value = "lossLearning")
-    private final Number lossTest;
+    private final Double lossTest;
 
     @JsonProperty(value = "maxLatency")
-    private final Number maxLatency;
+    private final Double maxLatency;
 
     @JsonProperty(value = "minLatency")
-    private final Number minLatency;
+    private final Double minLatency;
 
     @JsonProperty(value = "avgLatency")
-    private final Number avgLatency;
+    private final Double avgLatency;
 
     @JsonProperty(value = "latencyPercentile")
-    private final Number latencyPercentile;
+    private final Double latencyPercentile;
 
     @JsonProperty(value = "time")
-    private final Number time;
-
+    private final Double time;
 }

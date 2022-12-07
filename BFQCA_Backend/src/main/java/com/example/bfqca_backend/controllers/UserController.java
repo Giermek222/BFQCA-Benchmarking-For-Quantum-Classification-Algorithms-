@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -37,7 +38,12 @@ public class UserController {
     @GetMapping
     ResponseEntity<Object> getUser(@RequestHeader HttpHeaders headers, @RequestParam(value = "id") int id) {
         User users = userService.getUser(id);
-        return  ResponseEntity.ok(UserMapper.mapBusinesstoRest(users));
+        if (Objects.isNull(users)) {
+            return ResponseEntity.badRequest().build();
+        }
+        else {
+            return  ResponseEntity.ok(UserMapper.mapBusinesstoRest(users));
+        }
     }
 
     @PostMapping("/register")

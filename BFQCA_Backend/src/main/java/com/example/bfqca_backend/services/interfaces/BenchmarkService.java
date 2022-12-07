@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 public interface BenchmarkService {
 
     public void addBenchmark(Benchmark benchmark);
+
+    public void getBenchmarks();
 }

@@ -1,5 +1,6 @@
 package com.example.bfqca_backend.utils.database;
 
+import com.example.bfqca_backend.models.dao.AlgorithmDTO;
 import com.example.bfqca_backend.models.dao.UserDTO;
 
 import java.sql.ResultSet;
@@ -22,5 +23,21 @@ public class DatabaseMapper {
             );
         }
         return usersFromDb;
+    }
+
+    public static List<AlgorithmDTO> getAlgorithms(ResultSet resultSet) throws SQLException {
+        List<AlgorithmDTO> algorithmDTOList = new ArrayList<>();
+
+        while (resultSet.next()) {
+            algorithmDTOList.add(
+                    AlgorithmDTO.builder()
+                            .withId(resultSet.getLong("id"))
+                            .withAlgorithmName(resultSet.getString("algorithmName"))
+                            .withProblemName(resultSet.getString("problemName"))
+                            .withDescription(resultSet.getString("algorithmDescription"))
+                            .build()
+            );
+        }
+        return algorithmDTOList;
     }
 }

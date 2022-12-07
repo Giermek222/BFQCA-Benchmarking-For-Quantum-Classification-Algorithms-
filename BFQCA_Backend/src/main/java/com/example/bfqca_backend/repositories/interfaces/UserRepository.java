@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends IRepository<UserDTO> {
+public interface UserRepository{
 
     public void addUser(UserDTO userDTO);
     public void deleteUser(long idToDelete);

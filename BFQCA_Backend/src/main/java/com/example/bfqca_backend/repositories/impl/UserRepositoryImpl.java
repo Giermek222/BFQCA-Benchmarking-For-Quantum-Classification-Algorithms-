@@ -19,7 +19,6 @@ public class UserRepositoryImpl implements UserRepository {
     public void addUser(UserDTO userDTO) {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
-
             PreparedStatement statement = connection.prepareStatement("insert into user (userName, password, token) values (?,?,?) ");
             statement.setString(1, userDTO.getUserName());
             statement.setString(2, userDTO.getPassword());

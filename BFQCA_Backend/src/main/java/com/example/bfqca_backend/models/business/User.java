@@ -8,6 +8,7 @@ import lombok.NonNull;
 @Getter
 @Builder(setterPrefix = "with")
 public class User {
+    private final Long id;
     private final String username;
     private final String password;
 }

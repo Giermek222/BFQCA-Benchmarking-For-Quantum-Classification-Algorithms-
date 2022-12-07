@@ -10,6 +10,7 @@ public interface UserRepository extends IRepository<UserDTO> {
 
     public void addUser(UserDTO userDTO);
     public void deleteUser(long idToDelete);
-    public UserDTO getUser(long idToDelete);
+    public List<UserDTO> getUser(long id);
     public List<UserDTO> getUsers();
+    public String logUser(String username, String password);
 }

@@ -12,5 +12,6 @@ public interface UserService {
     public List<User> getUsers();
     public User getUser(long id);
     public void deleteUser(long id);
-    public boolean editUser(User user, long id);
+    public void editUser(User user, long id);
+    public String logUser(String username, String password);
 }

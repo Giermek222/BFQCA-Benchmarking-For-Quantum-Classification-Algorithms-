@@ -8,7 +8,7 @@ import com.example.bfqca_backend.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,8 +21,7 @@ public class UserServiceImpl implements UserService {
     public void createUser(User user) {
         try
         {
-            UserDTO userToSave = UserMapper.mapBusinessToDto(user);
-            userRepository.addUser(userToSave);
+            userRepository.addUser(UserMapper.mapBusinessToDto(user));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -30,21 +29,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsers() {
-        return null;
+        List<User> users = new ArrayList<>();
+        for (UserDTO userDTO: userRepository.getUsers()) {
+            users.add(UserMapper.mapDtoToBusiness(userDTO));
+        }
+        return users;
     }
 
     @Override
     public User getUser(long id) {
-        return null;
+        List<UserDTO> users = userRepository.getUser(id);
+        if (users.isEmpty())
+            return null;
+        return UserMapper.mapDtoToBusiness(users.get(0));
+
     }
 
     @Override
     public void deleteUser(long id) {
-        return;
+        userRepository.deleteUser(id);
     }
 
     @Override
-    public boolean editUser(User user, long id) {
-        return false;
+    public void editUser(User user, long id) {
+        deleteUser(id);
+        createUser(user);
+    }
+
+    @Override
+    public String logUser(String username, String password) {
+
+        return userRepository.logUser(username, password);
+
     }
 }

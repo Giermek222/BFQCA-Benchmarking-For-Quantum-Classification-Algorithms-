@@ -2,7 +2,7 @@ package com.example.bfqca_backend.services.impl;
 
 import com.example.bfqca_backend.models.business.Algorithm;
 import com.example.bfqca_backend.models.dao.AlgorithmDTO;
-import com.example.bfqca_backend.models.filters.AlgorithmFilter;
+import com.example.bfqca_backend.models.filters.RestFilter;
 import com.example.bfqca_backend.repositories.interfaces.AlgorithmRepository;
 import com.example.bfqca_backend.services.interfaces.AlgorithmService;
 import com.example.bfqca_backend.utils.mappers.AlgorithmMapper;
@@ -32,20 +32,10 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     }
 
     @Override
-    public List<Algorithm> GetAlgorithms(int page, int limit, AlgorithmFilter filter) {
+    public List<Algorithm> GetAlgorithms(int page, int limit, RestFilter filter) {
         var algorithms = algorithmRepository.getAlgorithms(filter);
-        boolean filteredByName = filter.getAlgorithmname() != null;
-        boolean filteredByProblem = filter.getProblem() != null;
         List<Algorithm> returned = new ArrayList<>(){};
         for(AlgorithmDTO dto : algorithms) {
-            if (filteredByName){
-                if (!dto.getAlgorithmName().equals(filter.getAlgorithmname()))
-                    continue;
-            }
-            if (filteredByProblem) {
-                if (!dto.getProblemName().equals(filter.getProblem()))
-                    continue;
-            }
             returned.add(AlgorithmMapper.mapDtoToBusiness(dto));
         }
         return returned;

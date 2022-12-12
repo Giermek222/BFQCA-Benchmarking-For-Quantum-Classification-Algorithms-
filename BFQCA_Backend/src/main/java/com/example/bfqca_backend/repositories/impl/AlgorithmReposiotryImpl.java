@@ -1,7 +1,7 @@
 package com.example.bfqca_backend.repositories.impl;
 
 import com.example.bfqca_backend.models.dao.AlgorithmDTO;
-import com.example.bfqca_backend.models.filters.AlgorithmFilter;
+import com.example.bfqca_backend.models.filters.RestFilter;
 import com.example.bfqca_backend.repositories.interfaces.AlgorithmRepository;
 import com.example.bfqca_backend.utils.database.DatabaseConnector;
 import com.example.bfqca_backend.utils.database.DatabaseMapper;
@@ -33,7 +33,7 @@ public class AlgorithmReposiotryImpl implements AlgorithmRepository {
     }
 
     @Override
-    public List<AlgorithmDTO> getAlgorithms(AlgorithmFilter filter) {
+    public List<AlgorithmDTO> getAlgorithms(RestFilter filter) {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
             StringBuilder query = new StringBuilder("select * from algorithm");

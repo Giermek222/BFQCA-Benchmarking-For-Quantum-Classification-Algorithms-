@@ -1,6 +1,7 @@
 package com.example.bfqca_backend.utils.database;
 
 import com.example.bfqca_backend.models.dao.AlgorithmDTO;
+import com.example.bfqca_backend.models.dao.BenchmarkDTO;
 import com.example.bfqca_backend.models.dao.UserDTO;
 
 import java.sql.ResultSet;
@@ -39,5 +40,28 @@ public class DatabaseMapper {
             );
         }
         return algorithmDTOList;
+    }
+
+    public static List<BenchmarkDTO> getBenchmarks(ResultSet resultSet) throws SQLException {
+        List<BenchmarkDTO> benchmarkDTOS = new ArrayList<>();
+
+        while (resultSet.next()) {
+            benchmarkDTOS.add(
+                    BenchmarkDTO.builder()
+                            .withId(resultSet.getLong("id"))
+                            .withAlgorithmName(resultSet.getString("algorithmName"))
+                            .withProblemName(resultSet.getString("problemName"))
+                            .withAccuracyLearning(resultSet.getDouble("accuracyLearning"))
+                            .withAccuracyTest(resultSet.getDouble("accuracyTest"))
+                            .withLossTest(resultSet.getDouble("lossTest"))
+                            .withMaxLatency(resultSet.getDouble("maxLatency"))
+                            .withMinLatency(resultSet.getDouble("minLatency"))
+                            .withAvgLatency(resultSet.getDouble("avgLatency"))
+                            .withLatencyPercentile(resultSet.getDouble("latencyPercentile"))
+                            .withTime(resultSet.getDouble("time"))
+                            .build()
+            );
+        }
+        return benchmarkDTOS;
     }
 }

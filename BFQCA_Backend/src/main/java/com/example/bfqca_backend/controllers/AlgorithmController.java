@@ -1,7 +1,7 @@
 package com.example.bfqca_backend.controllers;
 
 import com.example.bfqca_backend.models.business.Algorithm;
-import com.example.bfqca_backend.models.filters.AlgorithmFilter;
+import com.example.bfqca_backend.models.filters.RestFilter;
 import com.example.bfqca_backend.models.rest.AlgorithmRest;
 import com.example.bfqca_backend.services.interfaces.AlgorithmService;
 import com.example.bfqca_backend.services.interfaces.SecurityService;
@@ -35,9 +35,9 @@ public class AlgorithmController {
     public ResponseEntity<Object> getAlgorithm(@RequestHeader HttpHeaders headers,
                                                @RequestParam(value = "page") int page,
                                                @RequestParam(value = "limit") int limit,
-                                               @RequestBody(required = false) AlgorithmFilter filters) {
+                                               @RequestBody(required = false) RestFilter filters) {
         if (Objects.isNull(filters))
-            filters = new AlgorithmFilter();
+            filters = new RestFilter();
         var algorithms = algorithmService.GetAlgorithms(page, limit, filters);
         List<AlgorithmRest> restList = new ArrayList<>();
         for(Algorithm algorithm : algorithms) {

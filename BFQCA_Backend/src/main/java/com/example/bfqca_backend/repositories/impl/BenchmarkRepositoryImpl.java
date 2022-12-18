@@ -5,6 +5,7 @@ import com.example.bfqca_backend.models.filters.RestFilter;
 import com.example.bfqca_backend.repositories.interfaces.BenchmarkRepository;
 import com.example.bfqca_backend.utils.database.DatabaseConnector;
 import com.example.bfqca_backend.utils.database.DatabaseMapper;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-
+@Repository
 public class BenchmarkRepositoryImpl  implements BenchmarkRepository {
     @Override
     public List<BenchmarkDTO> getBenchmarks(RestFilter filter) {

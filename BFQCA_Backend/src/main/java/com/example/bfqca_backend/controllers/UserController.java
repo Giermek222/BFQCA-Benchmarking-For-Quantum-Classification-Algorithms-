@@ -22,7 +22,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
     SecurityService securityService;
 
     @GetMapping("/all")

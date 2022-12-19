@@ -24,8 +24,9 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     @Override
     public void ExecuteAlgorithm(Algorithm algorithm, List<String> params, String Code) throws IOException {
 
-        algorithmRepository.addAlgorithm(AlgorithmMapper.mapBusinessToDto(algorithm));
+
         if (!Code.equals(null)) {
+            algorithmRepository.addAlgorithm(AlgorithmMapper.mapBusinessToDto(algorithm));
             createNewPythonScript(Code);
         }
         runAlgorithm(algorithm, params);

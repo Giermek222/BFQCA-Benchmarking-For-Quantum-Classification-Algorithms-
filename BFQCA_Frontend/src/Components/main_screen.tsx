@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Grid,
@@ -16,14 +16,37 @@ import {
 import g1 from "../images/graph1.png";
 import g2 from "../images/graph2.png";
 import { useNavigate } from "react-router-dom";
-import { algorithmExecuteEndpoint } from "../constants";
+import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../constants";
 const MainScreen: React.FC = () => {
+  const [algorithmNames, setAlgorithmNames] = useState([]);
+  const [chosenAlgorithm, setChosenAlgorithm] = useState("QKNN_DEFAULT");
+  let algorithmIndex = 0;
+  const getAlgorithms = async () => {
+    let benchmarksPromise = axios.post(
+      algorithmsGetEndpoint + "?page=0&limit=5000",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "---",
+        },
+      }
+    );
+    await benchmarksPromise.then((response) => {
+      setAlgorithmNames(response.data);
+    });
+    console.info(algorithmNames);
+  };
+
+  useEffect(() => {
+    getAlgorithms();
+  }, []);
+
   const buttonHandler = () => {
     axios
       .post(
         algorithmExecuteEndpoint,
         {
-          algorithmName: "QKNN",
+          algorithmName: chosenAlgorithm,
           description: "some other algorithm",
           problemName: "Digits",
           code: "penis",
@@ -44,7 +67,12 @@ const MainScreen: React.FC = () => {
         alert(err);
       });
   };
-  let handleSelect = () => {};
+  let handleSelect = (e: any) => {
+    e.preventDefault();
+    let algorithmAtIndex = algorithmNames.at(e.target.value)!;
+    setChosenAlgorithm(algorithmAtIndex["algorithmName"]);
+    console.info("New chosen algorithm is " + chosenAlgorithm);
+  };
   const navigate = useNavigate();
   return (
     <Grid container style={{ height: "100vh" }}>
@@ -58,8 +86,13 @@ const MainScreen: React.FC = () => {
               id="id1"
               onChange={handleSelect}
             >
-              <MenuItem value={1}>Quantum KNN</MenuItem>
-              <MenuItem value={2}>Quantum CNN</MenuItem>
+              {algorithmNames.map((algorithm) => (
+                <MenuItem value={algorithmIndex++}>
+                  {algorithm["algorithmName"]}
+                </MenuItem>
+              ))}
+              {/* <MenuItem value={1}>Quantum KNN</MenuItem>
+              <MenuItem value={2}>Quantum CNN</MenuItem> */}
             </Select>
           </FormControl>
         </Grid>

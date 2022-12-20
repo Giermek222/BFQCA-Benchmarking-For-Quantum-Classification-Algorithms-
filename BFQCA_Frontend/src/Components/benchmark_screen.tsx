@@ -12,21 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { benchmarkGetEndpoint } from "../constants";
-function createData(
-  algorithmName: string,
-  dataset1: number,
-  dataset2: number,
-  dataset3: number
-) {
-  return { algorithmName, dataset1, dataset2, dataset3 };
-}
 
-const rows = [
-  createData("Test Data - maybe GET didn't work", 78, 56, 90),
-  createData("CNN with quantum layers", 34, 76, 78),
-  createData("Quantum DNN", 12, 45, 32),
-  createData("Quantum genetic algorithm", 43, 70, 67),
-];
 const ColumnsNames = new Map([
   ["algorithmName", "Algorithm"],
   ["problemName", "Dataset"],
@@ -43,6 +29,7 @@ const ColumnArray = Array.from(ColumnsNames.values());
 const BenchmarkNameDefinitons = Array.from(ColumnsNames.keys());
 const BenchmarkScreen: React.FC = () => {
   const [benchmarks, setbenchmarks] = useState([]);
+
   const getBenchmarkdata = async () => {
     let benchmarksPromise = axios.post(
       benchmarkGetEndpoint + "?page=0&limit=5000",
@@ -79,10 +66,6 @@ const BenchmarkScreen: React.FC = () => {
             {benchmarks.map((row: any) => (
               <TableRow>
                 {BenchmarkNameDefinitons.map((ColumnName) => {
-                  console.info(ColumnName);
-
-                  console.info(row);
-
                   if (row[ColumnName] != null) {
                     //has this parameter
                     return <TableCell>{row[ColumnName]}</TableCell>;

@@ -16,13 +16,12 @@ import {
 import g1 from "../images/graph1.png";
 import g2 from "../images/graph2.png";
 import { useNavigate } from "react-router-dom";
-
-const backend = "http://localhost:3001";
+import { algorithmExecuteEndpoint } from "../constants";
 const MainScreen: React.FC = () => {
   const buttonHandler = () => {
     axios
       .post(
-        backend + "/algorithms/execute",
+        algorithmExecuteEndpoint,
         {
           algorithmName: "QKNN",
           description: "some other algorithm",

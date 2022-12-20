@@ -9,7 +9,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { benchmarkGetEndpoint } from "../constants";
 function createData(
   algorithmName: string,
   dataset1: number,
@@ -20,13 +22,47 @@ function createData(
 }
 
 const rows = [
-  createData("Quantum KNN", 78, 56, 90),
+  createData("Test Data - maybe GET didn't work", 78, 56, 90),
   createData("CNN with quantum layers", 34, 76, 78),
   createData("Quantum DNN", 12, 45, 32),
   createData("Quantum genetic algorithm", 43, 70, 67),
 ];
-
+const ColumnsNames = new Map([
+  ["algorithmName", "Algorithm"],
+  ["problemName", "Dataset"],
+  ["accuracyLearning", "Learning Accuracy"],
+  ["accuracyTest", "Test Accuracy"],
+  ["lossTest", "Test Loss"],
+  ["time", "Time"],
+  ["maxLatency", "Max Latency"],
+  ["minLatency", "Min Latency"],
+  ["avgLatency", "Avg Latency"],
+  ["latencyPercentile", "Latency Percentile"],
+]);
+const ColumnArray = Array.from(ColumnsNames.values());
+const BenchmarkNameDefinitons = Array.from(ColumnsNames.keys());
 const BenchmarkScreen: React.FC = () => {
+  const [benchmarks, setbenchmarks] = useState([]);
+  const getBenchmarkdata = async () => {
+    let benchmarksPromise = axios.post(
+      benchmarkGetEndpoint + "?page=0&limit=5000",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "---",
+        },
+      }
+    );
+
+    await benchmarksPromise.then((response) => {
+      setbenchmarks(response.data);
+    });
+  };
+
+  useEffect(() => {
+    getBenchmarkdata();
+  }, []);
+
   const navigate = useNavigate();
   return (
     <div>
@@ -34,24 +70,27 @@ const BenchmarkScreen: React.FC = () => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Algorithms</TableCell>
-              <TableCell align="right">Irises</TableCell>
-              <TableCell align="right">Digits</TableCell>
-              <TableCell align="right">Dogs vs Cats</TableCell>
+              {ColumnArray.map((column) => (
+                <TableCell>{column}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.algorithmName}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.algorithmName}
-                </TableCell>
-                <TableCell align="right">{row.dataset1}%</TableCell>
-                <TableCell align="right">{row.dataset3}%</TableCell>
-                <TableCell align="right">{row.dataset2}%</TableCell>
+            {benchmarks.map((row: any) => (
+              <TableRow>
+                {BenchmarkNameDefinitons.map((ColumnName) => {
+                  console.info(ColumnName);
+
+                  console.info(row);
+
+                  if (row[ColumnName] != null) {
+                    //has this parameter
+                    return <TableCell>{row[ColumnName]}</TableCell>;
+                  } else {
+                    //this parameter is missing
+                    return <TableCell>---</TableCell>;
+                  }
+                })}
               </TableRow>
             ))}
           </TableBody>

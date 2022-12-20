@@ -27,6 +27,9 @@ public class BenchmarkRest implements Serializable {
     private final Double accuracyTest;
 
     @JsonProperty(value = "lossLearning")
+    private final Double lossLearning;
+
+    @JsonProperty(value = "lossTest")
     private final Double lossTest;
 
     @JsonProperty(value = "maxLatency")

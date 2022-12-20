@@ -1,0 +1,5 @@
+quantumAI/build/
+quantumAI/dist/
+quantumAI/cowskit.egg-info/
+log_*.txt
+__pycache__/

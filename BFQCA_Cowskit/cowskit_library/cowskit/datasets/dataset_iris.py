@@ -2,6 +2,9 @@ from typing import List
 from cowskit.datasets.dataset import Dataset
 import numpy as np
 
+import sklearn.datasets as skdatasets
+from sklearn.model_selection import train_test_split
+
 class IrisDataset(Dataset):
     def __init__(self, path:str , validation_split: float = 0.1, test_split: float = 0.1, shuffle: bool = True):
         self.path = path
@@ -18,7 +21,6 @@ class IrisDataset(Dataset):
             self.labels = np.zeros(shape=self.output_shape, dtype=np.int32)
 
             for idx, entry in enumerate(iris_array):
-                print(entry)
                 values = entry.replace('\n','').split(',')
                 data = np.array([float(v) for v in values[:-1]])
                 label = values[-1]
@@ -38,3 +40,12 @@ class IrisDataset(Dataset):
 
     def ok(self):
         super().ok()
+
+    def load_iris(self, train_size:int, test_size:int):
+
+        X, Y= skdatasets.load_iris(return_X_y=True)
+        # X, y = shuffle(X, y)
+
+        return train_test_split(
+            X, Y, test_size=test_size, train_size=train_size, random_state=42
+        )

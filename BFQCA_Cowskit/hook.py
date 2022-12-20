@@ -63,11 +63,12 @@ def main():
 
     algorithm.encoding = encoding
 
+    start = time.time()
     X_train, X_test, y_train, y_test = dataset.load_iris(16,32)
 
-    start = time.time()
     algorithm.fit(X_train, y_train)
     end = time.time()
+    total_time = round(end-start, 2)
 
     URL = "https://localhost/benchmarks/execute"
 
@@ -82,12 +83,12 @@ def main():
         "accuracy test": algorithm.score(X_test, y_test),
         "loss learning": 0,
         "loss test": 0,
-        "max latency": end - start,
-        "min latency": end - start,
-        "avg latency": end - start,
+        "max latency": total_time,
+        "min latency": total_time,
+        "avg latency": total_time,
         "latency percentile": "100",
-        "time": end - start,
-        "params": params
+        "time": total_time
+        #"params": params
     }
 
     BODY = json.dumps(body, indent=4)

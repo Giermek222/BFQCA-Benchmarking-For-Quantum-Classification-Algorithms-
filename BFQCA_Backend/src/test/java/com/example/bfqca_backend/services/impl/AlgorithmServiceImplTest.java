@@ -30,7 +30,7 @@ class AlgorithmServiceImplTest {
     @Test
     @DisplayName("Execute algorithm without code")
     void executeAlgorithmNoCode() {
-        
+
     }
 
     @Test

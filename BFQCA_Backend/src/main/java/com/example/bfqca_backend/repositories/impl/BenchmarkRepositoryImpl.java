@@ -65,11 +65,12 @@ public class BenchmarkRepositoryImpl  implements BenchmarkRepository {
             statement.setDouble(3, benchmarkDTO.getAccuracyLearning());
             statement.setDouble(4, benchmarkDTO.getAccuracyTest());
             statement.setDouble(5, benchmarkDTO.getLossTest());
-            statement.setDouble(6, benchmarkDTO.getMaxLatency());
-            statement.setDouble(7, benchmarkDTO.getMinLatency());
-            statement.setDouble(8, benchmarkDTO.getAvgLatency());
-            statement.setDouble(9, benchmarkDTO.getLatencyPercentile());
-            statement.setDouble(10, benchmarkDTO.getTime());
+            statement.setDouble(6, benchmarkDTO.getLossLearning());
+            statement.setDouble(7, benchmarkDTO.getMaxLatency());
+            statement.setDouble(8, benchmarkDTO.getMinLatency());
+            statement.setDouble(9, benchmarkDTO.getAvgLatency());
+            statement.setDouble(10, benchmarkDTO.getLatencyPercentile());
+            statement.setDouble(11, benchmarkDTO.getTime());
             statement.executeUpdate();
             connection.close();
 

@@ -31,7 +31,19 @@ public class BenchmarkController {
 
     @PostMapping("/execute")
     public ResponseEntity<Object> addBenchmarks(@RequestHeader HttpHeaders headers, @RequestBody @Valid BenchmarkRest benchmarkRest) throws IOException {
-
+        if (Objects.isNull(benchmarkRest.getAlgorithmName()) ||
+                Objects.isNull(benchmarkRest.getProblemName()) ||
+                Objects.isNull(benchmarkRest.getAccuracyLearning()) ||
+                Objects.isNull(benchmarkRest.getAccuracyTest()) ||
+                Objects.isNull(benchmarkRest.getAvgLatency()) ||
+                Objects.isNull(benchmarkRest.getMaxLatency()) ||
+                Objects.isNull(benchmarkRest.getMinLatency()) ||
+                Objects.isNull(benchmarkRest.getLatencyPercentile()) ||
+                Objects.isNull(benchmarkRest.getLossLearning()) ||
+                Objects.isNull(benchmarkRest.getLossTest()) ||
+                Objects.isNull(benchmarkRest.getTime())) {
+            return ResponseEntity.badRequest().build();
+        }
         benchmarkService.addBenchmark(BenchmarkMapper.mapRestToBusiness(benchmarkRest));
         return  ResponseEntity.ok().build();
     }

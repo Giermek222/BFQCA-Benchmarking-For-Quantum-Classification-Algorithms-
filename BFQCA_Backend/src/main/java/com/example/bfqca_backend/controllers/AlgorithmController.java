@@ -32,6 +32,9 @@ public class AlgorithmController {
 
     @PostMapping("/execute")
     public ResponseEntity<Object> addAlgorithm(@RequestHeader HttpHeaders headers, @RequestBody @Valid AlgorithmRest algorithmRest) throws IOException {
+        if (Objects.isNull(algorithmRest.getAlgorithmName()) || Objects.isNull(algorithmRest.getDescription()) || Objects.isNull(algorithmRest.getProblemName())  ) {
+            return ResponseEntity.badRequest().build();
+        }
         algorithmService.ExecuteAlgorithm(AlgorithmMapper.mapRestToBusiness(algorithmRest), algorithmRest.getParams(), algorithmRest.getCode());
         return  ResponseEntity.ok().build();
     }

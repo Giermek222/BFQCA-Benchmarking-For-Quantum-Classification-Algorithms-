@@ -31,46 +31,47 @@ class AlgorithmMapperTest {
                 .withProblemName(PROBLEM_NAME)
                 .build();
 
-        algorithmDTO = new AlgorithmDTO();
-        algorithmDTO.setAlgorithmName(ALGORITHM_NAME);
-        algorithmDTO.setDescription(DESCRIPTION);
-        algorithmDTO.setProblemName(PROBLEM_NAME);
+        algorithmDTO = AlgorithmDTO.builder()
+                .withAlgorithmName(ALGORITHM_NAME)
+                .withDescription(DESCRIPTION)
+                .withProblemName(PROBLEM_NAME)
+                .build();
     }
 
     @Test
     void should_MapFromRestToBusiness() {
         Algorithm test = AlgorithmMapper.mapRestToBusiness(algorithmRest);
 
-        Assertions.assertEquals(test.getAlgorithmName(), ALGORITHM_NAME);
-        Assertions.assertEquals(test.getDescription(), DESCRIPTION);
-        Assertions.assertEquals(test.getProblemName(), PROBLEM_NAME);
+        Assertions.assertEquals(ALGORITHM_NAME, test.getAlgorithmName());
+        Assertions.assertEquals(DESCRIPTION, test.getDescription());
+        Assertions.assertEquals(PROBLEM_NAME, test.getProblemName());
     }
 
     @Test
     void should_MapFromDtoToBusiness() {
         Algorithm test = AlgorithmMapper.mapDtoToBusiness(algorithmDTO);
 
-        Assertions.assertEquals(test.getAlgorithmName(), ALGORITHM_NAME);
-        Assertions.assertEquals(test.getDescription(), DESCRIPTION);
-        Assertions.assertEquals(test.getProblemName(), PROBLEM_NAME);
+        Assertions.assertEquals(ALGORITHM_NAME, test.getAlgorithmName());
+        Assertions.assertEquals(DESCRIPTION, test.getDescription());
+        Assertions.assertEquals(PROBLEM_NAME, test.getProblemName());
     }
 
     @Test
     void should_MapFromBusinessToRest() {
         AlgorithmRest test = AlgorithmMapper.mapBusinessToRest(algorithm);
 
-        Assertions.assertEquals(test.getAlgorithmName(), ALGORITHM_NAME);
-        Assertions.assertEquals(test.getDescription(), DESCRIPTION);
-        Assertions.assertEquals(test.getProblemName(), PROBLEM_NAME);
+        Assertions.assertEquals(ALGORITHM_NAME, test.getAlgorithmName());
+        Assertions.assertEquals(DESCRIPTION, test.getDescription());
+        Assertions.assertEquals(PROBLEM_NAME, test.getProblemName());
     }
 
     @Test
     void should_MapFromBusinessToDTo() {
         AlgorithmDTO test = AlgorithmMapper.mapBusinessToDto(algorithm);
 
-        Assertions.assertEquals(test.getAlgorithmName(), ALGORITHM_NAME);
-        Assertions.assertEquals(test.getDescription(), DESCRIPTION);
-        Assertions.assertEquals(test.getProblemName(), PROBLEM_NAME);
+        Assertions.assertEquals(ALGORITHM_NAME, test.getAlgorithmName());
+        Assertions.assertEquals(DESCRIPTION, test.getDescription());
+        Assertions.assertEquals(PROBLEM_NAME, test.getProblemName());
     }
 
 }

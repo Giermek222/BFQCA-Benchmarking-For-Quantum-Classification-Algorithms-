@@ -12,6 +12,7 @@ public class BenchmarkDTO {
     private final String algorithmName;
     private final Double accuracyLearning;
     private final Double accuracyTest;
+    private final Double lossLearning;
     private final Double lossTest;
     private final Double maxLatency;
     private final Double minLatency;

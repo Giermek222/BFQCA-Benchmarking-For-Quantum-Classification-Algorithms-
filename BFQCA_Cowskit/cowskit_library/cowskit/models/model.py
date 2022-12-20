@@ -1,10 +1,11 @@
 import qiskit
 from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit
 from cowskit.datasets.dataset import Dataset
+from cowskit.algorithms.algorithm import Algorithm
 from cowskit.encodings.encoding import Encoding
 from cowskit.utils.decorators import *
 
-class Model:
+class Model(Algorithm):
     def __init__(self, dataset: Dataset = None, encoding: Encoding = None) -> None:
         self.dataset = dataset
         self.encoding = encoding
@@ -17,7 +18,6 @@ class Model:
         #self.build_circuit()
         
     def infer(self):
-
         for value, label in iter(self.dataset):
             encoded_value = self.encoding.encode(value)
             #self.register._bits = encoded_value

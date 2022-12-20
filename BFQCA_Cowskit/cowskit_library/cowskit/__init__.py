@@ -4,3 +4,4 @@ import cowskit.encodings as encodings
 import cowskit.models as models
 import cowskit.utils as utils
 import cowskit.files as files
+import cowskit.algorithms as algorithms

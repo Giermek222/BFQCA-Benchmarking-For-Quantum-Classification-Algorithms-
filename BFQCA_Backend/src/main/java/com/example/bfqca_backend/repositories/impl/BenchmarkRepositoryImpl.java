@@ -57,9 +57,9 @@ public class BenchmarkRepositoryImpl  implements BenchmarkRepository {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
             PreparedStatement statement = connection.prepareStatement(
-                    "insert into " +
+                    "insert into benchmark " +
                             "(algorithmName, problemName, accuracyLearning, accuracyTest, lossTest, lossLearning, maxLatency, minLatency, avgLatency, latencyPercentile, time) " +
-                            "values (?,?,?,?,?,?,?,?,?,?) ");
+                            "values (?,?,?,?,?,?,?,?,?,?,?) ");
             statement.setString(1, benchmarkDTO.getAlgorithmName());
             statement.setString(2, benchmarkDTO.getProblemName());
             statement.setDouble(3, benchmarkDTO.getAccuracyLearning());

@@ -46,10 +46,10 @@ const MainScreen: React.FC = () => {
       .post(
         algorithmExecuteEndpoint,
         {
-          algorithmName: chosenAlgorithm,
+          algorithmName: "chosenAlgorithm4",
           description: "some other algorithm",
-          problemName: "Digits",
-          code: "penis",
+          problemName: "Irises",
+          code: "fallus",
           params: ["param1", "param2"],
         },
 

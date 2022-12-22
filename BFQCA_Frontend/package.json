@@ -49,5 +49,10 @@
   },
   "devDependencies": {
     "react-router-dom": "^6.4.3"
+  },
+  "jest": {
+    "transform": {
+      "\\.[jt]sx?$": "babel-jest"
+    }
   }
 }

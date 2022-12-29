@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { userRegisterEndpoint } from "../constants";
 import axios from "axios";
+import md5 from 'md5';
 
 const RegisterSection: React.FC = () => {
   const navigate = useNavigate();
@@ -21,20 +22,13 @@ const RegisterSection: React.FC = () => {
             name="username"
             className="login-input"
             placeholder="Username"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             style={{ padding: 10 }}
           />
         </div>
 
-        <div className="input-group">
-          <TextField
-            variant="standard"
-            type="text"
-            name="email"
-            className="login-input"
-            placeholder="Email"
-            style={{ padding: 10 }}
-          />
-        </div>
 
         <div className="input-group">
           <TextField
@@ -43,6 +37,9 @@ const RegisterSection: React.FC = () => {
             name="password"
             className="login-input"
             placeholder="Password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             style={{ padding: 10 }}
           />
         </div>
@@ -57,7 +54,7 @@ const RegisterSection: React.FC = () => {
                 userRegisterEndpoint,
                 {
                   username: email,
-                  password: password,
+                  password: md5(password),
                 },
 
                 {

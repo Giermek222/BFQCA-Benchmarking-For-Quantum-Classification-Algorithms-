@@ -2,20 +2,20 @@ import React, { useState } from "react";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
-import { setTokenValue } from "../redux_functions/security_token_slice";
-import { userLoginEndpoint } from "../constants";
+import { setTokenValue } from "../../redux_functions/security_token_slice";
+import { userLoginEndpoint } from "../../constants";
 import axios from "axios";
 import md5 from 'md5';
 
-const LoginSection: React.FC = () => {
+type Props = {
+  logged: (value: boolean) => void;
+};
+
+const LoginSection: React.FC<Props> = ({ logged }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const submitLogin = () => {
-    // navigate("/main");
-    setTokenValue(1);
-  };
+
+
   return (
     <div className="inner-container">
       <div className="box">
@@ -70,7 +70,8 @@ const LoginSection: React.FC = () => {
               .then((response: any) => {
                 console.log(response);
                 if (response.status === 200) {
-                  navigate("/main");
+                  logged(true);
+                  setTokenValue(response.data)
                 }
               })
               .catch((err: any) => {

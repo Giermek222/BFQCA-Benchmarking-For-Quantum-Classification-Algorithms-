@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render, screen } from "@testing-library/react";
-import LoginScreen from "../Components/login_screen";
+import LoginScreen from "../Components/login/login_screen";
 import { Router, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 describe("Login Screen", () => {

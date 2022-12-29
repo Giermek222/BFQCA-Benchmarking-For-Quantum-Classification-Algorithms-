@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./styles.css";
+import "../styles.css";
 import {
   Grid,
   TextField,
@@ -19,7 +19,7 @@ import {
 import g1 from "../images/graph1.png";
 import g2 from "../images/graph2.png";
 import { useNavigate } from "react-router-dom";
-import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../constants";
+import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
 const MainScreen: React.FC = () => {
   const [algorithmNames, setAlgorithmNames] = useState([]);
   const [chosenAlgorithm, setChosenAlgorithm] = useState("QKNN_DEFAULT");

@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { benchmarkGetEndpoint } from "../constants";
+import { benchmarkGetEndpoint } from "../../constants";
 
 const ColumnsNames = new Map([
   ["algorithmName", "Algorithm"],

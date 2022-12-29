@@ -19,10 +19,11 @@ public class UserRepositoryImpl implements UserRepository {
     public void addUser(UserDTO userDTO) {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
-            PreparedStatement statement = connection.prepareStatement("insert into user (userName, password, token) values (?,?,?) ");
+            PreparedStatement statement = connection.prepareStatement("insert into users (userName, password, token) values (?,?,?) ");
             statement.setString(1, userDTO.getUserName());
             statement.setString(2, userDTO.getPassword());
             statement.setString(3, userDTO.getToken());
+            System.out.println(statement.toString());
             statement.executeUpdate();
             connection.close();
 
@@ -35,7 +36,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteUser(long idToDelete) {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
-            PreparedStatement statement = connection.prepareStatement("delete from user where id = ? ");
+            PreparedStatement statement = connection.prepareStatement("delete from users where id = ? ");
             statement.setLong(1, idToDelete);
             statement.executeUpdate();
             connection.close();
@@ -48,7 +49,7 @@ public class UserRepositoryImpl implements UserRepository {
     public List<UserDTO> getUser(long idToDelete) {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
-            PreparedStatement statement = connection.prepareStatement("select * from user where id = ? ");
+            PreparedStatement statement = connection.prepareStatement("select * from users where id = ? ");
             statement.setLong(1, idToDelete);
             ResultSet resultSet = statement.executeQuery();
             List<UserDTO> userDTOS = DatabaseMapper.getUsers(resultSet);
@@ -65,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
     public List<UserDTO> getUsers() {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
-            PreparedStatement statement = connection.prepareStatement("select * from user");
+            PreparedStatement statement = connection.prepareStatement("select * from users");
             ResultSet resultSet = statement.executeQuery();
             List<UserDTO> userDTOS = DatabaseMapper.getUsers(resultSet);
             connection.close();
@@ -81,7 +82,7 @@ public class UserRepositoryImpl implements UserRepository {
         try {
             String loginResult;
             Connection connection = DatabaseConnector.connectToDatabase();
-            PreparedStatement statement = connection.prepareStatement("select * from user where userName = ? and password = ?");
+            PreparedStatement statement = connection.prepareStatement("select * from users where userName = ? and password = ?");
             statement.setString(1, username);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();

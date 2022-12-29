@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { setTokenValue } from "../redux_functions/security_token_slice";
 import { userLoginEndpoint } from "../constants";
 import axios from "axios";
+import md5 from 'md5';
 
 const LoginSection: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -56,7 +57,7 @@ const LoginSection: React.FC = () => {
                 userLoginEndpoint,
                 {
                   username: email,
-                  password: password,
+                  password: md5(password),
                 },
 
                 {

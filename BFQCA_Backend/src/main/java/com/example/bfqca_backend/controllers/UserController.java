@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> logUser(@RequestHeader HttpHeaders headers, @RequestParam(value = "username") String username, @RequestParam(value = "password") String password) {
-        String result = userService.logUser(username, password);
+    public ResponseEntity<Object> logUser(@RequestHeader HttpHeaders headers, @RequestBody @Valid UserRest userRest) {
+        String result = userService.logUser(userRest.getUsername(), userRest.getPassword());
         if (result.equals("")) {
             return ResponseEntity.status(401).build();
         }

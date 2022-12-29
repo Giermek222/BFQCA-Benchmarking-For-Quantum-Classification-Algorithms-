@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DatabaseConnector {
 
-    static final String URL = "jdbc:mysql://localhost:3306/Cookly?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true";
+    static final String URL = "jdbc:sqlserver://bfqca-server.database.windows.net:1433;database=BFQCA";
     static final String USERNAME = "adam";
-    static final String PASSWORD = "piwo1";
+    static final String PASSWORD = "4b0UllpYIivqC2Q1wE34";
 
     public static Connection connectToDatabase() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);

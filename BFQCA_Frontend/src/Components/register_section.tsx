@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { userRegisterEndpoint } from "../constants";
+import axios from "axios";
 
 const RegisterSection: React.FC = () => {
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <div className="inner-container">
       <div className="box">
@@ -48,7 +52,30 @@ const RegisterSection: React.FC = () => {
           className="login-btn"
           style={{ margin: 10 }}
           onClick={() => {
-            navigate("/main");
+            axios
+              .post(
+                userRegisterEndpoint,
+                {
+                  username: email,
+                  password: password,
+                },
+
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "---",
+                  },
+                }
+              )
+              .then((response: any) => {
+                console.log(response);
+                if (response.status === 200) {
+                  navigate("/main");
+                }
+              })
+              .catch((err: any) => {
+                alert(err);
+              });
           }}
         >
           Register

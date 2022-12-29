@@ -3,7 +3,7 @@ import { Grid } from "@mui/material";
 import { Container } from "@mui/system";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import bg from "../images/blue.png";
+import bg from "../../images/blue.png";
 import LoginSection from "./login_section";
 import RegisterSection from "./register_section";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -11,7 +11,11 @@ import Divider from "@mui/material/Divider";
 
 const lightBlue = "#1976D2";
 var fontStyle = "serif";
-const LoginScreen: React.FC = () => {
+type Props = {
+  logged: (value: boolean) => void;
+};
+
+const LoginScreen: React.FC<Props> = ({ logged }) => {
   // Set slices for login data
   const handleLogin = async (event: any) => {};
   const [isLoginOpen, setIsLoginOpen] = useState(true);
@@ -195,7 +199,7 @@ const LoginScreen: React.FC = () => {
                 height: "50vh",
               }}
             >
-              {isLoginOpen ? <LoginSection /> : <RegisterSection />}
+              {isLoginOpen ? <LoginSection logged={logged} /> : <RegisterSection/>}
             </div>
           </div>
           <div />

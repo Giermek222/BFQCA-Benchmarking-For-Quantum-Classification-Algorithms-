@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { userRegisterEndpoint } from "../constants";
+import { userRegisterEndpoint } from "../../constants";
 import axios from "axios";
 import md5 from 'md5';
 
@@ -64,12 +64,6 @@ const RegisterSection: React.FC = () => {
                   },
                 }
               )
-              .then((response: any) => {
-                console.log(response);
-                if (response.status === 200) {
-                  navigate("/main");
-                }
-              })
               .catch((err: any) => {
                 alert(err);
               });

@@ -86,7 +86,7 @@ public class UserRepositoryImpl implements UserRepository {
             statement.setString(1, username);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            if (resultSet.next()) { 
                 loginResult = resultSet.getString("token");
             }
             else {

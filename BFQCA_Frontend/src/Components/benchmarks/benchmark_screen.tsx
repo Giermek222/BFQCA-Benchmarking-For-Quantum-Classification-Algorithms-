@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { benchmarkGetEndpoint } from "../../constants";
+import { tokenSlice } from "../../redux_functions/security_token_slice";
 
 const ColumnsNames = new Map([
   ["algorithmName", "Algorithm"],
@@ -36,6 +37,7 @@ const BenchmarkScreen: React.FC = () => {
       {
         headers: {
           "Content-Type": "application/json",
+          "Security-Token":tokenSlice.name,
           Authorization: "---",
         },
       }

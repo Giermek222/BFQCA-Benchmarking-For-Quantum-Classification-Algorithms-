@@ -4,7 +4,6 @@ import "../styles.css";
 import {
   Grid,
   TextField,
-  Button,
   Select,
   MenuItem,
   FormHelperText,
@@ -15,15 +14,34 @@ import {
   CardActions,
   Typography,
 } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 
-import g1 from "../images/graph1.png";
-import g2 from "../images/graph2.png";
 import { useNavigate } from "react-router-dom";
 import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
+import { tokenSlice } from "../../redux_functions/security_token_slice";
+import { width } from "@mui/system";
+
+const ColumnsNames = new Map([
+  ["algorithmName", "Algorithm"],
+  ["problemName", "Dataset"],
+  ["description", "Description"],
+  ["Execute", "Execute"],
+]);
+const ColumnArray = Array.from(ColumnsNames.values());
+const AlgorithmNameDefinitons = Array.from(ColumnsNames.keys());
+const lightBlue = "#1976D2";
+
 const MainScreen: React.FC = () => {
   const [algorithmNames, setAlgorithmNames] = useState([]);
-  const [chosenAlgorithm, setChosenAlgorithm] = useState("QKNN_DEFAULT");
-  let algorithmIndex = 0;
+  const [showAlgorithms, setShowAlgorithms] = useState(true)
+
   const getAlgorithms = async () => {
     let benchmarksPromise = axios.post(
       algorithmsGetEndpoint + "?page=0&limit=5000",
@@ -44,15 +62,15 @@ const MainScreen: React.FC = () => {
     getAlgorithms();
   }, []);
 
-  const buttonHandler = (algName: string) => {
+  const buttonHandler = (algName: string, probName: string) => {
     axios
       .post(
         algorithmExecuteEndpoint,
         {
           algorithmName: algName,
           description: "default description",
-          problemName: "Irises",
-          code: "fallus",
+          problemName: probName,
+          code: "",
           params: [],
         },
 
@@ -71,10 +89,62 @@ const MainScreen: React.FC = () => {
       });
   };
 
-  const navigate = useNavigate();
+
   return (
+    <div>
+      {showAlgorithms ?
+        <div>
+          <TableContainer sx={{ width: '75%' }} component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  {ColumnArray.map((column) => (
+                    <TableCell>{column}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {algorithmNames.map((row: any) => (
+                  <TableRow>
+                    {AlgorithmNameDefinitons.map((ColumnName) => {
+                      if (row[ColumnName] != null) {
+                        //has this parameter
+                        return <TableCell>{row[ColumnName]}</TableCell>;
+                      }
+                      else {
+                        //artificial empty parameter for button
+                        return <TableCell>
+                          <Button
+                            color="success"
+                            variant="contained"
+                            onClick={() => {
+                              buttonHandler(row['algorithmName'], row['problemName']);
+                            }}
+                            sx={{ width: 200, margin: 2 }}>Execute
+                          </Button>
+                        </TableCell>
+                      }
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        :
+        <div>
+
+        </div>
+      }
+    </div>
+
+
+
+
+
+    /*
     <Grid container style={{ height: "100vh", justifyContent: "flex-start" }}>
-      {/* <Grid item xs={4}></Grid> */}
+      { <Grid item xs={4}></Grid> }
       {algorithmNames.map((algorithm) => (
         <Grid container xs={12}>
           <Card
@@ -118,6 +188,7 @@ const MainScreen: React.FC = () => {
         BENCHMARK
       </Button>
     </Grid>
+    */
   );
 };
 

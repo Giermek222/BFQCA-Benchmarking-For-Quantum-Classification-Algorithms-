@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles.css";
-import {
-  Grid,
-  TextField,
-  Select,
-  MenuItem,
-  FormHelperText,
-  InputLabel,
-  FormControl,
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-} from "@mui/material";
+import AlgorithmModel from "./algorthm_model";
+import AddAlgorithmScreen from "./add_algorithm_screen";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -23,20 +13,17 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
-import { useNavigate } from "react-router-dom";
 import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
 import { tokenSlice } from "../../redux_functions/security_token_slice";
-import { width } from "@mui/system";
+import TextField from "@mui/material/TextField";
 
-const ColumnsNames = new Map([
-  ["algorithmName", "Algorithm"],
-  ["problemName", "Dataset"],
-  ["description", "Description"],
-  ["Execute", "Execute"],
-]);
-const ColumnArray = Array.from(ColumnsNames.values());
-const AlgorithmNameDefinitons = Array.from(ColumnsNames.keys());
-const lightBlue = "#1976D2";
+const divStyle = {
+  display: 'flex',
+  alignItems: 'center'
+};
+
+const ColumnArray = Array.from(AlgorithmModel.values());
+const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
 
 const MainScreen: React.FC = () => {
   const [algorithmNames, setAlgorithmNames] = useState([]);
@@ -130,10 +117,41 @@ const MainScreen: React.FC = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setShowAlgorithms(false);
+            }}
+            sx={{ width: 300, height: 60, margin: 2 }}
+          >
+            Add new Algorithm
+          </Button>
         </div>
         :
         <div>
-
+          <AddAlgorithmScreen/>
+          <div>
+            <div style={divStyle}>
+              <div>Algorithm Name </div> <TextField variant="outlined" />
+            </div>
+            <div style={divStyle}>
+              <div>Problem Name </div><TextField  variant="outlined" />
+            </div>
+            <div style={divStyle}>
+              <div>Description </div> <TextField   variant="outlined" />
+            </div>
+            <div style={divStyle}>
+              <div>Code </div> <TextField   variant="outlined" />
+            </div>
+          </div>
+          <Button            
+            variant="contained"
+            onClick={() => {
+              setShowAlgorithms(true);
+            }}
+            sx={{ width: 300, height: 60, margin: 2 }}>
+            Sumbmit
+          </Button>
         </div>
       }
     </div>

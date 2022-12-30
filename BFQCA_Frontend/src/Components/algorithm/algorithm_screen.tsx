@@ -15,19 +15,14 @@ import Button from "@mui/material/Button";
 
 import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
 import { tokenSlice } from "../../redux_functions/security_token_slice";
-import TextField from "@mui/material/TextField";
 
-const divStyle = {
-  display: 'flex',
-  alignItems: 'center'
-};
 
 const ColumnArray = Array.from(AlgorithmModel.values());
 const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
 
 const MainScreen: React.FC = () => {
   const [algorithmNames, setAlgorithmNames] = useState([]);
-  const [showAlgorithms, setShowAlgorithms] = useState(true)
+  const [showAlgorithms, setShowAlgorithms] = useState(true);
 
   const getAlgorithms = async () => {
     let benchmarksPromise = axios.post(
@@ -128,31 +123,7 @@ const MainScreen: React.FC = () => {
           </Button>
         </div>
         :
-        <div>
-          <AddAlgorithmScreen/>
-          <div>
-            <div style={divStyle}>
-              <div>Algorithm Name </div> <TextField variant="outlined" />
-            </div>
-            <div style={divStyle}>
-              <div>Problem Name </div><TextField  variant="outlined" />
-            </div>
-            <div style={divStyle}>
-              <div>Description </div> <TextField   variant="outlined" />
-            </div>
-            <div style={divStyle}>
-              <div>Code </div> <TextField   variant="outlined" />
-            </div>
-          </div>
-          <Button            
-            variant="contained"
-            onClick={() => {
-              setShowAlgorithms(true);
-            }}
-            sx={{ width: 300, height: 60, margin: 2 }}>
-            Sumbmit
-          </Button>
-        </div>
+          <AddAlgorithmScreen showAlgorithm={setShowAlgorithms}/>  
       }
     </div>
 

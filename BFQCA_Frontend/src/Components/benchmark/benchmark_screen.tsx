@@ -13,21 +13,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { benchmarkGetEndpoint } from "../../constants";
 import { tokenSlice } from "../../redux_functions/security_token_slice";
+import BenchmarkModel from "./benchmark_model";
 
-const ColumnsNames = new Map([
-  ["algorithmName", "Algorithm"],
-  ["problemName", "Dataset"],
-  ["accuracyLearning", "Learning Accuracy"],
-  ["accuracyTest", "Test Accuracy"],
-  ["lossTest", "Test Loss"],
-  ["time", "Time"],
-  ["maxLatency", "Max Latency"],
-  ["minLatency", "Min Latency"],
-  ["avgLatency", "Avg Latency"],
-  ["latencyPercentile", "Latency Percentile"],
-]);
-const ColumnArray = Array.from(ColumnsNames.values());
-const BenchmarkNameDefinitons = Array.from(ColumnsNames.keys());
+
+const ColumnArray = Array.from(BenchmarkModel.values());
+const BenchmarkNameDefinitons = Array.from(BenchmarkModel.keys());
 const BenchmarkScreen: React.FC = () => {
   const [benchmarks, setbenchmarks] = useState([]);
 
@@ -81,15 +71,6 @@ const BenchmarkScreen: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate("/main");
-        }}
-        sx={{ width: 300, margin: 2 }}
-      >
-        BACK
-      </Button>
     </div>
   );
 };

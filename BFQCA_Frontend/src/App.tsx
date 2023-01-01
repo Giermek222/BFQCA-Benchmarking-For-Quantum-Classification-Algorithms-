@@ -3,8 +3,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import LoginScreen from "./Components/login/login_screen";
 import { Routes, Route } from "react-router-dom";
-import AlgorithmScreen from "./Components/benchmarks/main_screen";
-import BenchmarkScreen from "./Components/benchmarks/benchmark_screen";
+import AlgorithmScreen from "./Components/algorithm/algorithm_screen";
+import BenchmarkScreen from "./Components/benchmark/benchmark_screen";
 import Header from "./Components/Header";
 function App() {
   const [logged, setLogged] = useState(false);

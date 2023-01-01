@@ -1,1 +1,1 @@
-print('Hello, World!')
+file = open("Jedziemy z kurwami.py", "x")

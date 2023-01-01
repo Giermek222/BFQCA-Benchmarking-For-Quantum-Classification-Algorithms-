@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BenchmarkServiceImpl implements BenchmarkService {
@@ -39,7 +40,10 @@ public class BenchmarkServiceImpl implements BenchmarkService {
             }
             returned.add(BenchmarkMapper.mapDtoToBusiness(dto));
         }
-        return returned;
+        return returned.stream()
+                .skip((long) page * limit)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
 }

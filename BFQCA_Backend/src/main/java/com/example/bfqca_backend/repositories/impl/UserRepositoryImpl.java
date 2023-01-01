@@ -26,7 +26,6 @@ public class UserRepositoryImpl implements UserRepository {
             System.out.println(statement.toString());
             statement.executeUpdate();
             connection.close();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -55,8 +54,6 @@ public class UserRepositoryImpl implements UserRepository {
             List<UserDTO> userDTOS = DatabaseMapper.getUsers(resultSet);
             connection.close();
             return  userDTOS;
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

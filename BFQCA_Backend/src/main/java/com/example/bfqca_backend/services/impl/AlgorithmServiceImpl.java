@@ -9,14 +9,21 @@ import com.example.bfqca_backend.utils.mappers.AlgorithmMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
 
-    private static final String TESTPATH = "python D:\\Wladek\repos\\BFQCA\\BFQCA_Backend\src\\main\resources\\hello.py ";
+    private static final String TESTPATH = "python D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Backend\\src\\main\\resources\\hello.py ";
+    private static final String ALGORITMPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Backend\\src\\main\\resources\\python_algorithms\\";
     @Autowired
     AlgorithmRepository algorithmRepository;
 
@@ -27,8 +34,9 @@ public class AlgorithmServiceImpl implements AlgorithmService {
 
         if (!Code.equals(null)) {
             algorithmRepository.addAlgorithm(AlgorithmMapper.mapBusinessToDto(algorithm));
-            createNewPythonScript(Code);
+            createNewPythonScript(Code, algorithm.getAlgorithmName());
         }
+
         runAlgorithm(algorithm, params);
     }
 
@@ -39,21 +47,29 @@ public class AlgorithmServiceImpl implements AlgorithmService {
         for(AlgorithmDTO dto : algorithms) {
             returned.add(AlgorithmMapper.mapDtoToBusiness(dto));
         }
-        return returned;
+        return returned.stream()
+                .skip((long) page * limit)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     private void runAlgorithm(Algorithm algorithm, List<String> params) throws IOException {
         StringBuilder command = new StringBuilder();
         command.append(TESTPATH);
-        command.append(algorithm.getProblemName());
-        command.append(" ");
-        for (String p : params) {
-            command.append(" " + p);
-        }
         Runtime.getRuntime().exec(command.toString());
     }
 
-    private void createNewPythonScript(String Code) {
-       //It should create new file with algorithmin folder with new algorithms. But we have no idea where is that folder right now
+    private void createNewPythonScript(String Code, String algorithmName) {
+        try {
+            File myObj = new File( ALGORITMPATH + algorithmName + ".py");
+            if (myObj.createNewFile()) {
+                Files.writeString(myObj.toPath(), Code);
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }

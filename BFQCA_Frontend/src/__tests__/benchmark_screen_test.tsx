@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import axios from "axios";
 import React from "react";
 import * as router from "react-router-dom";
-import BenchmarkScreen from "../Components/benchmarks/benchmark_screen";
+import BenchmarkScreen from "../Components/benchmark/benchmark_screen";
 
 describe("BenchmarkScreen", () => {
   const mockBenchmarks = [

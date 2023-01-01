@@ -14,16 +14,73 @@ import axios from "axios";
 import { benchmarkGetEndpoint } from "../../constants";
 import { tokenSlice } from "../../redux_functions/security_token_slice";
 import BenchmarkModel from "./benchmark_model";
+import { Menu, MenuItem } from "@mui/material";
+
+const divStyle = {
+  display: 'flex',
+  alignItems: 'center'
+};
 
 
+
+
+const BenchmarkScreen: React.FC = () => {
+const [benchmarks, setbenchmarks] = useState([]);
+const [page, setPage] = useState(0);
+const [limit, setLimit] = useState(5);
+const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+const limitOpen = Boolean(anchorEl);
 const ColumnArray = Array.from(BenchmarkModel.values());
 const BenchmarkNameDefinitons = Array.from(BenchmarkModel.keys());
-const BenchmarkScreen: React.FC = () => {
-  const [benchmarks, setbenchmarks] = useState([]);
 
-  const getBenchmarkdata = async () => {
+const handleLimitClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  setAnchorEl(event.currentTarget);
+};
+const handleLimitClose = () => {
+  setAnchorEl(null);
+};
+const setNewLimitTo5 = () => {
+  SetNewLimit(5);
+  handleLimitClose();
+}
+const setNewLimitTo10 = () => {
+  SetNewLimit(10)
+  handleLimitClose();
+}
+const setNewLimitTo20 = () => {
+  SetNewLimit(20);
+  handleLimitClose();
+}
+
+const SetNewLimit = (newLimit : number) => {
+  let currentlyShownAlgorithm = page * limit;
+  let newPage = Math.floor(currentlyShownAlgorithm / newLimit);
+  setPage(newPage);
+  setLimit(newLimit);
+  getBenchmarkdata(newPage, newLimit);
+}
+const changePage = (increase: boolean) => {
+  if (increase) {
+    setPage(page + 1)
+    getBenchmarkdata(page + 1, limit);
+  }
+  else {
+    if (page > 0) {
+      setPage(page - 1)
+      getBenchmarkdata(page - 1, limit);
+    }
+    else {
+      setPage(page)
+      getBenchmarkdata(page, limit);
+    }
+  }
+
+}
+
+
+  const getBenchmarkdata = async (page: number, limit: number) => {
     let benchmarksPromise = axios.post(
-      benchmarkGetEndpoint + "?page=0&limit=5000",
+      benchmarkGetEndpoint + "?page="+page+"&limit="+limit,
       {
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +96,7 @@ const BenchmarkScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    getBenchmarkdata();
+    getBenchmarkdata(page, limit);
   }, []);
 
   const navigate = useNavigate();
@@ -71,6 +128,53 @@ const BenchmarkScreen: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      
+      <div style={divStyle}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                changePage(false)
+              }}
+              sx={{ width: 75, height: 20, margin: 2 }}
+
+            >
+              previous
+            </Button>
+            page : {page}
+            <Button
+              variant="contained"
+              onClick={() => {
+                changePage(true)
+              }}
+              sx={{ width: 75, height: 20, margin: 2 }}
+            >
+              next
+            </Button>
+            <div>
+              <Button
+                id="basic-button"
+                aria-controls={limitOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={limitOpen ? 'true' : undefined}
+                onClick={handleLimitClick}
+              >
+                Set Limit
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={limitOpen}
+                onClose={handleLimitClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem onClick={setNewLimitTo5}>5 algorithms per page:</MenuItem>
+                <MenuItem onClick={setNewLimitTo10}>10 algorithms per page:</MenuItem>
+                <MenuItem onClick={setNewLimitTo20}>20 algorithms per page:</MenuItem>
+              </Menu>
+            </div>
+          </div>
     </div>
   );
 };

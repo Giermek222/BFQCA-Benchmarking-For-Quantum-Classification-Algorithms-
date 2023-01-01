@@ -15,7 +15,12 @@ import Button from "@mui/material/Button";
 
 import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
 import { tokenSlice } from "../../redux_functions/security_token_slice";
+import { Menu, MenuItem } from "@mui/material";
 
+const divStyle = {
+  display: 'flex',
+  alignItems: 'center'
+};
 
 const ColumnArray = Array.from(AlgorithmModel.values());
 const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
@@ -23,14 +28,50 @@ const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
 const MainScreen: React.FC = () => {
   const [algorithmNames, setAlgorithmNames] = useState([]);
   const [showAlgorithms, setShowAlgorithms] = useState(true);
+  const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(5);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const limitOpen = Boolean(anchorEl);
 
-  const getAlgorithms = async () => {
+  useEffect(() => {
+    getAlgorithms(page, limit);
+  }, []);
+
+
+  const handleLimitClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleLimitClose = () => {
+    setAnchorEl(null);
+  };
+  const setNewLimitTo5 = () => {
+    SetNewLimit(5);
+    handleLimitClose();
+  }
+  const setNewLimitTo10 = () => {
+    SetNewLimit(10)
+    handleLimitClose();
+  }
+  const setNewLimitTo20 = () => {
+    SetNewLimit(20);
+    handleLimitClose();
+  }
+
+  const SetNewLimit = (newLimit : number) => {
+    let currentlyShownAlgorithm = page * limit;
+    let newPage = Math.floor(currentlyShownAlgorithm / newLimit);
+    setPage(newPage);
+    setLimit(newLimit);
+    getAlgorithms(newPage, newLimit);
+  }
+
+  const getAlgorithms = async (pageToget: number, limitToSet : number) => {
     let benchmarksPromise = axios.post(
-      algorithmsGetEndpoint + "?page=0&limit=5000",
+      algorithmsGetEndpoint + "?page=" + pageToget + "&limit=" + limitToSet,
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "---",
+          header1: 'Bearer ' + tokenSlice
         },
       }
     );
@@ -40,22 +81,34 @@ const MainScreen: React.FC = () => {
     console.info(algorithmNames);
   };
 
-  useEffect(() => {
-    getAlgorithms();
-  }, []);
 
-  const buttonHandler = (algName: string, probName: string) => {
+
+  const changePage = (increase: boolean) => {
+    if (increase) {
+      setPage(page + 1)
+      getAlgorithms(page + 1, limit);
+    }
+    else {
+      if (page > 0) {
+        setPage(page - 1)
+        getAlgorithms(page - 1, limit);
+      }
+      else {
+        setPage(page)
+        getAlgorithms(page, limit);
+      }
+    }
+
+  }
+
+  const executeAlgorithm = (algName: string, probName: string) => {
     axios
       .post(
         algorithmExecuteEndpoint,
         {
           algorithmName: algName,
-          description: "default description",
           problemName: probName,
-          code: "",
-          params: [],
         },
-
         {
           headers: {
             "Content-Type": "application/json",
@@ -100,7 +153,7 @@ const MainScreen: React.FC = () => {
                             color="success"
                             variant="contained"
                             onClick={() => {
-                              buttonHandler(row['algorithmName'], row['problemName']);
+                              executeAlgorithm(row['algorithmName'], row['problemName']);
                             }}
                             sx={{ width: 200, margin: 2 }}>Execute
                           </Button>
@@ -121,63 +174,61 @@ const MainScreen: React.FC = () => {
           >
             Add new Algorithm
           </Button>
+
+
+
+          <div style={divStyle}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                changePage(false)
+              }}
+              sx={{ width: 75, height: 20, margin: 2 }}
+
+            >
+              previous
+            </Button>
+            page : {page}
+            <Button
+              variant="contained"
+              onClick={() => {
+                changePage(true)
+              }}
+              sx={{ width: 75, height: 20, margin: 2 }}
+            >
+              next
+            </Button>
+            <div>
+              <Button
+                id="basic-button"
+                aria-controls={limitOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={limitOpen ? 'true' : undefined}
+                onClick={handleLimitClick}
+              >
+                Set Limit
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={limitOpen}
+                onClose={handleLimitClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem onClick={setNewLimitTo5}>5 algorithms per page:</MenuItem>
+                <MenuItem onClick={setNewLimitTo10}>10 algorithms per page:</MenuItem>
+                <MenuItem onClick={setNewLimitTo20}>20 algorithms per page:</MenuItem>
+              </Menu>
+            </div>
+          </div>
         </div>
         :
-          <AddAlgorithmScreen showAlgorithm={setShowAlgorithms}/>  
+        <AddAlgorithmScreen showAlgorithm={setShowAlgorithms} />
       }
     </div>
 
-
-
-
-
-    /*
-    <Grid container style={{ height: "100vh", justifyContent: "flex-start" }}>
-      { <Grid item xs={4}></Grid> }
-      {algorithmNames.map((algorithm) => (
-        <Grid container xs={12}>
-          <Card
-            sx={{
-              minWidth: "100%",
-              maxHeight: 90,
-            }}
-          >
-            <CardContent>
-              <CardActions sx={{ justifyContent: "space-between" }}>
-                <Typography variant="h4" sx={{ width: 400 }}>
-                  {algorithm["algorithmName"]}
-                </Typography>
-
-                <Typography variant="h5" align="center" sx={{ width: 400 }}>
-                  {algorithm["problemName"]}
-                </Typography>
-
-                <Button
-                  color="success"
-                  variant="contained"
-                  onClick={() => {
-                    buttonHandler(algorithm["algorithmName"]);
-                  }}
-                  sx={{ width: 200, margin: 2 }}
-                >
-                  RUN
-                </Button>
-              </CardActions>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate("/benchmark");
-        }}
-        sx={{ width: 300, height: 60, margin: 2 }}
-      >
-        BENCHMARK
-      </Button>
-    </Grid>
-    */
   );
 };
 

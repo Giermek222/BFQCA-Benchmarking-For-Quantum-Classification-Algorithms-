@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import { setTokenValue } from "../../redux_functions/security_token_slice";
 import { algorithmExecuteEndpoint, userLoginEndpoint } from "../../constants";
 import axios from "axios";
-import md5 from 'md5';
 
 const divStyle = {
   display: 'flex',
@@ -47,10 +46,10 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm }) => {
       .post(
         algorithmExecuteEndpoint,
         {
-          algorithmName: algName != "" ? algName : null,
-          description: description != "" ? description : null,
-          problemName: problemName != "" ? problemName : null,
-          code: code != "" ? code : null,
+          algorithmName: algName !== "" ? algName : null,
+          description: description !== "" ? description : null,
+          problemName: problemName !== "" ? problemName : null,
+          code: code !== "" ? code : null,
           params: [],
         },
 
@@ -93,7 +92,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm }) => {
           value={code}
           onChange={onChangeCode} />
       </div>
-
+      <div style={divStyle}>
       <Button
         variant="contained"
         onClick={() => {
@@ -103,6 +102,16 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm }) => {
         sx={{ width: 300, height: 60, margin: 2 }}>
         Sumbmit
       </Button>
+      <Button
+        variant="contained"
+        onClick={() => {
+          showAlgorithm(true);
+        }}
+        sx={{ width: 300, height: 60, margin: 2 }}>
+        Back
+      </Button>
+      </div>
+
     </div>
   );
 };

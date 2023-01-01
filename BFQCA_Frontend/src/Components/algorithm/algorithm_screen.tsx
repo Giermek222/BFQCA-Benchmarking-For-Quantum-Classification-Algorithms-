@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import "../styles.css";
 import AlgorithmModel from "./algorthm_model";
@@ -15,7 +15,7 @@ import Button from "@mui/material/Button";
 
 import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
 import { tokenSlice } from "../../redux_functions/security_token_slice";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, TextField } from "@mui/material";
 
 
 
@@ -24,13 +24,16 @@ const MainScreen: React.FC = () => {
   const [showAlgorithms, setShowAlgorithms] = useState(true);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(5);
+  const [algorithmFilter, setAlgorithmFilter] = useState("");
+  const [problemFilter, setProblemFilter] = useState("")
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const limitOpen = Boolean(anchorEl);
   const ColumnArray = Array.from(AlgorithmModel.values());
   const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
 
   useEffect(() => {
-    getAlgorithms(page, limit);
+    getAlgorithms(page, limit, algorithmFilter, problemFilter);
   }, []);
 
 
@@ -58,13 +61,18 @@ const MainScreen: React.FC = () => {
     let newPage = Math.floor(currentlyShownAlgorithm / newLimit);
     setPage(newPage);
     setLimit(newLimit);
-    getAlgorithms(newPage, newLimit);
+    getAlgorithms(newPage, newLimit, algorithmFilter, problemFilter);
   }
 
-  const getAlgorithms = async (pageToget: number, limitToSet: number) => {
+  const getAlgorithms = async (pageToget: number, limitToSet: number, algFilter: String, probFilter : String) => {
     let benchmarksPromise = axios.post(
       algorithmsGetEndpoint + "?page=" + pageToget + "&limit=" + limitToSet,
       {
+        algorithmName: algFilter,
+        problem: probFilter,
+      },
+      {
+        
         headers: {
           "Content-Type": "application/json",
           header1: 'Bearer ' + tokenSlice
@@ -82,16 +90,16 @@ const MainScreen: React.FC = () => {
   const changePage = (increase: boolean) => {
     if (increase) {
       setPage(page + 1)
-      getAlgorithms(page + 1, limit);
+      getAlgorithms(page + 1, limit, algorithmFilter, problemFilter);
     }
     else {
       if (page > 0) {
         setPage(page - 1)
-        getAlgorithms(page - 1, limit);
+        getAlgorithms(page - 1, limit, algorithmFilter, problemFilter);
       }
       else {
         setPage(page)
-        getAlgorithms(page, limit);
+        getAlgorithms(page, limit, algorithmFilter, problemFilter);
       }
     }
 
@@ -120,11 +128,33 @@ const MainScreen: React.FC = () => {
       });
   };
 
+  const filterByAlgorithm = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedAlgorithm: string = e.target.value;
+    setAlgorithmFilter(searchedAlgorithm);
+    getAlgorithms(page, limit, searchedAlgorithm, problemFilter);
+  }
+
+  const filterByProblem = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedProblem: string = e.target.value;
+    setProblemFilter(searchedProblem)
+    getAlgorithms(page, limit, algorithmFilter, searchedProblem);
+  }
 
   return (
     <div className="pageDivStyle">
       {showAlgorithms ?
         <div>
+          Filters
+          <div>
+            Algorithm Name:
+            <TextField
+                      value={algorithmFilter}
+                      onChange={filterByAlgorithm}></TextField> 
+            Problem Name:
+            <TextField
+                      value={problemFilter}
+                      onChange={filterByProblem}></TextField>
+          </div>
           <TableContainer sx={{ width: '75%' }} component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
@@ -139,7 +169,6 @@ const MainScreen: React.FC = () => {
                   <TableRow>
                     {AlgorithmNameDefinitons.map((ColumnName) => {
                       if (row[ColumnName] != null) {
-                        //has this parameter
                         return <TableCell>{row[ColumnName]}</TableCell>;
                       }
                       else {

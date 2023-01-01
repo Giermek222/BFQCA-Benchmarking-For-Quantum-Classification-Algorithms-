@@ -7,12 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { benchmarkGetEndpoint } from "../../constants";
 import { tokenSlice } from "../../redux_functions/security_token_slice";
 import BenchmarkModel from "./benchmark_model";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, TextField } from "@mui/material";
 
 
 
@@ -20,6 +20,8 @@ const BenchmarkScreen: React.FC = () => {
   const [benchmarks, setbenchmarks] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(5);
+  const [algorithmFilter, setAlgorithmFilter] = useState("");
+  const [problemFilter, setProblemFilter] = useState("")
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const limitOpen = Boolean(anchorEl);
   const ColumnArray = Array.from(BenchmarkModel.values());
@@ -49,30 +51,46 @@ const BenchmarkScreen: React.FC = () => {
     let newPage = Math.floor(currentlyShownAlgorithm / newLimit);
     setPage(newPage);
     setLimit(newLimit);
-    getBenchmarkdata(newPage, newLimit);
+    getBenchmarkdata(newPage, newLimit, algorithmFilter, problemFilter);
   }
   const changePage = (increase: boolean) => {
     if (increase) {
       setPage(page + 1)
-      getBenchmarkdata(page + 1, limit);
+      getBenchmarkdata(page + 1, limit, algorithmFilter, problemFilter);
     }
     else {
       if (page > 0) {
         setPage(page - 1)
-        getBenchmarkdata(page - 1, limit);
+        getBenchmarkdata(page - 1, limit, algorithmFilter, problemFilter);
       }
       else {
         setPage(page)
-        getBenchmarkdata(page, limit);
+        getBenchmarkdata(page, limit, algorithmFilter, problemFilter);
       }
     }
 
   }
 
+  const filterByAlgorithm = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedAlgorithm: string = e.target.value;
+    setAlgorithmFilter(searchedAlgorithm);
+    getBenchmarkdata(page, limit, searchedAlgorithm, problemFilter);
+  }
 
-  const getBenchmarkdata = async (page: number, limit: number) => {
+  const filterByProblem = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedProblem: string = e.target.value;
+    setProblemFilter(searchedProblem)
+    getBenchmarkdata(page, limit, algorithmFilter, searchedProblem);
+  }
+
+
+  const getBenchmarkdata = async (page: number, limit: number, algFilter: String, probFilter: String) => {
     let benchmarksPromise = axios.post(
       benchmarkGetEndpoint + "?page=" + page + "&limit=" + limit,
+      {
+        algorithmName: algFilter,
+        problem: probFilter,
+      },
       {
         headers: {
           "Content-Type": "application/json",
@@ -88,11 +106,22 @@ const BenchmarkScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    getBenchmarkdata(page, limit);
+    getBenchmarkdata(page, limit, algorithmFilter, problemFilter);
   }, []);
 
   return (
     <div>
+      Filters
+          <div>
+            Algorithm Name:
+            <TextField
+                      value={algorithmFilter}
+                      onChange={filterByAlgorithm}></TextField> 
+            Problem Name:
+            <TextField
+                      value={problemFilter}
+                      onChange={filterByProblem}></TextField>
+          </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

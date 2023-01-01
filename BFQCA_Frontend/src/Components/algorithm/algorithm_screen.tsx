@@ -17,13 +17,7 @@ import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants
 import { tokenSlice } from "../../redux_functions/security_token_slice";
 import { Menu, MenuItem } from "@mui/material";
 
-const divStyle = {
-  display: 'flex',
-  alignItems: 'center'
-};
 
-const ColumnArray = Array.from(AlgorithmModel.values());
-const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
 
 const MainScreen: React.FC = () => {
   const [algorithmNames, setAlgorithmNames] = useState([]);
@@ -32,6 +26,8 @@ const MainScreen: React.FC = () => {
   const [limit, setLimit] = useState(5);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const limitOpen = Boolean(anchorEl);
+  const ColumnArray = Array.from(AlgorithmModel.values());
+  const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
 
   useEffect(() => {
     getAlgorithms(page, limit);
@@ -57,7 +53,7 @@ const MainScreen: React.FC = () => {
     handleLimitClose();
   }
 
-  const SetNewLimit = (newLimit : number) => {
+  const SetNewLimit = (newLimit: number) => {
     let currentlyShownAlgorithm = page * limit;
     let newPage = Math.floor(currentlyShownAlgorithm / newLimit);
     setPage(newPage);
@@ -65,7 +61,7 @@ const MainScreen: React.FC = () => {
     getAlgorithms(newPage, newLimit);
   }
 
-  const getAlgorithms = async (pageToget: number, limitToSet : number) => {
+  const getAlgorithms = async (pageToget: number, limitToSet: number) => {
     let benchmarksPromise = axios.post(
       algorithmsGetEndpoint + "?page=" + pageToget + "&limit=" + limitToSet,
       {
@@ -126,7 +122,7 @@ const MainScreen: React.FC = () => {
 
 
   return (
-    <div>
+    <div className="pageDivStyle">
       {showAlgorithms ?
         <div>
           <TableContainer sx={{ width: '75%' }} component={Paper}>
@@ -177,7 +173,7 @@ const MainScreen: React.FC = () => {
 
 
 
-          <div style={divStyle}>
+          <div className="columnDivStyle">
             <Button
               variant="contained"
               onClick={() => {

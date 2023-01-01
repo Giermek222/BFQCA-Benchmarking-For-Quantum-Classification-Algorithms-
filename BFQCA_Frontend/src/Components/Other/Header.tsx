@@ -14,7 +14,7 @@ const Header = () => {
             Benchmakrs
             </NavLink>
             {" | "}
-            <NavLink to="/idk" style ={activeStyle}>
+            <NavLink to="/problems" style ={activeStyle}>
             Problems
             </NavLink>
         </nav>

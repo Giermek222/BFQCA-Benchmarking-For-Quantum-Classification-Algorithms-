@@ -2,14 +2,12 @@ import React, { ChangeEvent, useState } from "react";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import "../styles.css";
 import { setTokenValue } from "../../redux_functions/security_token_slice";
 import { algorithmExecuteEndpoint, userLoginEndpoint } from "../../constants";
 import axios from "axios";
+import { Menu, MenuItem } from "@mui/material";
 
-const divStyle = {
-  display: 'flex',
-  alignItems: 'center'
-};
 
 type Props = {
   showAlgorithm: (value: boolean) => void;
@@ -18,17 +16,15 @@ type Props = {
 const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm }) => {
   const [algName, setAlgName] = useState("");
   const [problemName, setProblemName] = useState("");
+  const [problemDescription, setProblemDescription] = useState("Select problem")
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const limitOpen = Boolean(anchorEl);
 
   const onChangeAlgorithmName = (e: ChangeEvent<HTMLInputElement>) => {
     const searchTitle: string = e.target.value;
     setAlgName(searchTitle);
-  };
-
-  const onChangeProblemName = (e: ChangeEvent<HTMLInputElement>) => {
-    const searchTitle: string = e.target.value;
-    setProblemName(searchTitle);
   };
 
   const onChangeDescription = (e: ChangeEvent<HTMLInputElement>) => {
@@ -68,48 +64,96 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm }) => {
       });
   };
 
+  const handleLimitClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const setProblemToPenguins = () => {
+    setProblemName("Palmer Penguin")
+    setProblemDescription("Palmer Penguin")
+    handleLimitClose()
+  }
+  const setProblemToIris = () => {
+    setProblemName("Iris")
+    setProblemDescription("Iris")
+    handleLimitClose()
+  }
+  const setProblemToDiabetes = () => {
+    setProblemName("Pima Indians Diabetic")
+    setProblemDescription("Pima Indians Diabetic")
+    handleLimitClose()
+  }
+
+  const handleLimitClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div>
-      <div style={divStyle}>
-        <div>Algorithm Name </div> <TextField variant="outlined"
+      <div className="columnDivStyle">
+        <div>Algorithm Name </div>
+        <TextField variant="outlined"
           value={algName}
           onChange={onChangeAlgorithmName} />
       </div>
-      <div style={divStyle}>
-        <div>Problem Name </div><TextField variant="outlined"
-          value={problemName}
-          onChange={onChangeProblemName} />
+      <div className="columnDivStyle">
+        <div>Problem Name </div>
+        <div>
+          <Button
+            id="basic-button"
+            aria-controls={limitOpen ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={limitOpen ? 'true' : undefined}
+            onClick={handleLimitClick}
+          >
+            {problemDescription}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={limitOpen}
+            onClose={handleLimitClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
+            <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
+            <MenuItem onClick={setProblemToDiabetes}>Pima Indians Diabetic</MenuItem>
+          </Menu>
+        </div>
       </div>
-      <div style={divStyle}>
-        <div>Description </div>
-        <TextField 
+      <div className="columnDivStyle">
+        Description 
+        <TextField
           variant="outlined"
           value={description}
           onChange={onChangeDescription} />
       </div>
-      <div style={divStyle}>
-        <div>Code </div> <TextField variant="outlined"
+      <div className="columnDivStyle">
+        Code 
+        <TextField variant="outlined"
           value={code}
           onChange={onChangeCode} />
       </div>
-      <div style={divStyle}>
-      <Button
-        variant="contained"
-        onClick={() => {
-          sendNewAlgorithm()
-          showAlgorithm(true);
-        }}
-        sx={{ width: 300, height: 60, margin: 2 }}>
-        Sumbmit
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => {
-          showAlgorithm(true);
-        }}
-        sx={{ width: 300, height: 60, margin: 2 }}>
-        Back
-      </Button>
+      <div className="columnDivStyle">
+        <Button
+          variant="contained"
+          onClick={() => {
+            sendNewAlgorithm()
+            showAlgorithm(true);
+          }}
+          sx={{ width: 300, height: 60, margin: 2 }}>
+          Sumbmit
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            showAlgorithm(true);
+          }}
+          sx={{ width: 300, height: 60, margin: 2 }}>
+          Back
+        </Button>
       </div>
 
     </div>

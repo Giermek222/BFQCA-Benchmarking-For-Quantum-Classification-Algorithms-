@@ -26,18 +26,8 @@ public class BenchmarkServiceImpl implements BenchmarkService {
     @Override
     public List<Benchmark> getBenchmarks(int page, int limit, RestFilter filter) {
         List<BenchmarkDTO> benchmarks = benchmarkRepository.getBenchmarks(filter);
-        boolean filteredByName = filter.getAlgorithmname() != null;
-        boolean filteredByProblem = filter.getProblem() != null;
         List<Benchmark> returned = new ArrayList<>(){};
         for(BenchmarkDTO dto : benchmarks) {
-            if (filteredByName){
-                if (!dto.getAlgorithmName().equals(filter.getAlgorithmname()))
-                    continue;
-            }
-            if (filteredByProblem) {
-                if (!dto.getProblemName().equals(filter.getProblem()))
-                    continue;
-            }
             returned.add(BenchmarkMapper.mapDtoToBusiness(dto));
         }
         return returned.stream()

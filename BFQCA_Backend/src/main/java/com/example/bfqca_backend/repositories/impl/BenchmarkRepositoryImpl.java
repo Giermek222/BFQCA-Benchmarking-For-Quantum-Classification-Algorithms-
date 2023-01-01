@@ -21,26 +21,26 @@ public class BenchmarkRepositoryImpl  implements BenchmarkRepository {
             Connection connection = DatabaseConnector.connectToDatabase();
             StringBuilder query = new StringBuilder("select * from benchmark");
             if (Objects.nonNull(filter.getAlgorithmname()) && Objects.nonNull(filter.getProblem()))
-                query.append(" where algorithmName = ? and problemName = ? ");
+                query.append(" where algorithmName LIKE ? and problemName LIKE ? ");
             else if (Objects.nonNull(filter.getAlgorithmname()))
-                query.append(" where where algorithmName = ?");
+                query.append(" where where algorithmName LIKE ?");
             else if (Objects.nonNull(filter.getProblem()))
-                query.append(" where problemName = ? ");
+                query.append(" where problemName LIKE ? ");
 
 
             PreparedStatement statement = connection.prepareStatement(query.toString());
 
             if (Objects.nonNull(filter.getAlgorithmname()) && Objects.nonNull(filter.getProblem())) {
-                statement.setString(1, filter.getAlgorithmname());
-                statement.setString(2, filter.getProblem());
+                statement.setString(1, "%" + filter.getAlgorithmname() + "%");
+                statement.setString(2, "%" + filter.getProblem() + "%");
             }
             else if (Objects.nonNull(filter.getAlgorithmname())) {
-                statement.setString(1, filter.getAlgorithmname());
+                statement.setString(1, "%" + filter.getAlgorithmname() + "%");
 
             }
             else if (Objects.nonNull(filter.getProblem()))
             {
-                statement.setString(1, filter.getProblem());
+                statement.setString(1, "%" + filter.getProblem() + "%");
             }
             ResultSet resultSet = statement.executeQuery();
             List<BenchmarkDTO> foundBenchmarks = DatabaseMapper.getBenchmarks(resultSet);

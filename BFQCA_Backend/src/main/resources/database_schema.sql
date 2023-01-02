@@ -2,8 +2,10 @@ create table algorithm (
                            id int not null identity,
                            algorithmName varchar(30) not null,
                            problemName varchar(100) not null,
+                           author varchar(50) not null,
                            algorithmDescription varchar(100),
                            constraint algorithm_pk primary key (id),
+                           CONSTRAINT Unique_algorithmName UNIQUE(algorithmName)
 );
 
 create table users (

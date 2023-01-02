@@ -19,9 +19,10 @@ const settings = ['Logout'];
 
 type Props = {
     logged: (value: boolean) => void;
+    userName : string
   };
   
-const Header: React.FC<Props> = ({ logged }) => {
+const Header: React.FC<Props> = ({ logged, userName }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
@@ -173,13 +174,18 @@ const Header: React.FC<Props> = ({ logged }) => {
               </Button>
             
           </Box>
-
+          <Button
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Welcome {userName}
+              </Button>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <Avatar>{userName.at(0)}</Avatar>
               </IconButton>
             </Tooltip>
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

@@ -11,4 +11,5 @@ public class AlgorithmDTO {
     private String algorithmName;
     private String description;
     private String problemName;
+    private String userName;
 }

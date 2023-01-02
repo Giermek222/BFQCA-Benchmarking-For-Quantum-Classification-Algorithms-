@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface AlgorithmService {
 
-    public void ExecuteAlgorithm(Algorithm algorithm, List<String> params, String code) throws IOException;
+    public void ExecuteAlgorithm(Algorithm algorithm, String code) throws IOException;
     public List<Algorithm> GetAlgorithms(int page, int limit, RestFilter filter);
 
 }

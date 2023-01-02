@@ -34,8 +34,7 @@ class AlgorithmControllerTest {
 
     @MockBean
     private static AlgorithmService algorithmService;
-    @MockBean
-    private static SecurityService securityService;
+
 
     final static int PAGE = 0;
     final static int LIMIT = 100;
@@ -43,11 +42,6 @@ class AlgorithmControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @BeforeEach
-    void init()
-    {
-        lenient().when(securityService.authenticateUser(any())).thenReturn(true);
-    }
 
     @Test
     @DisplayName("Save Algorithm - correct algorithm without params and code provided")
@@ -59,7 +53,7 @@ class AlgorithmControllerTest {
                 .withProblemName("problem")
                 .build();
 
-        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm, null, null);
+        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm, null);
 
         mockMvc.perform(post("/algorithms/execute")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,29 +63,7 @@ class AlgorithmControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    @DisplayName("Save Algorithm - correct algorithm with params and without code provided")
-    void addAlgorithmWithCorrectDataAndParamsButWithoutCode() throws Exception
-    {
-        final Algorithm algorithm = Algorithm.builder()
-                .withAlgorithmName("Name")
-                .withDescription("Desc")
-                .withProblemName("problem")
-                .build();
-        final List<String> params = new ArrayList<>();
-        params.add("132");
-        params.add("134");
 
-        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm, params, null);
-
-        mockMvc.perform(post("/algorithms/execute")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"algorithmName\" : \"Name\"," +
-                                " \"description\" : \"Desc\"," +
-                                " \"problemName\" : \"problem\"}," +
-                                " \"params\" : \"{\"132\",\"134\"}\"}"))
-                .andExpect(status().isOk());
-    }
 
     @Test
     @DisplayName("Save Algorithm - correct algorithm with params and code provided")
@@ -102,11 +74,9 @@ class AlgorithmControllerTest {
                 .withDescription("Desc")
                 .withProblemName("problem")
                 .build();
-        final List<String> params = new ArrayList<>();
-        params.add("132");
-        params.add("134");
 
-        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm, params, "hello.py");
+
+        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm,  "hello.py");
 
         mockMvc.perform(post("/algorithms/execute")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -118,24 +88,7 @@ class AlgorithmControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    @DisplayName("Save Algorithm - incorrect algorithm without ")
-    void addAlgorithmWithIncorrectDataNoName() throws Exception
-    {
-        final Algorithm algorithm = Algorithm.builder()
-                .withAlgorithmName("Name")
-                .withDescription("Desc")
-                .withProblemName("problem")
-                .build();
 
-        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm, null, null);
-
-        mockMvc.perform(post("/algorithms/execute")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"description\" : \"Desc\"," +
-                                " \"problemName\" : \"problem\"}"))
-                .andExpect(status().isBadRequest());
-    }
 
     @Test
     @DisplayName("Save Algorithm - incorrect algorithm without ")
@@ -146,7 +99,7 @@ class AlgorithmControllerTest {
                 .withProblemName("problem")
                 .build();
 
-        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm, null, null);
+        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm,  null);
 
         mockMvc.perform(post("/algorithms/execute")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -164,7 +117,7 @@ class AlgorithmControllerTest {
                 .withDescription("Desc")
                 .build();
 
-        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm, null, null);
+        doNothing().when(algorithmService).ExecuteAlgorithm(algorithm,  null);
 
         mockMvc.perform(post("/algorithms/execute")
                         .contentType(MediaType.APPLICATION_JSON)

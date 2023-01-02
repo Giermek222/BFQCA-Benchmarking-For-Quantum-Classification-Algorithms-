@@ -20,10 +20,11 @@ public class AlgorithmReposiotryImpl implements AlgorithmRepository {
     public void addAlgorithm(AlgorithmDTO algorithmDTO) {
         try {
             Connection connection = DatabaseConnector.connectToDatabase();
-            PreparedStatement statement = connection.prepareStatement("insert into algorithm (algorithmName, problemName, algorithmDescription) values (?,?,?) ");
+            PreparedStatement statement = connection.prepareStatement("insert into algorithm (algorithmName, problemName, algorithmDescription, author) values (?,?,?,?) ");
             statement.setString(1, algorithmDTO.getAlgorithmName());
             statement.setString(2, algorithmDTO.getProblemName());
             statement.setString(3, algorithmDTO.getDescription());
+            statement.setString(4, algorithmDTO.getUserName());
             statement.executeUpdate();
             connection.close();
 

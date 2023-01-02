@@ -19,6 +19,9 @@ public class AlgorithmRest implements Serializable {
     @JsonProperty(value = "algorithmName")
     private final String algorithmName;
 
+    @JsonProperty(value = "userName")
+    private final String userName;
+
     @Nullable
     @JsonProperty(value = "description")
     private final String description;
@@ -30,7 +33,7 @@ public class AlgorithmRest implements Serializable {
     @JsonProperty(value = "code")
     private final String code;
 
-    @Nullable
-    @JsonProperty(value = "params")
-    private final List<String> params;
+
+
+
 }

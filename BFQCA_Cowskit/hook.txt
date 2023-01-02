@@ -1,0 +1,6 @@
+usage: CowSkit Hook [-h] -a {qknn,qvm,qcnn,custom} -d {Iris,Palmer
+                    Penguin,Pima Indians Diabetic,custom}
+                    [-e {angle,amplitude,binary,custom}] [-af ALGORITHM_FILE]
+                    [-df DATASET_FILE] [-ef ENCODING_FILE] [-t TRIES]
+                    [-i INCLUDE_ALL] [-l LATENCY_PERCENTILE]
+CowSkit Hook: error: argument -d/--dataset: invalid choice: 'I' (choose from 'Iris', 'Palmer Penguin', 'Pima Indians Diabetic', 'custom')

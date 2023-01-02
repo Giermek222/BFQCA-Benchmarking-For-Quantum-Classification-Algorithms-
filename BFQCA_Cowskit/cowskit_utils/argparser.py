@@ -109,7 +109,7 @@ def parse_flags(override:bool = False) -> Tuple[argparse.Namespace, cowskit.data
 
     if override:
         args.dataset = "Iris"
-        # args.encoding = "amplitude"
+        args.encoding = "amplitude"
         args.algorithm = "qknn"
 
     dataset = parse_dataset(args.dataset, args.dataset_file)
@@ -118,4 +118,4 @@ def parse_flags(override:bool = False) -> Tuple[argparse.Namespace, cowskit.data
 
     algorithm.encoding = encoding
 
-    return [args, dataset, encoding, algorithm]
+    return args, dataset, encoding, algorithm

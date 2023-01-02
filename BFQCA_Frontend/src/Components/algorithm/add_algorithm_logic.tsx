@@ -3,10 +3,16 @@ import React, { ChangeEvent, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import "../styles.css";
-import { algorithmExecuteEndpoint} from "../../constants";
+import { algorithmExecuteEndpoint } from "../../constants";
 import axios from "axios";
 import { Menu, MenuItem } from "@mui/material";
 
+const styles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  
+};
 
 type Props = {
   showAlgorithm: (value: boolean) => void;
@@ -89,52 +95,66 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
   };
 
   return (
-    <div>
-      <div className="columnDivStyle">
-        <div>Algorithm Name </div>
-        <TextField variant="outlined"
-          value={algName}
-          onChange={onChangeAlgorithmName} />
+    <div >
+      <div >
+
+        Selected Problem:
+        <Button
+          id="basic-button"
+          aria-controls={limitOpen ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={limitOpen ? 'true' : undefined}
+          onClick={handleLimitClick}
+        >
+          {problemDescription}
+        </Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={limitOpen}
+          onClose={handleLimitClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
+          <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
+          <MenuItem onClick={setProblemToDiabetes}>Pima Indians Diabetic</MenuItem>
+        </Menu>
       </div>
       <div className="columnDivStyle">
-        <div>Problem Name </div>
-        <div>
-          <Button
-            id="basic-button"
-            aria-controls={limitOpen ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={limitOpen ? 'true' : undefined}
-            onClick={handleLimitClick}
-          >
-            {problemDescription}
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={limitOpen}
-            onClose={handleLimitClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
-            <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
-            <MenuItem onClick={setProblemToDiabetes}>Pima Indians Diabetic</MenuItem>
-          </Menu>
-        </div>
-      </div>
-      <div className="columnDivStyle">
-        Description 
         <TextField
-          variant="outlined"
+          label="Algorithm name"
+          id="outlined-size-small"
+          defaultValue="Algorithm name"
+          size="small"
+          value={algName}
+          onChange={onChangeAlgorithmName}
+        />
+      </div>
+
+      <div className="columnDivStyle">
+        <TextField
+          label="Algorithm Description"
+          id="outlined-size-small"
+          defaultValue="Algorithm name"
+          size="small"
           value={description}
-          onChange={onChangeDescription} />
+          onChange={onChangeDescription}
+        />
+
       </div>
       <div className="columnDivStyle">
-        Code 
-        <TextField variant="outlined"
+        <TextField
+          label="Code"
+          id="outlined-size-small"
+          defaultValue="Algorithm name"
+          size="small"
           value={code}
-          onChange={onChangeCode} />
+          onChange={onChangeCode}
+        />
+
+
       </div>
       <div className="columnDivStyle">
         <Button

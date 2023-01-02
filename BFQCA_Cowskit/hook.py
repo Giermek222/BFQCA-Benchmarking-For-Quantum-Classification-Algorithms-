@@ -6,7 +6,7 @@ from cowskit_utils.argparser import parse_flags
 
 def main():
     
-    args, dataset, encoding, algorithm = parse_flags(override=True)
+    args, dataset, encoding, algorithm = parse_flags(override=False)
 
     start = time.time()
     print(start)

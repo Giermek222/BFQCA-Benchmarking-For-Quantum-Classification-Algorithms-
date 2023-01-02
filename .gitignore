@@ -24,7 +24,8 @@ hs_err_pid*
 
 
 # Cowskit gitignore files
-BFQCA_Cowskit/build/
-BFQCA_Cowskit/dist/
-BFQCA_Cowskit/cowskit.egg-info/
-BFQCA_Cowskit/cowskit/__pycache__/
+BFQCA_Cowskit/cowskit_library/build/
+BFQCA_Cowskit/cowskit_library/dist/
+BFQCA_Cowskit/cowskit_library/cowskit.egg-info/
+BFQCA_Cowskit/cowskit_library/cowskit/__pycache__/
+BFQCA_Cowskit/cowskit_utils/__pycache__/

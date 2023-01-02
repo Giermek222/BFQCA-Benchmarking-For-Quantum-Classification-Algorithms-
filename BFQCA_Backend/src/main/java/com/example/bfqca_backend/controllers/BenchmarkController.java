@@ -1,13 +1,9 @@
 package com.example.bfqca_backend.controllers;
 
-import com.example.bfqca_backend.models.business.Algorithm;
 import com.example.bfqca_backend.models.business.Benchmark;
 import com.example.bfqca_backend.models.filters.RestFilter;
-import com.example.bfqca_backend.models.rest.AlgorithmRest;
 import com.example.bfqca_backend.models.rest.BenchmarkRest;
 import com.example.bfqca_backend.services.interfaces.BenchmarkService;
-import com.example.bfqca_backend.services.interfaces.SecurityService;
-import com.example.bfqca_backend.utils.mappers.AlgorithmMapper;
 import com.example.bfqca_backend.utils.mappers.BenchmarkMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +22,7 @@ public class BenchmarkController {
 
     @Autowired
     BenchmarkService benchmarkService;
-    SecurityService securityService;
+
 
 
     @PostMapping("/execute")

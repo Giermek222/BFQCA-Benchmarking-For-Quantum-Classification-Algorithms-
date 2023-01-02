@@ -1,14 +1,14 @@
 import requests
 
 
-def make_request(problem_name, algorithm_name, learn_accuracy, test_accuracy, learn_loss, test_loss, max_latency, min_latency, avg_latency, percentile, total_time):
+def make_request(dataset_name, algorithm_name, learn_accuracy, test_accuracy, learn_loss, test_loss, max_latency, min_latency, avg_latency, percentile, total_time):
 
     params = [
         {"name": "idk", "value": 123}
     ]
 
     body = {
-        "problemName": problem_name,
+        "problemName": dataset_name,
         "algorithmName": algorithm_name,
         "accuracyLearning": learn_accuracy,
         "accuracyTest": test_accuracy,

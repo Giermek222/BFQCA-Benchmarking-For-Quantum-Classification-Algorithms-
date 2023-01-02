@@ -1,2 +1,6 @@
 numpy
 qiskit[machine-learning]
+matplotlib
+sklearn
+scipy
+unittest2

@@ -123,7 +123,6 @@ class KNearestNeighbors(ClassifierMixin, QKNN_Base):
 
         # eventually flatten the np.ndarray
         # returned by stats.mode
-        print(f"predicted values are {labels.real.flatten()}")
         return labels.real.flatten()
 
     def predict(self,

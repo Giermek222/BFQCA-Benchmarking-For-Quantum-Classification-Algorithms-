@@ -31,14 +31,17 @@ const ProblemScreen = () => {
                             height={225}
                         /></TableCell>
                         <TableCell>
-                            <h2>Dataset name</h2>
-                            <h3>Short description of data set</h3>
+                            <h2>Pima Indians Diabetic Dataset</h2>
+                            <h3>
+                                Dataset originating from  National Institute of Diabetes and Digestive and Kidney Diseases.
+                                allowing to determine whether patient has diabetes. It contains 768 observations with 8 input features. 
+                            </h3>
                         </TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <h2>Dataset name</h2>
-                            <h3>Short description of data set</h3>
+                            <h2>Palmer Penguin Dataset</h2>
+                            <h3>Dataset containing features of 688 penguins that can be categorized into 3 different species</h3>
                         </TableCell>
                         <TableCell>                            <img
                             src="https://rubikscode.net/wp-content/uploads/2020/07/lter_penguins.png"

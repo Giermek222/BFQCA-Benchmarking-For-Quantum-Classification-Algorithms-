@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Grid } from "@mui/material";
-import { Container } from "@mui/system";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+
 import bg from "../../images/blue.png";
 import LoginSection from "./login_section";
 import RegisterSection from "./register_section";
-import RadioGroup from "@mui/material/RadioGroup";
 import Divider from "@mui/material/Divider";
 
 const lightBlue = "#1976D2";

@@ -3,7 +3,6 @@ import axios from "axios";
 import AlgorithmModel from "./algorthm_model";
 import AlgorithmScreen from "./algorithm_screen";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { tokenSlice } from "../../redux_functions/security_token_slice";
 import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
 
 
@@ -103,7 +102,6 @@ const MainScreen: React.FC<Props> = ({ userName }) => {
         
         headers: {
           "Content-Type": "application/json",
-          header1: 'Bearer ' + tokenSlice
         },
       }
     );

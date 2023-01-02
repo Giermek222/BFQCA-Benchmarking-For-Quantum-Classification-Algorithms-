@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { setTokenValue } from "../../redux_functions/security_token_slice";
 import { userLoginEndpoint } from "../../constants";
 import axios from "axios";
 import md5 from 'md5';
@@ -73,7 +72,6 @@ const LoginSection: React.FC<Props> = ({ logged, setUserName }) => {
                 console.log(response);
                 if (response.status === 200) {
                   logged(true);
-                  setTokenValue(response.data)
                 }
               })
               .catch((err: any) => {

@@ -24,11 +24,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('-e','--encoding', 
                         required=False,
                         choices=ENCODING_CHOICES, 
-<<<<<<< HEAD
                         default="amplitude",
-=======
-                        default="angle",
->>>>>>> main
                         help=f"Name of the encoding to use. Possible values: {ENCODING_CHOICES}"
     )
     parser.add_argument('-af','--algorithm_file', 

@@ -10,7 +10,6 @@ import Button from "@mui/material/Button";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { benchmarkGetEndpoint } from "../../constants";
-import { tokenSlice } from "../../redux_functions/security_token_slice";
 import BenchmarkModel from "./benchmark_model";
 import { Menu, MenuItem, TextField } from "@mui/material";
 
@@ -94,7 +93,6 @@ const BenchmarkScreen: React.FC = () => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Security-Token": tokenSlice.name,
           Authorization: "---",
         },
       }

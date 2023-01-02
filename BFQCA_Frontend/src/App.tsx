@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import LoginScreen from "./Components/login/login_screen";
 import { Routes, Route } from "react-router-dom";

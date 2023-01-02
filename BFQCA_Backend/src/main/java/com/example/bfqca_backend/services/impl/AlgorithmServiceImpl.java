@@ -9,8 +9,10 @@ import com.example.bfqca_backend.utils.mappers.AlgorithmMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
 
-    private static final String TESTPATH = "python D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit\\hook.py ";
+    private static final String TESTPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit\\hook.py ";
     private static final String ALGORITMPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Backend\\src\\main\\resources\\python_algorithms\\";
     @Autowired
     AlgorithmRepository algorithmRepository;
@@ -53,7 +55,25 @@ public class AlgorithmServiceImpl implements AlgorithmService {
         command.append(TESTPATH);
         command.append(" -a " + algorithm.getAlgorithmName());
         command.append(" -d " + algorithm.getProblemName());
-        Runtime.getRuntime().exec(command.toString());
+
+
+
+        ProcessBuilder pb = new ProcessBuilder("python",TESTPATH," -a "+algorithm.getAlgorithmName()," -d "+algorithm.getProblemName());
+        Process p = pb.start();
+
+//        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//        int ret = new Integer(in.readLine()).intValue();
+//        System.out.println("value is : "+ret);
+
+
+//        System.out.println(command.toString());
+//        String line;
+//        Process p = Runtime.getRuntime().exec(command.toString());
+//        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//        while ((line = input.readLine()) != null) {
+//            System.out.println(line);
+//        }
+//        input.close();
     }
 
     private void createNewPythonScript(String Code, String algorithmName) {

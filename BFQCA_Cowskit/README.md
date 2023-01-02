@@ -41,8 +41,6 @@ Install logs can be found inside `logs` folder.
 | `-t, --tries` | `int` | Determines how many times algorithm is benchmarked. Default is 1. |
 | `-i, --include_all` | `bool` | Determines whether to include dataset loading and encoding in the benchmarking results. Default is False. |
 | `-l, --latency_percentile` | `int` | Latency percentile to report. Default is 90. |
-| `-p, --problem_name` | `string` | Problem name used in the return value. Default is 'benchmark'. |
-
 #### Advanced usage
 Hook allows to automatically compute benchmarking results for custom implementations of quantum algorithms.
 To do so, set any of the **required** flags to "custom", and provide a file with the code of the algorithm/dataset/encoding.
@@ -74,7 +72,7 @@ Returns a Dictionary object:
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `problemName`      | `string` | Name of the problem |
+| `problemName`      | `string` | Name of the dataset used |
 | `algorithmName`      | `string` | Name of the algorithm used |
 | `accuracyLearning`      | `float` | Learning accuracy |
 | `accuracyTest`      | `float` | Test set accuracy |

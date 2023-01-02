@@ -3,7 +3,7 @@ import argparse
 from typing import Tuple
 
 ALGORITHM_CHOICES = ["qknn", "qvm", "qcnn", "custom"]
-DATASET_CHOICES = ["iris", "lines", "custom"]
+DATASET_CHOICES = ["Iris", "Palmer Penguin", "Pima Indians Diabetic", "custom"]
 ENCODING_CHOICES = ["angle", "amplitude", "binary", "custom"]
 
 def parse_args() -> argparse.Namespace:
@@ -22,8 +22,9 @@ def parse_args() -> argparse.Namespace:
                         help=f"Name of the dataset to use. Possible values: {DATASET_CHOICES}"
     )
     parser.add_argument('-e','--encoding', 
-                        required=True,
-                        choices=ENCODING_CHOICES,  
+                        required=False,
+                        choices=ENCODING_CHOICES, 
+                        default="angle",
                         help=f"Name of the encoding to use. Possible values: {ENCODING_CHOICES}"
     )
     parser.add_argument('-af','--algorithm_file', 
@@ -53,16 +54,12 @@ def parse_args() -> argparse.Namespace:
                         default=90,
                         help="Latency percentile to report. Default is 90"
     )
-    parser.add_argument('-p','--problem_name',
-                        default="benchmark",
-                        help="Problem name used in the return value. Default is benchmark"
-    )
 
     return parser.parse_args()
 
 
 def parse_dataset(dataset:str, dataset_file:str = "") -> cowskit.datasets.Dataset:
-    if dataset == "iris":
+    if dataset == "Iris":
         dataset = cowskit.datasets.IrisDataset("./cowskit_library/cowskit/files/iris.dataset") # cowskit.files.IRIS_DATASET
     elif dataset == "lines":
         dataset = cowskit.datasets.LinesDataset(shape=[3,3], line_len=2)

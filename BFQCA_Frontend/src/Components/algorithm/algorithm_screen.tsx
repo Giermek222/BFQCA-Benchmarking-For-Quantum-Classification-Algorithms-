@@ -115,9 +115,6 @@ const AlgorithmScreen: React.FC<Props> = ({
                     >
                         Add new Algorithm
                     </Button>
-
-
-
                     <div className="columnDivStyle">
                         <Button
                             variant="contained"

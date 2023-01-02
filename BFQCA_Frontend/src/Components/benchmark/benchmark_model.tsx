@@ -1,6 +1,6 @@
 const BenchmarkModel = new Map([
     ["algorithmName", "Algorithm"],
-    ["problemName", "Dataset"],
+    ["problemName", "Problem"],
     ["accuracyLearning", "Learning Accuracy"],
     ["accuracyTest", "Test Accuracy"],
     ["lossTest", "Test Loss"],

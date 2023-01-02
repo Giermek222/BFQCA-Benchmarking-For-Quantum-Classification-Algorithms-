@@ -52,7 +52,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
         StringBuilder command = new StringBuilder();
         command.append(TESTPATH);
         command.append(" -a " + algorithm.getAlgorithmName());
-        command.append(" -d " + algorithm.getProblemName() + " -e angle");
+        command.append(" -d " + algorithm.getProblemName());
         Runtime.getRuntime().exec(command.toString());
     }
 

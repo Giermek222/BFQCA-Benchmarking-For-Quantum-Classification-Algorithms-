@@ -12,13 +12,21 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { Menu, MenuItem, TextField } from "@mui/material";
+import Box from "@mui/system/Box";
+
+const commonStyles = {
+    bgcolor: 'background.paper',
+    borderColor: 'text.primary',
+    m: 1,
+    border: 1,
+  };
 
 type Props = {
     page: number,
     limitOpen: boolean,
     algorithmNames: any,
     problemFilter: string,
-    ColumnArray:  string[],
+    ColumnArray: string[],
     showAlgorithms: boolean,
     algorithmFilter: string,
     setNewLimitTo5: () => void,
@@ -34,6 +42,13 @@ type Props = {
     setShowAlgorithms: React.Dispatch<React.SetStateAction<boolean>>,
     handleLimitClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
 };
+
+const styles = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  };
 
 const AlgorithmScreen: React.FC<Props> = ({
     showAlgorithms,
@@ -57,20 +72,31 @@ const AlgorithmScreen: React.FC<Props> = ({
     setNewLimitTo20
 }) => {
     return (
-        <div className="pageDivStyle">
+        <div style={styles}>
             {showAlgorithms ?
                 <div>
-                    Filters
+
                     <div>
-                        Algorithm Name:
                         <TextField
+                            
+                            label="Algorithm name"
+                            id="outlined-size-small"
+                            defaultValue="Algorithm name"
+                            size="small"
                             value={algorithmFilter}
-                            onChange={filterByAlgorithm}></TextField>
-                        Problem Name:
+                            onChange={filterByAlgorithm}
+                        />
+                        
                         <TextField
+                            label="Problem name"
+                            id="outlined-size-small"
+                            defaultValue="Problem name"
+                            size="small"
                             value={problemFilter}
-                            onChange={filterByProblem}></TextField>
+                            onChange={filterByProblem}
+                        />
                     </div>
+
                     <TableContainer sx={{ width: '75%' }} component={Paper}>
                         <Table aria-label="simple table">
                             <TableHead>
@@ -88,7 +114,6 @@ const AlgorithmScreen: React.FC<Props> = ({
                                                 return <TableCell>{row[ColumnName]}</TableCell>;
                                             }
                                             else {
-                                                //artificial empty parameter for button
                                                 return <TableCell>
                                                     <Button
                                                         color="success"

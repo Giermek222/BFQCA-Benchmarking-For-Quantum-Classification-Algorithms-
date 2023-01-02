@@ -14,7 +14,7 @@ function App() {
       <div>
         {logged ?
           <div>
-            <Header/>
+            <Header logged={setLogged}/>
             <Routes>
               <Route path="/" element={<AlgorithmScreen />} />
               <Route path="/benchmark" element={<BenchmarkScreen />} />

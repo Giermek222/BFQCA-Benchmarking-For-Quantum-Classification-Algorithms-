@@ -25,7 +25,7 @@ public class AlgorithmController {
 
 
     @PostMapping("/execute")
-    public ResponseEntity<Object> addAlgorithm(@RequestHeader HttpHeaders headers, @RequestBody @Valid AlgorithmRest algorithmRest) throws IOException {
+    public ResponseEntity<Object> addAlgorithm(@RequestHeader HttpHeaders headers, @RequestBody @Valid AlgorithmRest algorithmRest) throws IOException, InterruptedException {
         if (Objects.isNull(algorithmRest.getAlgorithmName()) ||  Objects.isNull(algorithmRest.getProblemName()) || Objects.isNull(algorithmRest.getUserName())  ) {
             return ResponseEntity.badRequest().build();
         }

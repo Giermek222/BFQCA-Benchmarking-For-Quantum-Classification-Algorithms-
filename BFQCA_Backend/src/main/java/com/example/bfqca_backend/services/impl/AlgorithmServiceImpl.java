@@ -21,20 +21,21 @@ import java.util.stream.Collectors;
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
 
-    private static final String TESTPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit\\hook.py ";
+    private static final String TESTPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit\\hook2.py ";
     private static final String ALGORITMPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Backend\\src\\main\\resources\\python_algorithms\\";
     @Autowired
     AlgorithmRepository algorithmRepository;
 
 
     @Override
-    public void ExecuteAlgorithm(Algorithm algorithm, String Code) throws IOException {
+    public void ExecuteAlgorithm(Algorithm algorithm, String Code) throws IOException, InterruptedException {
         if (Code != null) {
             algorithmRepository.addAlgorithm(AlgorithmMapper.mapBusinessToDto(algorithm));
             createNewPythonScript(Code, algorithm.getAlgorithmName());
         }
 
         runAlgorithm(algorithm);
+
     }
 
     @Override
@@ -50,7 +51,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
                 .collect(Collectors.toList());
     }
 
-    private void runAlgorithm(Algorithm algorithm) throws IOException {
+    private void runAlgorithm(Algorithm algorithm) throws IOException, InterruptedException {
         StringBuilder command = new StringBuilder();
         command.append(TESTPATH);
         command.append(" -a " + algorithm.getAlgorithmName());
@@ -60,6 +61,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
 
         ProcessBuilder pb = new ProcessBuilder("python",TESTPATH," -a "+algorithm.getAlgorithmName()," -d "+algorithm.getProblemName());
         Process p = pb.start();
+        p.waitFor();
 
 //        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 //        int ret = new Integer(in.readLine()).intValue();

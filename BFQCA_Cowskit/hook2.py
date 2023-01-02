@@ -5,7 +5,7 @@ import sys
 def main():
     with open("hook.txt", "w") as logfile:
         args = sys.argv[1:]
-        command = "python hook.py "+" ".join(args)
+        command = "python D:\Wladek\\repos\\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit\\hook.py "+" ".join(args)
         print(command)
         subprocess.run(command,
                         shell=True,

@@ -80,7 +80,6 @@ const AlgorithmScreen: React.FC<Props> = ({
 
                     <div>
                         <TextField
-                            
                             label="Algorithm name"
                             id="outlined-size-small"
                             defaultValue="Algorithm name"

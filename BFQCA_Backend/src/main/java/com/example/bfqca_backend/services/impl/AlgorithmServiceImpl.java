@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
 
-    private static final String TESTPATH = "python D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Backend\\src\\main\\resources\\hello.py ";
+    private static final String TESTPATH = "python D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit ";
     private static final String ALGORITMPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Backend\\src\\main\\resources\\python_algorithms\\";
     @Autowired
     AlgorithmRepository algorithmRepository;

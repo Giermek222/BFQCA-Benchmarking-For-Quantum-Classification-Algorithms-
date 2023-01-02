@@ -28,7 +28,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
 
 
     @Override
-    public void ExecuteAlgorithm(Algorithm algorithm, String Code) throws IOException, InterruptedException {
+    public void ExecuteAlgorithm(Algorithm algorithm, String Code) throws IOException {
         if (Code != null) {
             algorithmRepository.addAlgorithm(AlgorithmMapper.mapBusinessToDto(algorithm));
             createNewPythonScript(Code, algorithm.getAlgorithmName());
@@ -51,7 +51,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
                 .collect(Collectors.toList());
     }
 
-    private void runAlgorithm(Algorithm algorithm) throws IOException, InterruptedException {
+    private void runAlgorithm(Algorithm algorithm) throws IOException {
         StringBuilder command = new StringBuilder();
         command.append(TESTPATH);
         command.append(" -a " + algorithm.getAlgorithmName());
@@ -60,22 +60,9 @@ public class AlgorithmServiceImpl implements AlgorithmService {
 
 
         ProcessBuilder pb = new ProcessBuilder("python",TESTPATH," -a "+algorithm.getAlgorithmName()," -d "+algorithm.getProblemName());
+        pb.directory(new File("D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit"));
+
         Process p = pb.start();
-        p.waitFor();
-
-//        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//        int ret = new Integer(in.readLine()).intValue();
-//        System.out.println("value is : "+ret);
-
-
-//        System.out.println(command.toString());
-//        String line;
-//        Process p = Runtime.getRuntime().exec(command.toString());
-//        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//        while ((line = input.readLine()) != null) {
-//            System.out.println(line);
-//        }
-//        input.close();
     }
 
     private void createNewPythonScript(String Code, String algorithmName) {

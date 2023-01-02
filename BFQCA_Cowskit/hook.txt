@@ -2,5 +2,5 @@ C:\Users\Wojtek\AppData\Local\Programs\Python\Python310\lib\site-packages\cowski
   labels, _ = stats.mode(k_nearest, axis=1)
 C:\Users\Wojtek\AppData\Local\Programs\Python\Python310\lib\site-packages\cowskit\algorithms\algorithm_qknn.py:122: FutureWarning: Unlike other reduction functions (e.g. `skew`, `kurtosis`), the default behavior of `mode` typically preserves the axis it acts along. In SciPy 1.11.0, this behavior will change: the default value of `keepdims` will become False, the `axis` over which the statistic is taken will be eliminated, and the value None will no longer be accepted. Set `keepdims` to True or False to avoid this warning.
   labels, _ = stats.mode(k_nearest, axis=1)
-{'problemName': 'Iris', 'algorithmName': 'qknn', 'accuracyLearning': 1.0, 'accuracyTest': 0.9375, 'lossLearning': 1.0, 'lossTest': 1.0, 'maxLatency': 9.42, 'minLatency': 9.42, 'avgLatency': 9.42, 'latencyPercentile': 9.42, 'time': 9.42}
+{'problemName': 'Iris', 'algorithmName': 'qknn', 'accuracyLearning': 1.0, 'accuracyTest': 0.9375, 'lossLearning': 1.0, 'lossTest': 1.0, 'maxLatency': 4.0, 'minLatency': 4.0, 'avgLatency': 4.0, 'latencyPercentile': 4.0, 'time': 4.0}
 <Response [200]>

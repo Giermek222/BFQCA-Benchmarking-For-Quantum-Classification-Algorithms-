@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 import "../styles.css";
 import AddAlgorithmScreen from "./add_algorithm_logic";
@@ -14,25 +14,25 @@ import Button from "@mui/material/Button";
 import { Menu, MenuItem, TextField } from "@mui/material";
 
 type Props = {
-    showAlgorithms: any,
-    algorithmFilter: any,
-    filterByAlgorithm: any,
-    problemFilter: any,
-    filterByProblem: any,
-    ColumnArray: any,
+    page: number,
+    limitOpen: boolean,
     algorithmNames: any,
-    AlgorithmNameDefinitons: any,
-    executeAlgorithm: any,
-    setShowAlgorithms: any,
-    changePage: any,
-    page: any,
-    limitOpen: any,
-    handleLimitClick: any,
-    anchorEl: any,
-    handleLimitClose: any,
-    setNewLimitTo5: any,
-    setNewLimitTo10: any,
-    setNewLimitTo20: any,
+    problemFilter: string,
+    ColumnArray:  string[],
+    showAlgorithms: boolean,
+    algorithmFilter: string,
+    setNewLimitTo5: () => void,
+    setNewLimitTo10: () => void,
+    setNewLimitTo20: () => void,
+    handleLimitClose: () => void,
+    anchorEl: HTMLElement | null,
+    AlgorithmNameDefinitons: string[],
+    changePage: (increase: boolean) => void,
+    filterByProblem: (e: ChangeEvent<HTMLInputElement>) => void,
+    executeAlgorithm: (algName: string, probName: string) => void,
+    filterByAlgorithm: (e: ChangeEvent<HTMLInputElement>) => void,
+    setShowAlgorithms: React.Dispatch<React.SetStateAction<boolean>>,
+    handleLimitClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
 };
 
 const AlgorithmScreen: React.FC<Props> = ({
@@ -115,9 +115,6 @@ const AlgorithmScreen: React.FC<Props> = ({
                     >
                         Add new Algorithm
                     </Button>
-
-
-
                     <div className="columnDivStyle">
                         <Button
                             variant="contained"

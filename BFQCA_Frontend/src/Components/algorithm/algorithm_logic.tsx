@@ -9,6 +9,7 @@ import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants
 
 
 const MainScreen: React.FC = () => {
+  //constants
   const [algorithmNames, setAlgorithmNames] = useState([]);
   const [showAlgorithms, setShowAlgorithms] = useState(true);
   const [page, setPage] = useState(0);
@@ -26,6 +27,7 @@ const MainScreen: React.FC = () => {
   }, []);
 
 
+  //paginaton
   const handleLimitClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,6 +55,41 @@ const MainScreen: React.FC = () => {
     getAlgorithms(newPage, newLimit, algorithmFilter, problemFilter);
   }
 
+
+  const changePage = (increase: boolean) => {
+    if (increase) {
+      setPage(page + 1)
+      getAlgorithms(page + 1, limit, algorithmFilter, problemFilter);
+    }
+    else {
+      if (page > 0) {
+        setPage(page - 1)
+        getAlgorithms(page - 1, limit, algorithmFilter, problemFilter);
+      }
+      else {
+        setPage(page)
+        getAlgorithms(page, limit, algorithmFilter, problemFilter);
+      }
+    }
+
+  }
+
+  //filtering
+
+  const filterByAlgorithm = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedAlgorithm: string = e.target.value;
+    setAlgorithmFilter(searchedAlgorithm);
+    getAlgorithms(page, limit, searchedAlgorithm, problemFilter);
+  }
+
+  const filterByProblem = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedProblem: string = e.target.value;
+    setProblemFilter(searchedProblem)
+    getAlgorithms(page, limit, algorithmFilter, searchedProblem);
+  }
+
+  //REST API calls
+
   const getAlgorithms = async (pageToget: number, limitToSet: number, algFilter: String, probFilter : String) => {
     let benchmarksPromise = axios.post(
       algorithmsGetEndpoint + "?page=" + pageToget + "&limit=" + limitToSet,
@@ -74,25 +111,6 @@ const MainScreen: React.FC = () => {
     console.info(algorithmNames);
   };
 
-
-
-  const changePage = (increase: boolean) => {
-    if (increase) {
-      setPage(page + 1)
-      getAlgorithms(page + 1, limit, algorithmFilter, problemFilter);
-    }
-    else {
-      if (page > 0) {
-        setPage(page - 1)
-        getAlgorithms(page - 1, limit, algorithmFilter, problemFilter);
-      }
-      else {
-        setPage(page)
-        getAlgorithms(page, limit, algorithmFilter, problemFilter);
-      }
-    }
-
-  }
 
   const executeAlgorithm = (algName: string, probName: string) => {
     axios
@@ -116,18 +134,6 @@ const MainScreen: React.FC = () => {
         alert(err);
       });
   };
-
-  const filterByAlgorithm = (e: ChangeEvent<HTMLInputElement>) => {
-    const searchedAlgorithm: string = e.target.value;
-    setAlgorithmFilter(searchedAlgorithm);
-    getAlgorithms(page, limit, searchedAlgorithm, problemFilter);
-  }
-
-  const filterByProblem = (e: ChangeEvent<HTMLInputElement>) => {
-    const searchedProblem: string = e.target.value;
-    setProblemFilter(searchedProblem)
-    getAlgorithms(page, limit, algorithmFilter, searchedProblem);
-  }
 
   return (
       <AlgorithmScreen

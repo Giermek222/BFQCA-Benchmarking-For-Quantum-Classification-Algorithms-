@@ -111,17 +111,26 @@ const BenchmarkScreen: React.FC = () => {
 
   return (
     <div>
-      Filters
-          <div>
-            Algorithm Name:
-            <TextField
-                      value={algorithmFilter}
-                      onChange={filterByAlgorithm}></TextField> 
-            Problem Name:
-            <TextField
-                      value={problemFilter}
-                      onChange={filterByProblem}></TextField>
-          </div>
+      <div>
+        <TextField
+
+          label="Algorithm name"
+          id="outlined-size-small"
+          defaultValue="Algorithm name"
+          size="small"
+          value={algorithmFilter}
+          onChange={filterByAlgorithm}
+        />
+
+        <TextField
+          label="Problem name"
+          id="outlined-size-small"
+          defaultValue="Problem name"
+          size="small"
+          value={problemFilter}
+          onChange={filterByProblem}
+        />
+      </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

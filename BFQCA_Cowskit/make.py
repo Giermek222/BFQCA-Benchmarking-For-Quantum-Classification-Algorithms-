@@ -1,9 +1,13 @@
 import subprocess
 import os
 
+
 UNINSTALL_LOG_FILE = "logs/lib_delete.txt"
 INSTALL_LOG_FILE = "logs/lib_make.txt"
 LIB_FOLDER = "cowskit_library"
+
+if not os.path.exists(LIB_FOLDER):
+    os.mkdir(LIB_FOLDER)
 
 ### UNINSTALL CODE
 command_line = "python -m pip uninstall -y cowskit"

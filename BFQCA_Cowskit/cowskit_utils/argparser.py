@@ -1,5 +1,6 @@
 import cowskit
 import argparse
+import os
 from typing import Tuple
 
 ALGORITHM_CHOICES = ["qknn", "qvm", "qcnn", "custom"]
@@ -59,8 +60,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def parse_dataset(dataset:str, dataset_file:str = "") -> cowskit.datasets.Dataset:
+    path = os.path.realpath(os.path.dirname(__file__))
     if dataset == "Iris":
-        dataset = cowskit.datasets.IrisDataset("./cowskit_library/cowskit/files/iris.dataset") # cowskit.files.IRIS_DATASET
+        dataset = cowskit.datasets.IrisDataset(f"{path}/../cowskit_library/cowskit/files/iris.dataset") # cowskit.files.IRIS_DATASET
     elif dataset == "lines":
         dataset = cowskit.datasets.LinesDataset(shape=[3,3], line_len=2)
     elif dataset == "custom":

@@ -26,10 +26,10 @@ def make_request(problem_name, algorithm_name, learn_accuracy, test_accuracy, le
     return body
 
 def send_request(body) -> None:
-    URL = "https://localhost:3001/benchmarks/execute"
+    URL = "http://localhost:3001/benchmarks/execute"
 
     try:
-        response = requests.post(url = URL, json=body)
+        response = requests.post(url = URL, json=body, verify=False)
         print(response)
     except Exception as e:
         print(e)

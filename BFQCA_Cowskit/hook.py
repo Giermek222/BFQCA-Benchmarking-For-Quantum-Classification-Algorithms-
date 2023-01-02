@@ -19,7 +19,7 @@ def main():
     print(total_time)
 
     body = make_request(
-        args.problem_name,
+        args.dataset,
         args.algorithm,
         algorithm.score(X_train, y_train),
         algorithm.score(X_test, y_test),

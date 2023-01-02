@@ -5,19 +5,16 @@ from cowskit_utils.request import make_request, send_request
 from cowskit_utils.argparser import parse_flags
 
 def main():
-    file = open("Jedziemy z kurwamistart.py", "x")
+    
     args, dataset, encoding, algorithm = parse_flags(override=False)
-    file = open("Jedziemy z kurwami2.py", "x")
+
     start = time.time()
-    print(start)
     X_train, X_test, y_train, y_test = dataset.load_iris(16,32)
     algorithm.fit(X_train, y_train)
     end = time.time()
-    print(end)
-    file = open("Jedziemy z kurwami3.py", "x")
-    total_time = round(end-start, 2)
-    print(total_time)
-    file = open("Jedziemy z kurwami4.py", "x")
+
+    total_time = round((end-start)*1000, 2)
+
     body = make_request(
         args.dataset,
         args.algorithm,
@@ -31,7 +28,6 @@ def main():
         total_time,
         total_time
     )
-    file = open("Jedziemy z kurwami5.py", "x")
     send_request(body)
 
     return body

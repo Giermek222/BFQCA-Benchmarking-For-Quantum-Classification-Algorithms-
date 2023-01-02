@@ -9,6 +9,7 @@ public class AlgorithmMapper {
     public static Algorithm mapRestToBusiness(AlgorithmRest algorithmRest) {
         return  Algorithm.builder()
                 .withAlgorithmName(algorithmRest.getAlgorithmName())
+                .withUserName(algorithmRest.getUserName())
                 .withDescription(algorithmRest.getDescription())
                 .withProblemName(algorithmRest.getProblemName())
                 .build();
@@ -17,6 +18,7 @@ public class AlgorithmMapper {
     public static AlgorithmRest mapBusinessToRest(Algorithm algorithm) {
         return AlgorithmRest.builder()
                 .withAlgorithmName(algorithm.getAlgorithmName())
+                .withUserName(algorithm.getUserName())
                 .withDescription(algorithm.getDescription())
                 .withProblemName(algorithm.getProblemName())
                 .build();
@@ -26,6 +28,7 @@ public class AlgorithmMapper {
         return AlgorithmDTO.builder()
                 .withAlgorithmName(algorithm.getAlgorithmName())
                 .withProblemName(algorithm.getProblemName())
+                .withUserName(algorithm.getUserName())
                 .withDescription(algorithm.getDescription())
                 .build();
     }
@@ -34,6 +37,7 @@ public class AlgorithmMapper {
         return  Algorithm.builder()
                 .withAlgorithmName(algorithmDTO.getAlgorithmName())
                 .withDescription(algorithmDTO.getDescription())
+                .withUserName(algorithmDTO.getUserName())
                 .withProblemName(algorithmDTO.getProblemName())
                 .build();
     }

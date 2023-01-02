@@ -34,8 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BenchmarkControllerTest {
     @MockBean
     private static BenchmarkService benchmarkService;
-    @MockBean
-    private static SecurityService securityService;
 
     final static int PAGE = 0;
     final static int LIMIT = 100;
@@ -54,11 +52,6 @@ class BenchmarkControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @BeforeEach
-    void init()
-    {
-        lenient().when(securityService.authenticateUser(any())).thenReturn(true);
-    }
 
     @Test
     @DisplayName("Get Algorithm - No filter")

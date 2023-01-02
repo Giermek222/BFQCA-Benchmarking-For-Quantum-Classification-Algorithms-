@@ -2,7 +2,6 @@ package com.example.bfqca_backend.controllers;
 
 import com.example.bfqca_backend.models.business.User;
 import com.example.bfqca_backend.models.rest.UserRest;
-import com.example.bfqca_backend.services.interfaces.SecurityService;
 import com.example.bfqca_backend.services.interfaces.UserService;
 import com.example.bfqca_backend.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class UserController {
 
     @Autowired
     UserService userService;
-    SecurityService securityService;
+
 
     @GetMapping("/all")
     ResponseEntity<Object> getUsers(@RequestHeader HttpHeaders headers) {

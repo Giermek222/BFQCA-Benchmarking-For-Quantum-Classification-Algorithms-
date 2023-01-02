@@ -9,4 +9,5 @@ public class Algorithm {
     private final String algorithmName;
     private final String description;
     private final String problemName;
+    private final String userName;
 }

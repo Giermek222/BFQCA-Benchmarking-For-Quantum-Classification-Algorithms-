@@ -23,6 +23,7 @@ const commonStyles = {
 
 type Props = {
     page: number,
+    userName : string,
     limitOpen: boolean,
     algorithmNames: any,
     problemFilter: string,
@@ -53,6 +54,7 @@ const styles = {
 const AlgorithmScreen: React.FC<Props> = ({
     showAlgorithms,
     algorithmFilter,
+    userName,
     filterByAlgorithm,
     problemFilter,
     filterByProblem,
@@ -187,7 +189,7 @@ const AlgorithmScreen: React.FC<Props> = ({
                     </div>
                 </div>
                 :
-                <AddAlgorithmScreen showAlgorithm={setShowAlgorithms} />
+                <AddAlgorithmScreen showAlgorithm={setShowAlgorithms} userName = {userName} />
             }
         </div>
 

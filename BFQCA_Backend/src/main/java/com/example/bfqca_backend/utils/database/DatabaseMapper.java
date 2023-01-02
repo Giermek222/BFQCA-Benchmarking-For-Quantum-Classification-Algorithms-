@@ -36,6 +36,7 @@ public class DatabaseMapper {
                             .withAlgorithmName(resultSet.getString("algorithmName"))
                             .withProblemName(resultSet.getString("problemName"))
                             .withDescription(resultSet.getString("algorithmDescription"))
+                            .withUserName(resultSet.getString("author"))
                             .build()
             );
         }

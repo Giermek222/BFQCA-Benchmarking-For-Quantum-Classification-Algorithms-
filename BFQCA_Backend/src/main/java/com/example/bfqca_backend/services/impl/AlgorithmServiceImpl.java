@@ -13,11 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
@@ -29,15 +26,13 @@ public class AlgorithmServiceImpl implements AlgorithmService {
 
 
     @Override
-    public void ExecuteAlgorithm(Algorithm algorithm, List<String> params, String Code) throws IOException {
-
-
-        if (!Code.equals(null)) {
+    public void ExecuteAlgorithm(Algorithm algorithm, String Code) throws IOException {
+        if (Code != null) {
             algorithmRepository.addAlgorithm(AlgorithmMapper.mapBusinessToDto(algorithm));
             createNewPythonScript(Code, algorithm.getAlgorithmName());
         }
 
-        runAlgorithm(algorithm, params);
+        runAlgorithm(algorithm);
     }
 
     @Override
@@ -53,7 +48,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
                 .collect(Collectors.toList());
     }
 
-    private void runAlgorithm(Algorithm algorithm, List<String> params) throws IOException {
+    private void runAlgorithm(Algorithm algorithm) throws IOException {
         StringBuilder command = new StringBuilder();
         command.append(TESTPATH);
         Runtime.getRuntime().exec(command.toString());

@@ -7,8 +7,10 @@ import { tokenSlice } from "../../redux_functions/security_token_slice";
 import { algorithmExecuteEndpoint, algorithmsGetEndpoint } from "../../constants";
 
 
-
-const MainScreen: React.FC = () => {
+type Props = {
+  userName: string
+};
+const MainScreen: React.FC<Props> = ({ userName }) => {
   //constants
   const [algorithmNames, setAlgorithmNames] = useState([]);
   const [showAlgorithms, setShowAlgorithms] = useState(true);
@@ -119,6 +121,7 @@ const MainScreen: React.FC = () => {
         {
           algorithmName: algName,
           problemName: probName,
+          userName: userName
         },
         {
           headers: {
@@ -138,6 +141,7 @@ const MainScreen: React.FC = () => {
   return (
       <AlgorithmScreen
       page = {page}
+      userName = {userName}
       anchorEl = {anchorEl}
       limitOpen = {limitOpen}
       ColumnArray = {ColumnArray}

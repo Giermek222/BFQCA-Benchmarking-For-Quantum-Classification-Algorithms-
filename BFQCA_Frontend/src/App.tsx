@@ -9,21 +9,22 @@ import Header from "./Components/Other/Header";
 import ProblemScreen from "./Components/Other/ProblemScreen";
 function App() {
   const [logged, setLogged] = useState(false);
+  const [username, setUserName] = useState("");
   return (
     
       <div>
         {logged ?
           <div>
-            <Header logged={setLogged}/>
+            <Header logged={setLogged} userName={username}/>
             <Routes>
-              <Route path="/" element={<AlgorithmScreen />} />
+              <Route path="/" element={<AlgorithmScreen userName = {username} />} />
               <Route path="/benchmark" element={<BenchmarkScreen />} />
               <Route path="/problems" element={<ProblemScreen />} />
             </Routes>
           </div>
         :
             <Routes>
-              <Route path="*" element={<LoginScreen logged={setLogged}/>} />
+              <Route path="*" element={<LoginScreen logged={setLogged} setUserName={setUserName}/>} />
             </Routes>
         }
       </div>

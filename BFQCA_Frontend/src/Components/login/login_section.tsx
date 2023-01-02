@@ -9,9 +9,10 @@ import md5 from 'md5';
 
 type Props = {
   logged: (value: boolean) => void;
+  setUserName: (value: string) => void
 };
 
-const LoginSection: React.FC<Props> = ({ logged }) => {
+const LoginSection: React.FC<Props> = ({ logged, setUserName }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -52,6 +53,7 @@ const LoginSection: React.FC<Props> = ({ logged }) => {
           variant="contained"
           style={{ margin: 10 }}
           onClick={() => {
+            setUserName(email)
             axios
               .post(
                 userLoginEndpoint,

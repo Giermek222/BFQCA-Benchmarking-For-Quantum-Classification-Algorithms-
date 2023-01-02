@@ -11,9 +11,10 @@ import { Menu, MenuItem } from "@mui/material";
 
 type Props = {
   showAlgorithm: (value: boolean) => void;
+  userName: string
 };
 
-const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm }) => {
+const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
   const [algName, setAlgName] = useState("");
   const [problemName, setProblemName] = useState("");
   const [problemDescription, setProblemDescription] = useState("Select problem")
@@ -46,7 +47,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm }) => {
           description: description !== "" ? description : null,
           problemName: problemName !== "" ? problemName : null,
           code: code !== "" ? code : null,
-          params: [],
+          userName: userName
         },
 
         {

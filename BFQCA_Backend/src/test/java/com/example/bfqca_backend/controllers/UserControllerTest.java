@@ -35,8 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
     @MockBean
     private static UserService userService;
-    @MockBean
-    private static SecurityService securityService;
 
     final static int PAGE = 0;
     final static int LIMIT = 100;
@@ -44,11 +42,6 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @BeforeEach
-    void init()
-    {
-        lenient().when(securityService.authenticateUser(any())).thenReturn(true);
-    }
 
 
     @Test

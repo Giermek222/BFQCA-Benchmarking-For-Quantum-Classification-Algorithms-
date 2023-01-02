@@ -13,9 +13,10 @@ const lightBlue = "#1976D2";
 var fontStyle = "serif";
 type Props = {
   logged: (value: boolean) => void;
+  setUserName: (value: string) => void
 };
 
-const LoginScreen: React.FC<Props> = ({ logged }) => {
+const LoginScreen: React.FC<Props> = ({ logged, setUserName }) => {
   // Set slices for login data
   const handleLogin = async (event: any) => {};
   const [isLoginOpen, setIsLoginOpen] = useState(true);
@@ -199,7 +200,7 @@ const LoginScreen: React.FC<Props> = ({ logged }) => {
                 height: "50vh",
               }}
             >
-              {isLoginOpen ? <LoginSection logged={logged} /> : <RegisterSection/>}
+              {isLoginOpen ? <LoginSection logged={logged} setUserName={setUserName} /> : <RegisterSection/>}
             </div>
           </div>
           <div />

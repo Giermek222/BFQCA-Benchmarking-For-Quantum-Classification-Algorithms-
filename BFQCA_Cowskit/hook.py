@@ -9,14 +9,11 @@ def main():
     args, dataset, encoding, algorithm = parse_flags(override=False)
 
     start = time.time()
-    print(start)
     X_train, X_test, y_train, y_test = dataset.load_iris(16,32)
     algorithm.fit(X_train, y_train)
     end = time.time()
-    print(end)
 
-    total_time = round(end-start, 2)
-    print(total_time)
+    total_time = round((end-start)*1000, 2)
 
     body = make_request(
         args.dataset,

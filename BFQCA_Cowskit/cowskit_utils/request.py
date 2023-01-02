@@ -8,16 +8,16 @@ def make_request(problem_name, algorithm_name, learn_accuracy, test_accuracy, le
     ]
 
     body = {
-        "problem name": problem_name,
-        "algorithm name": algorithm_name,
-        "accuracy learning": learn_accuracy,
-        "accuracy test": test_accuracy,
-        "loss learning": learn_loss,
-        "loss test": test_loss,
-        "max latency": max_latency,
-        "min latency": min_latency,
-        "avg latency": avg_latency,
-        "latency percentile": percentile,
+        "problemName": problem_name,
+        "algorithmName": algorithm_name,
+        "accuracyLearning": learn_accuracy,
+        "accuracyTest": test_accuracy,
+        "lossLearning": learn_loss,
+        "lossTest": test_loss,
+        "maxLatency": max_latency,
+        "minLatency": min_latency,
+        "avgLatency": avg_latency,
+        "latencyPercentile": percentile,
         "time": total_time
     }
 
@@ -26,7 +26,7 @@ def make_request(problem_name, algorithm_name, learn_accuracy, test_accuracy, le
     return body
 
 def send_request(body) -> None:
-    URL = "https://localhost/benchmarks/execute"
+    URL = "https://localhost:3001/benchmarks/execute"
 
     try:
         response = requests.post(url = URL, json=body)

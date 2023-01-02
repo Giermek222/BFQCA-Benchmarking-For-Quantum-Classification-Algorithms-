@@ -24,7 +24,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('-e','--encoding', 
                         required=False,
                         choices=ENCODING_CHOICES, 
+<<<<<<< HEAD
+                        default="amplitude",
+=======
                         default="angle",
+>>>>>>> main
                         help=f"Name of the encoding to use. Possible values: {ENCODING_CHOICES}"
     )
     parser.add_argument('-af','--algorithm_file', 
@@ -64,7 +68,7 @@ def parse_dataset(dataset:str, dataset_file:str = "") -> cowskit.datasets.Datase
     elif dataset == "lines":
         dataset = cowskit.datasets.LinesDataset(shape=[3,3], line_len=2)
     elif dataset == "custom":
-        file = __import__(dataset_file)
+        file = __import__(dataset_file.split(".py")[0])
         dataset = getattr(file, dataset_file.split(".py")[0])
     else:
         raise Exception(f"No dataset with name: {dataset}")
@@ -105,8 +109,8 @@ def parse_flags(override:bool = False) -> Tuple[argparse.Namespace, cowskit.data
     args = parse_args()
 
     if override:
-        args.dataset = "iris"
-        args.encoding = "amplitude"
+        args.dataset = "Iris"
+        # args.encoding = "amplitude"
         args.algorithm = "qknn"
 
     dataset = parse_dataset(args.dataset, args.dataset_file)

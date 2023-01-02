@@ -64,8 +64,9 @@ def parse_dataset(dataset:str, dataset_file:str = "") -> cowskit.datasets.Datase
     elif dataset == "lines":
         dataset = cowskit.datasets.LinesDataset(shape=[3,3], line_len=2)
     elif dataset == "custom":
-        file = __import__(dataset_file.split(".py")[0])
-        dataset = getattr(file, dataset_file.split(".py")[0])
+        name = dataset_file.split(".py")[0]
+        file = __import__(name)
+        dataset = getattr(file, name)()
     else:
         raise Exception(f"No dataset with name: {dataset}")
 
@@ -79,8 +80,9 @@ def parse_algorithm(algorithm:str, algorithm_file:str = "") -> cowskit.algorithm
     elif algorithm == "qcnn":
         algorithm = cowskit.models.ConvolutionalModel()
     elif algorithm == "custom":
-        file = __import__(algorithm_file)
-        algorithm = getattr(file, algorithm_file.split(".py")[0])
+        name = algorithm_file.split(".py")[0]
+        file = __import__(name)
+        algorithm = getattr(file, name)()
     else:
         raise Exception(f"No algorithm with name: {algorithm}")
 
@@ -94,8 +96,9 @@ def parse_encoding(encoding: str, encoding_file: str = "") -> cowskit.encodings.
     elif encoding == "amplitude":
         encoding = cowskit.encodings.AmplitudeEncodingV2(n_features=4)
     elif encoding == "custom":
-        file = __import__(encoding_file)
-        encoding = getattr(file, encoding_file.split(".py")[0])
+        name = encoding_file.split(".py")[0]
+        file = __import__(name)
+        encoding = getattr(file, name)()
     else:
         raise Exception(f"No encoding with name: {encoding}")
 

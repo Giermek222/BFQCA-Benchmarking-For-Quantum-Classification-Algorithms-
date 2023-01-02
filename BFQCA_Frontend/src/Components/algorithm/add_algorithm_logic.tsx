@@ -22,7 +22,7 @@ type Props = {
 const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
   const [algName, setAlgName] = useState("");
   const [problemName, setProblemName] = useState("");
-  const [problemDescription, setProblemDescription] = useState("Select problem")
+  const [problemDescription, setProblemDescription] = useState("")
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -106,7 +106,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
           aria-expanded={limitOpen ? 'true' : undefined}
           onClick={handleLimitClick}
         >
-          {problemDescription}
+          {problemDescription === "" ? "Click to select" : problemDescription}
         </Button>
         <Menu
           id="basic-menu"

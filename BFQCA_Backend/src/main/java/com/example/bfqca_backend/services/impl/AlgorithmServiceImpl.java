@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 public class AlgorithmServiceImpl implements AlgorithmService {
 
     static final String rootDirectory =Paths.get(".").toAbsolutePath().getParent().getParent().toAbsolutePath().normalize().toString();
-    private static final String pathToPythonScript = rootDirectory + "\\BFQCA_Cowskit\\hook2.py ";
-    private static final String pathWithAlgorithms = rootDirectory + "\\BFQCA_Cowskit\\ ";
-    private static final String pathToExecutionFolder = rootDirectory + "\\BFQCA_Cowskit ";
+    private static final String pathToPythonScript = rootDirectory + "\\BFQCA_Cowskit\\cowskit_utils\\hook2.py ";
+    private static final String pathWithAlgorithms = rootDirectory + "\\BFQCA_Cowskit\\custom_algorithms\\";
+    private static final String pathToExecutionFolder = rootDirectory + "\\BFQCA_Cowskit";
     @Autowired
     AlgorithmRepository algorithmRepository;
 

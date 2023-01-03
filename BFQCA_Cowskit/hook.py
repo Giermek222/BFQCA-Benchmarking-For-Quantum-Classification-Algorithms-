@@ -1,12 +1,13 @@
 import time
-
+import os
 
 from cowskit_utils.request import make_request, send_request
 from cowskit_utils.argparser import parse_flags
 
 def main():
     
-    args, dataset, encoding, algorithm = parse_flags(override=False)
+    path = os.path.realpath(os.path.dirname(__file__)) + "/"
+    args, dataset, encoding, algorithm = parse_flags(hook_path = path, override=False)
 
     start = time.time()
     X_train, X_test, y_train, y_test = dataset.load_iris(16,32)

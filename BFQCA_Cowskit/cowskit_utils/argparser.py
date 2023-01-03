@@ -44,8 +44,8 @@ def parse_args() -> argparse.Namespace:
                             "File must contain a class named exactly like the file, that overrides cowskit.encodings.Encoding class"
     )
     parser.add_argument('-t','--tries',
-                        default=1,
-                        help="Determines how many times algorithm is benchmarked. Default is 1."
+                        default=10,
+                        help="Determines how many times algorithm is benchmarked. Default is 10."
     )
     parser.add_argument('-i','--include_all',
                         default=False,

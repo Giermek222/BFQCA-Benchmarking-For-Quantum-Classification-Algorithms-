@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +22,10 @@ import java.util.stream.Collectors;
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
 
-    private static final String TESTPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit\\hook2.py ";
-    private static final String ALGORITMPATH = "D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Backend\\src\\main\\resources\\python_algorithms\\";
+    static final String rootDirectory =Paths.get(".").toAbsolutePath().getParent().getParent().toAbsolutePath().normalize().toString();
+    private static final String pathToPythonScript = rootDirectory + "\\BFQCA_Cowskit\\hook2.py ";
+    private static final String pathWithAlgorithms = rootDirectory + "\\BFQCA_Cowskit\\ ";
+    private static final String pathToExecutionFolder = rootDirectory + "\\BFQCA_Cowskit ";
     @Autowired
     AlgorithmRepository algorithmRepository;
 
@@ -53,21 +56,21 @@ public class AlgorithmServiceImpl implements AlgorithmService {
 
     private void runAlgorithm(Algorithm algorithm) throws IOException {
         StringBuilder command = new StringBuilder();
-        command.append(TESTPATH);
+        command.append(pathToPythonScript);
         command.append(" -a " + algorithm.getAlgorithmName());
         command.append(" -d " + algorithm.getProblemName());
 
 
 
-        ProcessBuilder pb = new ProcessBuilder("python",TESTPATH," -a "+algorithm.getAlgorithmName()," -d "+algorithm.getProblemName());
-        pb.directory(new File("D:\\Wladek\\repos\\inzynierka\\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\\BFQCA_Cowskit"));
+        ProcessBuilder pb = new ProcessBuilder("python",pathToPythonScript," -a "+algorithm.getAlgorithmName()," -d "+algorithm.getProblemName());
+        pb.directory(new File(pathToExecutionFolder));
 
         Process p = pb.start();
     }
 
     private void createNewPythonScript(String Code, String algorithmName) {
         try {
-            File myObj = new File( ALGORITMPATH + algorithmName + ".py");
+            File myObj = new File( pathWithAlgorithms + algorithmName + ".py");
             if (myObj.createNewFile()) {
                 Files.writeString(myObj.toPath(), Code);
             } else {

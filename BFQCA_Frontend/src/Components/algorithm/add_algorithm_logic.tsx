@@ -5,13 +5,13 @@ import Button from "@mui/material/Button";
 import "../styles.css";
 import { algorithmExecuteEndpoint } from "../../constants";
 import axios from "axios";
-import { Menu, MenuItem } from "@mui/material";
+import { Box, Menu, MenuItem } from "@mui/material";
 
 const styles = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  
+
 };
 
 type Props = {
@@ -95,34 +95,42 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
   };
 
   return (
-    <div >
-      <div >
+    <div>
+      <Box
+        sx={{
+          display: 'grid',
+          gap: 1,
+          gridTemplateRows: 'repeat(5)',
+          width: '75%'
+        }}
+      >
 
-        Selected Problem:
-        <Button
-          id="basic-button"
-          aria-controls={limitOpen ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={limitOpen ? 'true' : undefined}
-          onClick={handleLimitClick}
-        >
-          {problemDescription === "" ? "Click to select" : problemDescription}
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={limitOpen}
-          onClose={handleLimitClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
-          <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
-          <MenuItem onClick={setProblemToDiabetes}>Pima Indians Diabetic</MenuItem>
-        </Menu>
-      </div>
-      <div className="columnDivStyle">
+        <div style={styles}>
+          Selected Problem:
+          <Button
+            id="basic-button"
+            aria-controls={limitOpen ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={limitOpen ? 'true' : undefined}
+            onClick={handleLimitClick}
+          >
+            {problemDescription === "" ? "Click to select" : problemDescription}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={limitOpen}
+            onClose={handleLimitClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
+            <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
+            <MenuItem onClick={setProblemToDiabetes}>Pima Indians Diabetic</MenuItem>
+          </Menu>
+        </div>
+
         <TextField
           label="Algorithm name"
           id="outlined-size-small"
@@ -131,51 +139,62 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
           value={algName}
           onChange={onChangeAlgorithmName}
         />
-      </div>
 
-      <div className="columnDivStyle">
+
+
         <TextField
           label="Algorithm Description"
           id="outlined-size-small"
           defaultValue="Algorithm name"
           size="small"
+          multiline
+          rows={4}
           value={description}
           onChange={onChangeDescription}
         />
 
-      </div>
-      <div className="columnDivStyle">
+
+
         <TextField
           label="Code"
           id="outlined-size-small"
           defaultValue="Algorithm name"
           size="small"
           value={code}
+          multiline
+          rows={10}
           onChange={onChangeCode}
         />
 
 
-      </div>
-      <div className="columnDivStyle">
-        <Button
-          variant="contained"
-          onClick={() => {
-            sendNewAlgorithm()
-            showAlgorithm(true);
-          }}
-          sx={{ width: 300, height: 60, margin: 2 }}>
-          Sumbmit
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            showAlgorithm(true);
-          }}
-          sx={{ width: 300, height: 60, margin: 2 }}>
-          Back
-        </Button>
-      </div>
 
+        <Box
+          sx={{
+            display: 'grid',
+            gap: 1,
+            gridTemplateColumns: 'repeat(2, 1fr)',
+          }}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              sendNewAlgorithm()
+              showAlgorithm(true);
+            }}
+            sx={{ width: 300, height: 60, margin: 2 }}>
+            Sumbmit
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              showAlgorithm(true);
+            }}
+            sx={{ width: 300, height: 60, margin: 2 }}>
+            Back
+          </Button>
+        </Box>
+      </Box>
     </div>
   );
 };

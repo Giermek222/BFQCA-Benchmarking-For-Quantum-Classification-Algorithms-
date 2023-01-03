@@ -15,7 +15,7 @@ type Props = {
 
 const LoginScreen: React.FC<Props> = ({ logged, setUserName }) => {
   // Set slices for login data
-  const handleLogin = async (event: any) => {};
+  const handleLogin = async (event: any) => { };
   const [isLoginOpen, setIsLoginOpen] = useState(true);
 
   return (
@@ -34,42 +34,56 @@ const LoginScreen: React.FC<Props> = ({ logged, setUserName }) => {
             <div
               style={{
                 position: "absolute",
-                right: "90%",
+                right: "50%",
                 left: "10%",
                 bottom: "50%",
               }}
             >
               <label
                 style={{
-                  fontSize: 100,
+                  fontSize: 60,
                   fontWeight: "bold",
                   color: "white",
                   fontFamily: fontStyle,
                 }}
               >
-                Q
+                Project of selected quantum classification algorithms
               </label>
-              <label
-                style={{
-                  fontSize: 25,
-                  fontWeight: "bold",
-                  color: "white",
-                  fontFamily: fontStyle,
-                }}
-              >
-                UANTUM
-                <br />
-              </label>
-              <label
-                style={{
-                  fontSize: 25,
-                  fontWeight: "bold",
-                  color: "white",
-                  fontFamily: fontStyle,
-                }}
-              >
-                BENCHMARKING
-              </label>
+
+              <div>
+                <label
+                  style={{
+                    fontSize: 25,
+                    fontWeight: "bold",
+                    color: "white",
+                    fontFamily: fontStyle,
+                  }}
+                >
+                  Wojciech Buchwald
+                </label>
+              </div><div>
+                <label
+                  style={{
+                    fontSize: 25,
+                    fontWeight: "bold",
+                    color: "white",
+                    fontFamily: fontStyle,
+                  }}
+                >
+                  Piotr Krzemiński
+                </label>
+              </div><div>
+                <label
+                  style={{
+                    fontSize: 25,
+                    fontWeight: "bold",
+                    color: "white",
+                    fontFamily: fontStyle,
+                  }}
+                >
+                  Michał Babiński
+                </label>
+              </div>
             </div>
           </div>
         </Grid>
@@ -197,7 +211,7 @@ const LoginScreen: React.FC<Props> = ({ logged, setUserName }) => {
                 height: "50vh",
               }}
             >
-              {isLoginOpen ? <LoginSection logged={logged} setUserName={setUserName} /> : <RegisterSection/>}
+              {isLoginOpen ? <LoginSection logged={logged} setUserName={setUserName} /> : <RegisterSection />}
             </div>
           </div>
           <div />

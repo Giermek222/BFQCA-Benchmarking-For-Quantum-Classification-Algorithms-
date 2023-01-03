@@ -84,7 +84,7 @@ class QKNN_Base:
 
         return fidelities
 
-class CustomNeighbors6(ClassifierMixin, QKNN_Base):
+class CustomNeighbors3(ClassifierMixin, QKNN_Base):
 
     def __init__(self,
                  n_neighbors: int = 4,

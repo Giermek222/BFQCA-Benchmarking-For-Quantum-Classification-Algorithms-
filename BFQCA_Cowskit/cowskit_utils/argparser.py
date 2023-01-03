@@ -1,5 +1,6 @@
 import cowskit
 import argparse
+import sys
 from typing import Tuple
 
 ALGORITHM_CHOICES = ["qknn", "qvm", "qcnn", "custom"]
@@ -58,63 +59,67 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def parse_dataset(dataset:str, dataset_file:str = "") -> cowskit.datasets.Dataset:
-    if dataset == "Iris":
-        dataset = cowskit.datasets.IrisDataset("./cowskit_library/cowskit/files/iris.dataset") # cowskit.files.IRIS_DATASET
-    elif dataset == "lines":
+def parse_dataset(dataset_name:str, dataset_file:str = "", path:str = "./") -> Tuple[cowskit.datasets.Dataset, str]:
+    if dataset_name == "Iris":
+        dataset = cowskit.datasets.IrisDataset(path + "cowskit_library/cowskit/files/iris.dataset") # cowskit.files.IRIS_DATASET
+    elif dataset_name == "lines":
         dataset = cowskit.datasets.LinesDataset(shape=[3,3], line_len=2)
-    elif dataset == "custom":
-        name = dataset_file.split(".py")[0]
-        file = __import__(name)
-        dataset = getattr(file, name)()
+    elif dataset_name == "custom":
+        dataset_name = dataset_file.split(".py")[0]
+        file = __import__(dataset_name)
+        dataset = getattr(file, dataset_name)()
     else:
-        raise Exception(f"No dataset with name: {dataset}")
+        raise Exception(f"No dataset with name: {dataset_name}")
 
-    return dataset
+    return dataset, dataset_name
 
-def parse_algorithm(algorithm:str, algorithm_file:str = "") -> cowskit.algorithms.Algorithm:
-    if algorithm == "qknn":
+def parse_algorithm(algorithm_name:str, algorithm_file:str = "") -> Tuple[cowskit.algorithms.Algorithm, str]:
+    if algorithm_name == "qknn":
         algorithm = cowskit.algorithms.KNearestNeighbors(n_neighbors=4)
-    elif algorithm == "qvm":
+    elif algorithm_name == "qvm":
         algorithm = cowskit.models.VariationalModel()
-    elif algorithm == "qcnn":
+    elif algorithm_name == "qcnn":
         algorithm = cowskit.models.ConvolutionalModel()
-    elif algorithm == "custom":
-        name = algorithm_file.split(".py")[0]
-        file = __import__(name)
-        algorithm = getattr(file, name)()
+    elif algorithm_name == "custom":
+        algorithm_name = algorithm_file.split(".py")[0]
+        file = __import__(algorithm_name)
+        algorithm = getattr(file, algorithm_name)()
     else:
-        raise Exception(f"No algorithm with name: {algorithm}")
+        raise Exception(f"No algorithm with name: {algorithm_name}")
 
-    return algorithm
+    return algorithm, algorithm_name
 
-def parse_encoding(encoding: str, encoding_file: str = "") -> cowskit.encodings.Encoding:
-    if encoding == "binary":
+def parse_encoding(encoding_name: str, encoding_file: str = "") -> Tuple[cowskit.encodings.Encoding, str]:
+    if encoding_name == "binary":
         encoding = cowskit.encodings.BinaryEncoding()
-    elif encoding == "angle":
+    elif encoding_name == "angle":
         encoding = cowskit.encodings.AngleEncoding()
-    elif encoding == "amplitude":
+    elif encoding_name == "amplitude":
         encoding = cowskit.encodings.AmplitudeEncodingV2(n_features=4)
-    elif encoding == "custom":
-        name = encoding_file.split(".py")[0]
-        file = __import__(name)
-        encoding = getattr(file, name)()
+    elif encoding_name == "custom":
+        encoding_name = encoding_file.split(".py")[0]
+        file = __import__(encoding_name)
+        encoding = getattr(file, encoding_name)()
     else:
-        raise Exception(f"No encoding with name: {encoding}")
+        raise Exception(f"No encoding with name: {encoding_name}")
 
-    return encoding
+    return encoding, encoding_name
 
-def parse_flags(override:bool = False) -> Tuple[argparse.Namespace, cowskit.datasets.Dataset, cowskit.encodings.Encoding, cowskit.algorithms.Algorithm]:
+def parse_flags(hook_path: str = "", override:bool = False) -> Tuple[argparse.Namespace, cowskit.datasets.Dataset, cowskit.encodings.Encoding, cowskit.algorithms.Algorithm]:
     args = parse_args()
+
+    sys.path.append(hook_path+"custom_algorithms")
+    sys.path.append(hook_path+"custom_encodings")
+    sys.path.append(hook_path+"custom_datasets")
 
     if override:
         args.dataset = "Iris"
         args.encoding = "amplitude"
         args.algorithm = "qknn"
 
-    dataset = parse_dataset(args.dataset, args.dataset_file)
-    encoding = parse_encoding(args.encoding, args.encoding_file)
-    algorithm = parse_algorithm(args.algorithm, args.algorithm_file)
+    dataset, args.dataset = parse_dataset(args.dataset, args.dataset_file, hook_path)
+    encoding, args.encoding = parse_encoding(args.encoding, args.encoding_file)
+    algorithm, args.algorithm = parse_algorithm(args.algorithm, args.algorithm_file)
 
     algorithm.encoding = encoding
 

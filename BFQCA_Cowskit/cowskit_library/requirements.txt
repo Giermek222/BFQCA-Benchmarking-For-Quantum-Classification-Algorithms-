@@ -4,3 +4,4 @@ matplotlib
 sklearn
 scipy
 unittest2
+requests

@@ -3,7 +3,7 @@ import argparse
 import sys
 from typing import Tuple
 
-ALGORITHM_CHOICES = ["qknn", "qvm", "qcnn", "custom"]
+ALGORITHM_CHOICES = ["qknn", "qvm", "qcnn"]
 DATASET_CHOICES = ["Iris", "Palmer Penguin", "Pima Indians Diabetic", "custom"]
 ENCODING_CHOICES = ["angle", "amplitude", "binary", "custom"]
 
@@ -14,8 +14,8 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument('-a','--algorithm', 
                         required=True,
-                        choices=ALGORITHM_CHOICES,  
-                        help=f"Name of the algorithm to use. Possible values: {ALGORITHM_CHOICES}"
+                        # choices=ALGORITHM_CHOICES,  
+                        help=f"Name of the algorithm to use. Predefined values: {ALGORITHM_CHOICES}"
     )
     parser.add_argument('-d','--dataset', 
                         required=True,
@@ -80,12 +80,12 @@ def parse_algorithm(algorithm_name:str, algorithm_file:str = "") -> Tuple[cowski
         algorithm = cowskit.models.VariationalModel()
     elif algorithm_name == "qcnn":
         algorithm = cowskit.models.ConvolutionalModel()
-    elif algorithm_name == "custom":
-        algorithm_name = algorithm_file.split(".py")[0]
-        file = __import__(algorithm_name)
-        algorithm = getattr(file, algorithm_name)()
     else:
-        raise Exception(f"No algorithm with name: {algorithm_name}")
+        try:
+            file = __import__(algorithm_name)
+            algorithm = getattr(file, algorithm_name)()
+        except Exception as e:
+            raise Exception(f"No algorithm with name: {algorithm_name}")
 
     return algorithm, algorithm_name
 

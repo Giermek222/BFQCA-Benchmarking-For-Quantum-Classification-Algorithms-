@@ -1,15 +1,21 @@
+
+
 const ContributeScreen = () => {
     return (
         <div>
-            <h1>Hook allows to automatically compute benchmarking results for custom implementations of quantum algorithms.
-To do so, set any of the **required** flags to "custom", and provide a file with the code of the algorithm/dataset/encoding.
-
-Requirements:
-1. File must contain a class named EXACTLY like the file name. Example: CustomAlgorithm.py has CustomAlgorithm class
-2. File must be of .py extension
-3. Only a selected amount of external libraries are available. See the list in requirements.py
-4. A class inside the file must implement a selected interface from cowskit library. Either cowskit.algorithms.Algorithm, cowskit.datasets.Dataset or cowskit.encodings.Encoding
-</h1>
+            <h1>How to prepare algorithm code</h1>
+            <h2>File must contain a class named EXACTLY like the algorithm name</h2>
+            <h2>A class inside the file must implement a one of the following interfaces from cowskit library</h2>
+            <h3>cowskit.algorithms.Algorithm</h3>
+            <h3>cowskit.datasets.Dataset</h3>
+            <h3>cowskit.encodings.Encoding</h3>
+            <h2>Your code cas use only following libraries</h2>
+            <h3>numpy</h3>
+            <h3>qiskit[machine-learning]</h3>
+            <h3>matplotlib</h3>
+            <h3>sklearn</h3>
+            <h3>scipy</h3>
+            <h3>unittest2</h3>
         </div>
     )
 }

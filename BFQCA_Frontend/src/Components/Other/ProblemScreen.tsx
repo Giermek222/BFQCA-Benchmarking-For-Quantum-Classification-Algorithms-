@@ -1,18 +1,19 @@
 import { TableBody, TableCell, TableRow } from "@mui/material"
 import Table from "@mui/material/Table"
 
+const styles = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  };
 
 const ProblemScreen = () => {
 
 
     return (
-        <div>
-            <Table sx={{
-                width: { sm: 400, md: 600 },
-                "& .MuiInputBase-root": {
-                    height: 800
-                }
-            }}>
+        <div style={styles}>
+            <Table sx={{width: '75%' }}>
                 <TableBody>
                     <TableRow>
                         <TableCell>

@@ -11,7 +11,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import { Menu, MenuItem, TextField } from "@mui/material";
+import { Box, Menu, MenuItem, TextField } from "@mui/material";
 
 
 const commonStyles = {
@@ -19,11 +19,11 @@ const commonStyles = {
     borderColor: 'text.primary',
     m: 1,
     border: 1,
-  };
+};
 
 type Props = {
     page: number,
-    userName : string,
+    userName: string,
     limitOpen: boolean,
     algorithmNames: any,
     problemFilter: string,
@@ -48,8 +48,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    
-  };
+
+};
 
 const AlgorithmScreen: React.FC<Props> = ({
     showAlgorithms,
@@ -76,34 +76,47 @@ const AlgorithmScreen: React.FC<Props> = ({
     return (
         <div style={styles}>
             {showAlgorithms ?
-                <div>
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gap: 3,
+                        gridTemplateRows: 'repeat(5)',
+                        width: '75%'
+                    }}
+                >
 
-                    <div>
+<div></div>
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gap: 1,
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                        }}>
                         <TextField
-                            label="Algorithm name"
+                            label="Filter by algorithm name"
                             id="outlined-size-small"
                             defaultValue="Algorithm name"
                             size="small"
                             value={algorithmFilter}
                             onChange={filterByAlgorithm}
                         />
-                        
+
                         <TextField
-                            label="Problem name"
+                            label="Filter by problem name"
                             id="outlined-size-small"
                             defaultValue="Problem name"
                             size="small"
                             value={problemFilter}
                             onChange={filterByProblem}
                         />
-                    </div>
+                    </Box>
 
-                    <TableContainer sx={{ width: '75%' }} component={Paper}>
+                    <TableContainer  component={Paper}>
                         <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
                                     {ColumnArray.map((column: any) => (
-                                        <TableCell>{column}</TableCell>
+                                        <TableCell><h3>{column}</h3></TableCell>
                                     ))}
                                 </TableRow>
                             </TableHead>
@@ -132,15 +145,8 @@ const AlgorithmScreen: React.FC<Props> = ({
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Button
-                        variant="contained"
-                        onClick={() => {
-                            setShowAlgorithms(false);
-                        }}
-                        sx={{ width: 300, height: 60, margin: 2 }}
-                    >
-                        Add new Algorithm
-                    </Button>
+
+
                     <div className="columnDivStyle">
                         <Button
                             variant="contained"
@@ -161,7 +167,7 @@ const AlgorithmScreen: React.FC<Props> = ({
                         >
                             next
                         </Button>
-                        <div>
+                        
                             <Button
                                 id="basic-button"
                                 aria-controls={limitOpen ? 'basic-menu' : undefined}
@@ -184,11 +190,22 @@ const AlgorithmScreen: React.FC<Props> = ({
                                 <MenuItem onClick={setNewLimitTo10}>10 algorithms per page:</MenuItem>
                                 <MenuItem onClick={setNewLimitTo20}>20 algorithms per page:</MenuItem>
                             </Menu>
-                        </div>
+                        
                     </div>
-                </div>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            setShowAlgorithms(false);
+                        }}
+                        sx={{ width: 300, height: 60, margin: 2 }}
+                    >
+                        Add new Algorithm
+                    </Button>
+
+
+                </Box>
                 :
-                <AddAlgorithmScreen showAlgorithm={setShowAlgorithms} userName = {userName} />
+                <AddAlgorithmScreen showAlgorithm={setShowAlgorithms} userName={userName} />
             }
         </div>
 

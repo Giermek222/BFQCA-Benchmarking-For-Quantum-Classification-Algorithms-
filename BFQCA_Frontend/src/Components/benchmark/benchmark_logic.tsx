@@ -2,18 +2,26 @@ import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { benchmarkGetEndpoint } from "../../constants";
 import BenchmarkModel from "./benchmark_model";
-import { Menu, MenuItem, TextField } from "@mui/material";
+import { Box, Menu, MenuItem, TextField } from "@mui/material";
 
+const styles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 
+const stylesLeft = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'left',
+};
 
 const BenchmarkScreen: React.FC = () => {
   const [benchmarks, setbenchmarks] = useState([]);
@@ -108,33 +116,46 @@ const BenchmarkScreen: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <div>
-        <TextField
+    <div style={styles}>
+      <Box
+        sx={{
+          display: 'grid',
+          gap: 3,
+          gridTemplateRows: 'repeat(5)',
+          width: '75%',
+        }}
+      >
+        <div></div>
+        <Box
+          sx={{
+            display: 'grid',
+            gap: 1,
+            gridTemplateColumns: 'repeat(2, 1fr)',
+          }}>
+          <TextField
+            label="Filter by algorithm name"
+            id="outlined-size-small"
+            defaultValue="Filter by algorithm name"
+            size="small"
+            value={algorithmFilter}
+            onChange={filterByAlgorithm}
+          />
 
-          label="Algorithm name"
-          id="outlined-size-small"
-          defaultValue="Algorithm name"
-          size="small"
-          value={algorithmFilter}
-          onChange={filterByAlgorithm}
-        />
+          <TextField
+            label="Filter by problem name"
+            id="outlined-size-small"
+            defaultValue="Filter by problem name"
+            size="small"
+            value={problemFilter}
+            onChange={filterByProblem}
+          />
+        </Box>
 
-        <TextField
-          label="Problem name"
-          id="outlined-size-small"
-          defaultValue="Problem name"
-          size="small"
-          value={problemFilter}
-          onChange={filterByProblem}
-        />
-      </div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="simple table" sx={{width:'100%'}}>
           <TableHead>
             <TableRow>
               {ColumnArray.map((column) => (
-                <TableCell>{column}</TableCell>
+                <TableCell><h3>{column}</h3></TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -154,55 +175,63 @@ const BenchmarkScreen: React.FC = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
 
-      <div className="columnDivStyle">
-        <Button
-          variant="contained"
-          onClick={() => {
-            changePage(false)
-          }}
-          sx={{ width: 75, height: 20, margin: 2 }}
 
-        >
-          previous
-        </Button>
-        page : {page}
-        <Button
-          variant="contained"
-          onClick={() => {
-            changePage(true)
-          }}
-          sx={{ width: 75, height: 20, margin: 2 }}
-        >
-          next
-        </Button>
-        <div>
-          <Button
-            id="basic-button"
-            aria-controls={limitOpen ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={limitOpen ? 'true' : undefined}
-            onClick={handleLimitClick}
-          >
-            Set Limit
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={limitOpen}
-            onClose={handleLimitClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem onClick={setNewLimitTo5}>5 algorithms per page:</MenuItem>
-            <MenuItem onClick={setNewLimitTo10}>10 algorithms per page:</MenuItem>
-            <MenuItem onClick={setNewLimitTo20}>20 algorithms per page:</MenuItem>
-          </Menu>
-        </div>
-      </div>
-    </div>
+        
+           <div style={stylesLeft}>    
+
+            <Button
+              variant="contained"
+              onClick={() => {
+                changePage(false)
+              }}
+              sx={{ width: 75, height: 20, margin: 2 }}
+
+            >
+              previous
+            </Button>
+            page : {page}
+            <Button
+              variant="contained"
+              onClick={() => {
+                changePage(true)
+              }}
+              sx={{ width: 75, height: 20, margin: 2 }}
+            >
+              next
+            </Button>
+            <div>
+              <Button
+                id="basic-button"
+                aria-controls={limitOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={limitOpen ? 'true' : undefined}
+                onClick={handleLimitClick}
+              >
+                Set Limit
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={limitOpen}
+                onClose={handleLimitClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem onClick={setNewLimitTo5}>5 algorithms per page:</MenuItem>
+                <MenuItem onClick={setNewLimitTo10}>10 algorithms per page:</MenuItem>
+                <MenuItem onClick={setNewLimitTo20}>20 algorithms per page:</MenuItem>
+              </Menu>
+            </div>
+          
+          </div> 
+      </Box >
+
+
+
+
+    </div >
   );
 };
 

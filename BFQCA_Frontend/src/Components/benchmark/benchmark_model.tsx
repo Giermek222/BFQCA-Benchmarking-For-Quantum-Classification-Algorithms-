@@ -3,6 +3,7 @@ const BenchmarkModel = new Map([
     ["problemName", "Problem"],
     ["accuracyLearning", "Learning Accuracy"],
     ["accuracyTest", "Test Accuracy"],
+    ["lossLearning", "Learning Loss"],
     ["lossTest", "Test Loss"],
     ["time", "Time"],
     ["maxLatency", "Max Latency"],

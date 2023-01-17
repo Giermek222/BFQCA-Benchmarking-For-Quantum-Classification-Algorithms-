@@ -1,2 +1,0 @@
-Module 'cowskit' has been uninstalled!
-Module 'cowskit' has been installed!

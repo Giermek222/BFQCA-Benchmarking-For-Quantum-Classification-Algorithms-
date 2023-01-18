@@ -1,62 +1,56 @@
-import subprocess
+import sys
 import os
 
+from backend.files import get_logs_folder_path, get_log_file_path, get_file_realpath
+from backend.commands import run_command
 
-UNINSTALL_LOG_FILE = "logs/lib_delete.txt"
-INSTALL_LOG_FILE = "logs/lib_make.txt"
-LIB_FOLDER = "cowskit_library"
+LIBRARY_FOLDER = "library"
 
-if not os.path.exists(LIB_FOLDER):
-    os.mkdir(LIB_FOLDER)
+path_to_main_file = get_file_realpath(__file__)
+path_to_logs_folder = get_logs_folder_path(path_to_main_file)
+uninstall_log_path = get_log_file_path(path_to_logs_folder, "uninstall")
+install_log_path = get_log_file_path(path_to_logs_folder, "install")
 
 ### UNINSTALL CODE
-command_line = "python -m pip uninstall -y cowskit"
+with open(uninstall_log_path, "w") as log_file:
+    command_line = "python -m pip uninstall -y cowskit"
 
-with open(UNINSTALL_LOG_FILE, "w") as logfile:
     try:
-        import cowskit
-        subprocess.run(command_line,
-                    shell=True,
-                    check=True,
-                    stdout=logfile,
-                    stderr=logfile,
-                    cwd=os.getcwd(),
-                    env=os.environ.copy())
+        if "-f" not in sys.argv[1:]:
+            import cowskit
+        else:
+            log_file.write("Force uninstall 'cowskit'")
+
+        run_command(command_line, log_file)
         print("Module 'cowskit' has been uninstalled!")
 
     except ImportError as e:
-        print(f"Cowskit is not installed (or raised an exception), so it will not be uninstalled. Error can be found in the log files.")
-        logfile.write(str(e))
+        print("Module 'cowskit' was not found, so it will not be uninstalled.")
+        print("If this is a mistake, error can be found in the log files.")
+        log_file.write(str(e))
 
     except Exception as e:
-        print(f"Script execution failed, check {UNINSTALL_LOG_FILE} for details")
-        logfile.write(str(e))
+        print(f"Uninstall script execution failed, check {uninstall_log_path} for details.")
+        log_file.write(str(e))
 
-# WHEEL CODE
-try:
-    import wheel
-    command_line = f"cd {LIB_FOLDER} && " \
-                    "python setup.py bdist_wheel && " \
-                    "python -m pip install dist/cowskit-1.0.0-py3-none-any.whl"
-except Exception as e:
-    command_line = f"cd {LIB_FOLDER} && " \
-                    "python -m pip install --upgrade pip && " \
-                    "python -m pip install wheel && " \
-                    "python setup.py bdist_wheel && " \
-                    "python -m pip install dist/cowskit-1.0.0-py3-none-any.whl"
 
 # INSTALL CODE
-with open(INSTALL_LOG_FILE, "w") as logfile:
+with open(install_log_path, "w") as log_file:
+    command_line = f"cd {LIBRARY_FOLDER} && "
+
     try:
-        subprocess.run(command_line,
-                    shell=True,
-                    check=True,
-                    stdout=logfile,
-                    stderr=logfile,
-                    cwd=os.getcwd(),
-                    env=os.environ.copy())
+        import wheel
+    except Exception as e:
+        command_line += "python -m pip install --upgrade pip && " \
+                        "python -m pip install wheel && "
+
+    command_line += "python setup.py bdist_wheel && " \
+                    "python -m pip install dist/cowskit-1.0.0-py3-none-any.whl"
+
+    try:
+        run_command(command_line, log_file)
         print("Module 'cowskit' has been installed!")
 
     except Exception as e:
-        print(f"Script execution failed, check {INSTALL_LOG_FILE} for details")
-        logfile.write(str(e))
+        print(f"Install script execution failed, check {install_log_path} for details.")
+        log_file.write(str(e))

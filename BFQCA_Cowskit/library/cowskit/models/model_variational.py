@@ -11,7 +11,6 @@ import numpy as np
 from cowskit.models.model import Model
 from cowskit.datasets.dataset import Dataset
 from cowskit.encodings.encoding import Encoding
-from cowskit.utils.decorators import *
 
 class VariationalModel(Model):
     def __init__(self, dataset: Dataset = None, encoding: Encoding = None, depth: int = 1, learning_rate = 0.0001) -> None:

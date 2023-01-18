@@ -1,4 +1,5 @@
 import sys
+import os
 
 from backend.files import get_logs_folder_path, get_log_file_path, get_file_realpath
 from backend.commands import run_command
@@ -31,6 +32,7 @@ with open(uninstall_log_path, "w") as log_file:
     except Exception as e:
         print(f"Uninstall script execution failed, check {uninstall_log_path} for details.")
         log_file.write(str(e))
+
 
 # INSTALL CODE
 with open(install_log_path, "w") as log_file:

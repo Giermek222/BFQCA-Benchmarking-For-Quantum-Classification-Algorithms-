@@ -1,7 +1,5 @@
 from typing import Any
 
-
-
 class BasicDecorator:
     def __init__(self, *args: Any, **kwds: Any) -> None:
         pass

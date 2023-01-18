@@ -1,7 +1,7 @@
 import os
 import sys
 
-from backend.log import Log
+from backend.logger import Log
 
 def get_file_realpath(file: str) -> str:
     path = os.path.realpath(os.path.dirname(file))
@@ -22,6 +22,8 @@ def get_log_file_path(path_to_logs_folder: str, name: str) -> str:
     return path
 
 def add_custom_folders_to_path(path_to_main_file: str) -> None:
+    Log.info("Quantum Benchmarking initializing...")
+
     algorithms_path = f"{path_to_main_file}/custom_algorithms"
     encodings_path = f"{path_to_main_file}/custom_encodings"
     datasets_path = f"{path_to_main_file}/custom_datasets"

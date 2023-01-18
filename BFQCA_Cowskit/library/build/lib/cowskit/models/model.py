@@ -3,7 +3,6 @@ from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit
 from cowskit.datasets.dataset import Dataset
 from cowskit.algorithms.algorithm import Algorithm
 from cowskit.encodings.encoding import Encoding
-from cowskit.utils.decorators import *
 
 class Model(Algorithm):
     def __init__(self, dataset: Dataset = None, encoding: Encoding = None) -> None:
@@ -25,7 +24,6 @@ class Model(Algorithm):
             self.build_circuit()
             self.circuit.measure(self.all_qubits, self.output)
             
-    @VirtualHandle
     def build_circuit(self):
         pass
         

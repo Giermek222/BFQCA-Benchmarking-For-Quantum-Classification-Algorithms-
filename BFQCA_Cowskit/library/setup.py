@@ -38,6 +38,10 @@ setup(
     packages=find_packages(),
     install_requires=requirements_list,
     include_package_data=True,
-    package_data={'': [f"{FILE}cowskit/files/iris.dataset", f"{FILE}cowskit/files/penguins.dataset"]},
+    package_data={'': [
+        f"{FILE}cowskit/files/iris.dataset",
+        f"{FILE}cowskit/files/penguins.dataset",
+        f"{FILE}cowskit/files/diabetes.dataset"
+    ]},
     python_requires='>=3.7',
 )

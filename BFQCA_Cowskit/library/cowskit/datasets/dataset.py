@@ -1,7 +1,6 @@
 from typing import Tuple
 import numpy as np
 from random import randint
-from cowskit.utils.decorators import *
 
 class Dataset:
 
@@ -24,10 +23,11 @@ class Dataset:
 
     def generate_dataset(self) -> None:
         """
-        Override this method. Sets the following class parameters to numpy arrays: \n
+        Override this method. \n
+        Set the following class parameters to numpy arrays:\n
         self.data, self.labels.
         """
-        raise Exception("generate_dataset() method was not overriden in the custom implementation of the dataset")
+        raise Exception("Unimplemented 'generate_dataset' function in custom dataset.")
 
     def shuffle(self) -> None:
         assert(self._validated == True)
@@ -70,4 +70,3 @@ class Dataset:
         self.len = self.data.shape[0]
         self._validated = True
 
-    

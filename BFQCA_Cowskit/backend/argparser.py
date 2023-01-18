@@ -1,16 +1,16 @@
 import cowskit
 import argparse
-from argparse import Namespace
+from argparse import Namespace, ArgumentParser
 from typing import Tuple
 
 from backend.logger import Log
 
 PREDEFINED_ALGORITHMS = ['qknn', 'qvm', 'qcnn', 'qgenetic']
-PREDEFINED_DATASETS = ['iris', 'palmer penguin', 'pima indians diabetic']
+PREDEFINED_DATASETS = ['iris', 'palmer_penguin', 'pima_indians_diabetic', 'lines']
 PREDEFINED_ENCODINGS = ['angle', 'amplitude', 'binary']
 
 def parse_args() -> Namespace:
-    parser = argparse.ArgumentParser(
+    parser = ArgumentParser(
                 prog = 'Cowskit Benchmark App',
                 description = 'Launch algorithms, receive benchmark results')
 
@@ -46,13 +46,17 @@ def parse_args() -> Namespace:
     return parser.parse_args()
 
 
-def parse_dataset(dataset_name: str) -> Tuple[cowskit.datasets.Dataset, str]:
+def parse_dataset(dataset_name: str) -> cowskit.datasets.Dataset:
     dataset_name = dataset_name.lower()
 
     if dataset_name == 'iris':
         dataset = cowskit.datasets.IrisDataset()
     elif dataset_name == 'lines':
-        dataset = cowskit.datasets.LinesDataset(shape=[3,3], line_len=2)
+        dataset = cowskit.datasets.LinesDataset()
+    elif dataset_name == 'palmer_penguin':
+        dataset = cowskit.datasets.PalmerPenguinDataset()
+    elif dataset_name == 'pima_indians_diabetic':
+        dataset = cowskit.datasets.DiabetesDataset()
     else:
         try:
             file = __import__(dataset_name)
@@ -65,15 +69,17 @@ def parse_dataset(dataset_name: str) -> Tuple[cowskit.datasets.Dataset, str]:
 
     return dataset
 
-def parse_algorithm(algorithm_name: str) -> Tuple[cowskit.algorithms.Algorithm, str]:
+def parse_algorithm(algorithm_name: str) -> cowskit.algorithms.Algorithm:
     algorithm_name = algorithm_name.lower()
 
     if algorithm_name == 'qknn':
-        algorithm = cowskit.algorithms.KNearestNeighbors(n_neighbors=4)
+        algorithm = cowskit.algorithms.KNearestNeighbors()
+    elif algorithm_name == 'qgenetic':
+        algorithm = cowskit.algorithms.GeneticAlgorithm()
     elif algorithm_name == 'qvm':
         algorithm = cowskit.models.VariationalModel()
     elif algorithm_name == 'qcnn':
-        algorithm = cowskit.models.ConvolutionalModel()
+        algorithm = cowskit.models.ConvolutionalModelV2()
     else:
         try:
             file = __import__(algorithm_name)
@@ -86,7 +92,7 @@ def parse_algorithm(algorithm_name: str) -> Tuple[cowskit.algorithms.Algorithm, 
 
     return algorithm
 
-def parse_encoding(encoding_name: str) -> Tuple[cowskit.encodings.Encoding, str]:
+def parse_encoding(encoding_name: str) -> cowskit.encodings.Encoding:
     encoding_name = encoding_name.lower()
 
     if encoding_name == 'binary':
@@ -94,7 +100,7 @@ def parse_encoding(encoding_name: str) -> Tuple[cowskit.encodings.Encoding, str]
     elif encoding_name == 'angle':
         encoding = cowskit.encodings.AngleEncoding()
     elif encoding_name == 'amplitude':
-        encoding = cowskit.encodings.AmplitudeEncodingV2(n_features=4)
+        encoding = cowskit.encodings.AmplitudeEncodingV2()
     else:
         try:
             file = __import__(encoding_name)
@@ -113,7 +119,14 @@ def construct_instances_from_args(args: Namespace) -> Tuple[cowskit.datasets.Dat
     algorithm = parse_algorithm(args.algorithm)
     encoding = parse_encoding(args.encoding)
 
-    algorithm.encoding = encoding
+    # To be removed
+    if isinstance(algorithm, cowskit.algorithms.KNearestNeighbors):
+        features_amount = cowskit.utils.get_shape_size(dataset.get_random_pair()[0])
+        Log.info(f"Features amount: {features_amount}")
+        encoding.__init__(n_features = features_amount)
+        algorithm.__init__(n_neighbors = features_amount)
+        algorithm.encoding = encoding
+    # ===
 
     return dataset, algorithm, encoding 
 

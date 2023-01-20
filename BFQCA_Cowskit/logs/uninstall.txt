@@ -1,4 +1,3 @@
 Found existing installation: cowskit 1.0.0
 Uninstalling cowskit-1.0.0:
   Successfully uninstalled cowskit-1.0.0
-Force uninstall 'cowskit'

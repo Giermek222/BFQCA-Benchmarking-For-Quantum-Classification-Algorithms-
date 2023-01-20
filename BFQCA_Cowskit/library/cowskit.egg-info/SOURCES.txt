@@ -31,3 +31,4 @@ cowskit/models/model.py
 cowskit/models/model_convolutional.py
 cowskit/models/model_convolutionalV2.py
 cowskit/models/model_variational.py
+cowskit/models/model_variationalV2.py

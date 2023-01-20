@@ -16,11 +16,12 @@ from cowskit.encodings.encoding import Encoding
 
 class ConvolutionalModelV2(Model):
     def __init__(self) -> None:
-        self.build_circuit()
+        Model.__init__(self)
+        self.EPOCHS = 1
         
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
-        print(X)
-        print(Y)
+        self.build_circuit()
+        Y = Y.flatten()
         self.classifier.fit(X, Y)
 
     def predict(self, value: np.ndarray):
@@ -28,21 +29,19 @@ class ConvolutionalModelV2(Model):
             
     def build_circuit(self):
         self.feature_map = ZFeatureMap(8)
-
         self.instruction_set = QuantumCircuit(8)
 
-        self.instruction_set.compose(self.conv_layer(8), list(range(8)), inplace=True)
-        self.instruction_set.compose(self.pool_layer(list(range(0,4)), list(range(4,8))), list(range(8)), inplace=True)
+        self.instruction_set.compose(self.conv_layer(8, 1), list(range(8)), inplace=True)
+        self.instruction_set.compose(self.pool_layer(list(range(0,4)), list(range(4,8)), 1), list(range(8)), inplace=True)
 
-        self.instruction_set.compose(self.conv_layer(4), list(range(4, 8)), inplace=True)
-        self.instruction_set.compose(self.pool_layer(list(range(0,2)), list(range(2,4))), list(range(4,8)), inplace=True)
+        self.instruction_set.compose(self.conv_layer(4, 2), list(range(4, 8)), inplace=True)
+        self.instruction_set.compose(self.pool_layer(list(range(0,2)), list(range(2,4)), 2), list(range(4,8)), inplace=True)
 
-        self.instruction_set.compose(self.conv_layer(2), list(range(6,8)), inplace=True)
-        self.instruction_set.compose(self.pool_layer(list(range(0,1)), list(range(1,2))), list(range(6,8)), inplace=True)
+        self.instruction_set.compose(self.conv_layer(2, 3), list(range(6,8)), inplace=True)
+        self.instruction_set.compose(self.pool_layer(list(range(0,1)), list(range(1,2)), 3), list(range(6,8)), inplace=True)
 
         self.circuit = QuantumCircuit(8)
         self.circuit.compose(self.feature_map, range(8), inplace=True)
-        self.circuit.compose(self.feature_map, range(8), inplace=True) # inplace to replace ?
         self.circuit.compose(self.instruction_set, range(8), inplace=True)
 
         observable = SparsePauliOp.from_list([("Z" + "I" * 7, 1)])
@@ -65,12 +64,12 @@ class ConvolutionalModelV2(Model):
 
         self.classifier = NeuralNetworkClassifier(
             self.network,
-            optimizer=ADAM(maxiter=200),
+            optimizer=ADAM(maxiter=self.EPOCHS),
             # callback=callback_graph
         )
 
 
-    def conv_layer(self, num_qubits, param_prefix = "c"):
+    def conv_layer(self, num_qubits, id, param_prefix = "c"):
         def conv_circuit(params):
             target = QuantumCircuit(2)
             target.rz(-np.pi / 2, 1)
@@ -86,7 +85,7 @@ class ConvolutionalModelV2(Model):
         qc = QuantumCircuit(num_qubits, name="Convolutional Layer")
         qubits = list(range(num_qubits))
         param_index = 0
-        params = ParameterVector(param_prefix + str(random.randint(0,10000)), length=num_qubits * 3)
+        params = ParameterVector(param_prefix + str(id), length=num_qubits * 3)
         for q1, q2 in zip(qubits[0::2], qubits[1::2]):
             qc = qc.compose(conv_circuit(params[param_index : (param_index + 3)]), [q1, q2])
             qc.barrier()
@@ -102,7 +101,7 @@ class ConvolutionalModelV2(Model):
         qc.append(qc_inst, qubits)
         return qc
 
-    def pool_layer(self, sources, sinks, param_prefix = "p"):
+    def pool_layer(self, sources, sinks, id, param_prefix = "p"):
         def pool_circuit(params):
             target = QuantumCircuit(2)
             target.rz(-np.pi / 2, 1)
@@ -116,7 +115,7 @@ class ConvolutionalModelV2(Model):
         num_qubits = len(sources) + len(sinks)
         qc = QuantumCircuit(num_qubits, name="Pooling Layer")
         param_index = 0
-        params = ParameterVector(param_prefix + str(random.randint(0,10000)), length=num_qubits // 2 * 3)
+        params = ParameterVector(param_prefix + str(id), length=num_qubits // 2 * 3)
         for source, sink in zip(sources, sinks):
             qc = qc.compose(pool_circuit(params[param_index : (param_index + 3)]), [source, sink])
             qc.barrier()

@@ -12,26 +12,26 @@ import scipy.stats as stats
 from qiskit import QuantumCircuit
 from typing import List
 from qiskit.tools import parallel_map
-from cowskit.encodings import AmplitudeEncoding
+from cowskit.encodings import AmplitudeEncodingV2
+from cowskit.algorithms import Algorithm
 
 import logging
 logger = logging.getLogger(__name__)
 
-class QKNN_Base:
-    def __init__(self,
-                 n_neighbors: int = 3,
-                 encoding: AmplitudeEncoding = None,
-                 quantum_instance: QuantumInstance = None):
+class QKNN_Base(Algorithm):
+    def __init__(self):
         """
         :param n_neighbors: number of neighbours that the algorithm will compare new data with
         :param encoding: class encoding classical data into quantum vector. Only Amplitude Neocding is currently supported
         :param quantum_instance: Quantum Instance to run quantum gates on
         """
-        self.encoding = encoding
-        self.quantum_instance = quantum_instance
-        self.n_neighbors = n_neighbors
+        Algorithm.__init__(self)
+        self.encoding = None
+        self.quantum_instance = None
+        self.n_neighbors = None
         self.training_parameters = np.asarray([])
         self.training_labels = np.asarray([])
+
 
     def train(self, training_parameters, training_labels):
         """
@@ -39,6 +39,7 @@ class QKNN_Base:
         :param training_labels: labels that the algorithm will use to categorize training data
         :return: nothing. it just sets data as parameter of class
         """
+        self.n_neighbors = self.get_input_size()
         self.training_parameters = np.asarray(training_parameters)
         self.training_labels = np.asarray(training_labels)
 
@@ -88,16 +89,12 @@ class QKNN_Base:
 
 class KNearestNeighbors(ClassifierMixin, QKNN_Base):
 
-    def __init__(self,
-                 n_neighbors: int = 3,
-                 encoding_map: Optional[AmplitudeEncoding] = None,
-                 quantum_instance: Optional[Union[QuantumInstance, Backend]] = None):
+    def __init__(self):
 
-        
-        quantum_instance = QuantumInstance(BasicAer.get_backend('qasm_simulator'),
+        QKNN_Base.__init__(self)
+        self.quantum_instance = QuantumInstance(BasicAer.get_backend('qasm_simulator'),
                             shots=1024,
                             optimization_level=1)
-        super().__init__(n_neighbors, encoding_map, quantum_instance)
 
     def _majority_voting(self,
                          y_train: np.ndarray,
@@ -112,7 +109,6 @@ class KNearestNeighbors(ClassifierMixin, QKNN_Base):
         """
 
         k_nearest = _kneighbors(y_train, fidelities, self.n_neighbors)
-
         # getting most frequent values in `k_nearest`
         # in a more efficient way than looping and
         # using, for instance, collections.Counter
@@ -129,13 +125,14 @@ class KNearestNeighbors(ClassifierMixin, QKNN_Base):
 
     def predict(self,
                 X_test: np.ndarray) -> np.ndarray:
+        
         circuits = _construct_circuits_from_test_data(X_test, self.training_parameters, self.encoding)
         results = self.execute(circuits)
         # the execution results are employed to compute
         # fidelities which are used for the majority voting
         fidelities = self._get_fidelities(results, len(X_test))
-
-        return self._majority_voting(self.training_labels, fidelities)
+        Y_out = self._majority_voting(self.training_labels, fidelities)
+        return Y_out
 
 
 def Create_Single_Circuit(qc_alpha: QuantumCircuit, qc_beta: QuantumCircuit) -> QuantumCircuit:
@@ -194,7 +191,7 @@ class SwaptestCircuit(QuantumCircuit):
 
 def _construct_circuit(feature_vector_1: np.ndarray,
                        feature_vector_2: np.ndarray,
-                       encoding: AmplitudeEncoding = None) -> QuantumCircuit:
+                       encoding: AmplitudeEncodingV2 = None) -> QuantumCircuit:
     """
 
     :param feature_vector_1: feature vector of classical data
@@ -209,7 +206,7 @@ def _construct_circuit(feature_vector_1: np.ndarray,
 
 
 def _construct_circuits_from_test_data(
-                                       test_data: np.ndarray, training_data: np.ndarray, encoding:AmplitudeEncoding) -> List[QuantumCircuit]:
+                                       test_data: np.ndarray, training_data: np.ndarray, encoding:AmplitudeEncodingV2) -> List[QuantumCircuit]:
     """
     :param test_data: test data to be classified
     :return:

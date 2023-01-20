@@ -60,7 +60,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
         command.append(" -a " + algorithm.getAlgorithmName());
         command.append(" -d " + algorithm.getProblemName());
         command.append(" -e " + "amplitude");
-        command.append(" -debug ")
+        command.append(" -debug ");
 
 
         ProcessBuilder pb = new ProcessBuilder(

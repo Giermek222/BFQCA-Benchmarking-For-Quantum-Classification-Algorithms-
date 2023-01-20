@@ -119,6 +119,7 @@ class GeneticAlgorithm(Algorithm):
 
             return job.result().get_memory()
 
+        
         first_8_bits  = get_result(0,  probabilities_array, backend)
         second_8_bits = get_result(8,  probabilities_array, backend)
         third_8_bits  = get_result(16, probabilities_array, backend)

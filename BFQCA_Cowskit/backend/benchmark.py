@@ -30,6 +30,7 @@ def benchmark_training(benchmark_cache: Dict[str, str], dataset: Dataset, algori
     Log.info("Computing training benchmarks")
 
     X_train, y_train = dataset.get_train_data()
+    Log.info(f"Training data amount: {X_train.shape[0]}")
     y_pred = algorithm.predict(X_train)
 
     training_accuracy = compute_accuracy(y_train, y_pred)
@@ -56,6 +57,7 @@ def benchmark_test(benchmark_cache: Dict[str, float], dataset: Dataset, algorith
     Log.info("Computing test benchmarks")
 
     X_test, y_test = dataset.get_test_data()
+    Log.info(f"Testing data amount: {X_test.shape[0]}")
     y_pred = algorithm.predict(X_test)
     
     test_accuracy = compute_accuracy(y_test, y_pred)

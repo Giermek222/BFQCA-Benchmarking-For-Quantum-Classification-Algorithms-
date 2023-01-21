@@ -17,9 +17,9 @@ public class DatasetRest implements Serializable {
 
     @NonNull
     @JsonProperty(value = "datasetName")
-    private final String username;
+    private final String datasetName;
 
     @NonNull
     @JsonProperty(value = "datasetCode")
-    private final String password;
+    private final String datasetCode;
 }

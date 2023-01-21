@@ -3,6 +3,8 @@ package com.example.bfqca_backend.repositories.impl;
 import com.example.bfqca_backend.repositories.interfaces.DatasetReporitory;
 import com.example.bfqca_backend.utils.database.DatabaseConnector;
 import com.example.bfqca_backend.utils.database.DatabaseMapper;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Repository
 public class DatasetRepositoryImpl implements DatasetReporitory {
 
     @Override

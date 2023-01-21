@@ -20,29 +20,47 @@ public class BenchmarkRest implements Serializable {
     @JsonProperty(value = "algorithmName")
     private final String algorithmName;
 
-    @JsonProperty(value = "accuracyLearning")
-    private final Double accuracyLearning;
+    @JsonProperty(value = "training_accuracy")
+    private final Double trainingAccuracy;
 
-    @JsonProperty(value = "accuracyTest")
-    private final Double accuracyTest;
+    @JsonProperty(value = "training_precision")
+    private final Double trainingPrecision;
 
-    @JsonProperty(value = "lossLearning")
-    private final Double lossLearning;
+    @JsonProperty(value = "training_recall")
+    private final Double trainingRecall;
 
-    @JsonProperty(value = "lossTest")
-    private final Double lossTest;
+    @JsonProperty(value = "training_f1_score")
+    private final Double trainingF1Score;
 
-    @JsonProperty(value = "maxLatency")
-    private final Double maxLatency;
+    @JsonProperty(value = "training_loss")
+    private final Double trainingLoss;
 
-    @JsonProperty(value = "minLatency")
-    private final Double minLatency;
+    @JsonProperty(value = "test_accuracy")
+    private final Double testAccuracy;
 
-    @JsonProperty(value = "avgLatency")
-    private final Double avgLatency;
+    @JsonProperty(value = "test_precision")
+    private final Double testPrecision;
 
-    @JsonProperty(value = "latencyPercentile")
-    private final Double latencyPercentile;
+    @JsonProperty(value = "test_recall")
+    private final Double testRecall;
+
+    @JsonProperty(value = "test_f1_score")
+    private final Double testF1Score;
+
+    @JsonProperty(value = "test_loss")
+    private final Double testLoss;
+
+    @JsonProperty(value = "max_latency_ms")
+    private final Double maxLatencyMs;
+
+    @JsonProperty(value = "min_latency_ms")
+    private final Double minLatencyMs;
+
+    @JsonProperty(value = "avg_latency_ms")
+    private final Double avgLatencyMs;
+
+    @JsonProperty(value = "percentile_latency_ms")
+    private final Double percentileLatencyMs;
 
     @JsonProperty(value = "time")
     private final Double time;

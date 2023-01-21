@@ -26,6 +26,17 @@ public class DatabaseMapper {
         return usersFromDb;
     }
 
+    public static List<String> getDataset(ResultSet resultSet) throws SQLException {
+        List<String> datasetsFromDb = new ArrayList<>();
+
+        while (resultSet.next()) {
+            datasetsFromDb.add(
+                    resultSet.getString("problemName")
+            );
+        }
+        return datasetsFromDb;
+    }
+
     public static List<AlgorithmDTO> getAlgorithms(ResultSet resultSet) throws SQLException {
         List<AlgorithmDTO> algorithmDTOList = new ArrayList<>();
 

@@ -2,16 +2,48 @@ insert into algorithm (algorithmName, problemName, author, algorithmDescription)
  ('qknn', 'Iris', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qknn', 'Palmer Penguin', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
+    ('qgenetic', 'Iris', 'Krówcia Crew', '');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qknn', 'Pima Indians Diabetic', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
+    ('qcnn', 'Iris', 'Krówcia Crew', '');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qgenetic', 'Iris', 'Krówcia Crew', 'Quantum genetic algorithm');
+    ('qvm', 'Iris', 'Krówcia Crew', '');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qgenetic', 'Palmer Penguin', 'Krówcia Crew', 'Quantum genetic algorithm');
+    ('qknn', 'lines', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qgenetic', 'Pima Indians Diabetic', 'Krówcia Crew', 'Quantum genetic algorithm');
+    ('qgenetic', 'lines', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qcnn', 'lines', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qvm', 'lines', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qknn', 'palmer_penguin', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qgenetic', 'palmer_penguin', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qcnn', 'palmer_penguin', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qvm', 'palmer_penguin', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qknn', 'pima_indians_diabetic', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qgenetic', 'pima_indians_diabetic', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qcnn', 'pima_indians_diabetic', 'Krówcia Crew', '');
+
+insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
+    ('qvm', 'pima_indians_diabetic', 'Krówcia Crew', '');
+
+

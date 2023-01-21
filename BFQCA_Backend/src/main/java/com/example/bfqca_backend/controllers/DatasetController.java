@@ -33,6 +33,7 @@ public class DatasetController {
 
     @PostMapping
     ResponseEntity<Object> addDataset(@RequestHeader HttpHeaders headers, @RequestBody @Valid DatasetRest dataset) {
-
+        datasetService.saveDataset(dataset.getDatasetName(), dataset.getDatasetCode());
+        return  ResponseEntity.ok().build();
     }
 }

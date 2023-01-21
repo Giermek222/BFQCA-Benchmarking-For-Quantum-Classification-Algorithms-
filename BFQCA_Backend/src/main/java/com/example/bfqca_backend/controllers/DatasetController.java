@@ -4,6 +4,7 @@ import com.example.bfqca_backend.models.business.User;
 import com.example.bfqca_backend.models.rest.DatasetRest;
 import com.example.bfqca_backend.services.interfaces.DatasetService;
 import com.example.bfqca_backend.utils.mappers.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.Objects;
 @RequestMapping("/dataset")
 @CrossOrigin(origins = "*")
 public class DatasetController {
-
+    @Autowired
     DatasetService datasetService;
 
     @GetMapping

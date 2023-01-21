@@ -4,10 +4,12 @@ import com.example.bfqca_backend.repositories.interfaces.DatasetReporitory;
 import com.example.bfqca_backend.services.interfaces.DatasetService;
 import com.example.bfqca_backend.utils.file_utils.FileSaver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.nio.file.Paths;
 import java.util.List;
 
+@Service
 public class DatasetServiceImpl implements DatasetService {
 
     @Autowired

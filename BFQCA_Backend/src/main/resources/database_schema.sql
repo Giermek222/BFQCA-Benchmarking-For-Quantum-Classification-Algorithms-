@@ -4,8 +4,7 @@ create table algorithm (
                            problemName varchar(100) not null,
                            author varchar(50) not null,
                            algorithmDescription varchar(100),
-                           constraint algorithm_pk primary key (id),
-                           CONSTRAINT Unique_algorithmName UNIQUE(algorithmName)
+                           constraint algorithm_pk primary key (id)
 );
 
 create table users (
@@ -30,4 +29,9 @@ create table benchmark (
                            latencyPercentile numeric(9,3),
                            time numeric(9,3),
                            constraint benchmark_pk primary key (id)
+);
+
+create table dataset (
+    id int not null identity,
+    problemName varchar(30) not null
 );

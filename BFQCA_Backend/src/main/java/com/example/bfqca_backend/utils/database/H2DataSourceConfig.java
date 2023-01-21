@@ -13,6 +13,8 @@ public class H2DataSourceConfig {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 .addScript("classpath:database_schema.sql")
+                .addScript("classpath:database_starting_values.sql")
+                .addScript("classpath:database_add_datasets.sql")
                 .build();
     }
 }

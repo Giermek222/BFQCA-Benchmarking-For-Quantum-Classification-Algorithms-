@@ -8,21 +8,20 @@ import axios from "axios";
 import { Box, Menu, MenuItem } from "@mui/material";
 
 const styles = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 };
 
 type Props = {
   showAlgorithm: (value: boolean) => void;
-  userName: string
+  userName: string;
 };
 
 const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
   const [algName, setAlgName] = useState("");
   const [problemName, setProblemName] = useState("");
-  const [problemDescription, setProblemDescription] = useState("")
+  const [problemDescription, setProblemDescription] = useState("");
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -52,7 +51,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
           description: description !== "" ? description : null,
           problemName: problemName !== "" ? problemName : null,
           code: code !== "" ? code : null,
-          userName: userName
+          userName: userName,
         },
 
         {
@@ -74,21 +73,22 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
     setAnchorEl(event.currentTarget);
   };
 
+  //TODO::make it dynamic, get datasets names from backend and display them here
   const setProblemToPenguins = () => {
-    setProblemName("Palmer Penguin")
-    setProblemDescription("Palmer Penguin")
-    handleLimitClose()
-  }
+    setProblemName("Palmer Penguin");
+    setProblemDescription("Palmer Penguin");
+    handleLimitClose();
+  };
   const setProblemToIris = () => {
-    setProblemName("Iris")
-    setProblemDescription("Iris")
-    handleLimitClose()
-  }
+    setProblemName("Iris");
+    setProblemDescription("Iris");
+    handleLimitClose();
+  };
   const setProblemToDiabetes = () => {
-    setProblemName("Pima Indians Diabetic")
-    setProblemDescription("Pima Indians Diabetic")
-    handleLimitClose()
-  }
+    setProblemName("Pima Indians Diabetic");
+    setProblemDescription("Pima Indians Diabetic");
+    handleLimitClose();
+  };
 
   const handleLimitClose = () => {
     setAnchorEl(null);
@@ -98,20 +98,19 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
     <div>
       <Box
         sx={{
-          display: 'grid',
+          display: "grid",
           gap: 1,
-          gridTemplateRows: 'repeat(5)',
-          width: '75%'
+          gridTemplateRows: "repeat(5)",
+          width: "75%",
         }}
       >
-
         <div style={styles}>
           Selected Problem:
           <Button
             id="basic-button"
-            aria-controls={limitOpen ? 'basic-menu' : undefined}
+            aria-controls={limitOpen ? "basic-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={limitOpen ? 'true' : undefined}
+            aria-expanded={limitOpen ? "true" : undefined}
             onClick={handleLimitClick}
           >
             {problemDescription === "" ? "Click to select" : problemDescription}
@@ -122,12 +121,14 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
             open={limitOpen}
             onClose={handleLimitClose}
             MenuListProps={{
-              'aria-labelledby': 'basic-button',
+              "aria-labelledby": "basic-button",
             }}
           >
             <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
             <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
-            <MenuItem onClick={setProblemToDiabetes}>Pima Indians Diabetic</MenuItem>
+            <MenuItem onClick={setProblemToDiabetes}>
+              Pima Indians Diabetic
+            </MenuItem>
           </Menu>
         </div>
 
@@ -140,8 +141,6 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
           onChange={onChangeAlgorithmName}
         />
 
-
-
         <TextField
           label="Algorithm Description"
           id="outlined-size-small"
@@ -152,8 +151,6 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
           value={description}
           onChange={onChangeDescription}
         />
-
-
 
         <TextField
           label="Code"
@@ -166,22 +163,22 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
           onChange={onChangeCode}
         />
 
-
-
         <Box
           sx={{
-            display: 'grid',
+            display: "grid",
             gap: 1,
-            gridTemplateColumns: 'repeat(2, 1fr)',
-          }}>
+            gridTemplateColumns: "repeat(2, 1fr)",
+          }}
+        >
           <Button
             variant="contained"
             color="success"
             onClick={() => {
-              sendNewAlgorithm()
+              sendNewAlgorithm();
               showAlgorithm(true);
             }}
-            sx={{ width: 300, height: 60, margin: 2 }}>
+            sx={{ width: 300, height: 60, margin: 2 }}
+          >
             Sumbmit
           </Button>
           <Button
@@ -190,7 +187,8 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
             onClick={() => {
               showAlgorithm(true);
             }}
-            sx={{ width: 300, height: 60, margin: 2 }}>
+            sx={{ width: 300, height: 60, margin: 2 }}
+          >
             Back
           </Button>
         </Box>

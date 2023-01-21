@@ -7,7 +7,13 @@ import { userRegisterEndpoint } from "../../constants";
 import axios from "axios";
 import md5 from 'md5';
 
-const RegisterSection: React.FC = () => {
+
+type Props = {
+    logged: (value: boolean) => void;
+    setUserName: (value: string) => void
+};
+
+const RegisterSection: React.FC<Props> = ({logged, setUserName}) => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -63,7 +69,13 @@ const RegisterSection: React.FC = () => {
                     Authorization: "---",
                   },
                 }
-              )
+              ).then((response: any) => {
+                console.log(response);
+                if (response.status === 200) {
+                    setUserName(email)
+                    logged(true);
+                }
+            })
               .catch((err: any) => {
                 alert(err);
               });

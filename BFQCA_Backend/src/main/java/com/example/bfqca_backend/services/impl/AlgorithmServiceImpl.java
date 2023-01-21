@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class AlgorithmServiceImpl implements AlgorithmService {
 
     static final String rootDirectory =Paths.get(".").toAbsolutePath().getParent().getParent().toAbsolutePath().normalize().toString();
-    private static final String pathToPythonScript = rootDirectory + "\\BFQCA_Cowskit\\hook.py ";
+    private static final String pathToPythonScript = rootDirectory + "\\BFQCA_Cowskit\\main.py ";
     private static final String pathWithAlgorithms = rootDirectory + "\\BFQCA_Cowskit\\custom_algorithms\\";
     private static final String pathToExecutionFolder = rootDirectory + "\\BFQCA_Cowskit";
     @Autowired
@@ -59,10 +59,18 @@ public class AlgorithmServiceImpl implements AlgorithmService {
         command.append(pathToPythonScript);
         command.append(" -a " + algorithm.getAlgorithmName());
         command.append(" -d " + algorithm.getProblemName());
+        command.append(" -e " + "amplitude");
+        command.append(" -debug ")
 
 
+        ProcessBuilder pb = new ProcessBuilder(
+            "python ", pathToPythonScript,
+            " -a " + algorithm.getAlgorithmName(),
+            " -d " + algorithm.getProblemName(),
+            " -e " + "amplitude",
+            " -debug "
+        );
 
-        ProcessBuilder pb = new ProcessBuilder("python",pathToPythonScript," -a "+algorithm.getAlgorithmName()," -d "+algorithm.getProblemName());
         pb.directory(new File(pathToExecutionFolder));
 
         Process p = pb.start();

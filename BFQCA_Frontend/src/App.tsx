@@ -25,12 +25,7 @@ function App() {
             <Route path="/contribute" element={<ContributeScreen />} />
             <Route
               path="/addAlgorithm"
-              element={
-                <AddAlgorithmScreen
-                  showAlgorithm={(x) => x}
-                  userName={username}
-                />
-              }
+              element={<AddAlgorithmScreen userName={username} />}
             />
             <Route
               path="/addDataset"

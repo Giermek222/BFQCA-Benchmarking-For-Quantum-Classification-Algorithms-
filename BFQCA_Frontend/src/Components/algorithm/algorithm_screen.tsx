@@ -28,7 +28,6 @@ type Props = {
   algorithmNames: any;
   problemFilter: string;
   ColumnArray: string[];
-  showAlgorithms: boolean;
   algorithmFilter: string;
   setNewLimitTo5: () => void;
   setNewLimitTo10: () => void;
@@ -40,7 +39,6 @@ type Props = {
   filterByProblem: (e: ChangeEvent<HTMLInputElement>) => void;
   executeAlgorithm: (algName: string, probName: string) => void;
   filterByAlgorithm: (e: ChangeEvent<HTMLInputElement>) => void;
-  setShowAlgorithms: React.Dispatch<React.SetStateAction<boolean>>;
   handleLimitClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
@@ -51,9 +49,7 @@ const styles = {
 };
 
 const AlgorithmScreen: React.FC<Props> = ({
-  showAlgorithms,
   algorithmFilter,
-  userName,
   filterByAlgorithm,
   problemFilter,
   filterByProblem,
@@ -61,7 +57,6 @@ const AlgorithmScreen: React.FC<Props> = ({
   algorithmNames,
   AlgorithmNameDefinitons,
   executeAlgorithm,
-  setShowAlgorithms,
   changePage,
   page,
   limitOpen,
@@ -75,159 +70,152 @@ const AlgorithmScreen: React.FC<Props> = ({
   let navigate = useNavigate();
   return (
     <div style={styles}>
-      {showAlgorithms ? (
+      (
+      <Box
+        sx={{
+          display: "grid",
+          gap: 3,
+          gridTemplateRows: "repeat(5)",
+          width: "75%",
+        }}
+      >
+        <div></div>
         <Box
           sx={{
             display: "grid",
-            gap: 3,
-            gridTemplateRows: "repeat(5)",
-            width: "75%",
+            gap: 1,
+            gridTemplateColumns: "repeat(2, 1fr)",
           }}
         >
-          <div></div>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 1,
-              gridTemplateColumns: "repeat(2, 1fr)",
-            }}
-          >
-            <TextField
-              label="Filter by algorithm name"
-              id="outlined-size-small"
-              defaultValue="Algorithm name"
-              size="small"
-              value={algorithmFilter}
-              onChange={filterByAlgorithm}
-            />
+          <TextField
+            label="Filter by algorithm name"
+            id="outlined-size-small"
+            defaultValue="Algorithm name"
+            size="small"
+            value={algorithmFilter}
+            onChange={filterByAlgorithm}
+          />
 
-            <TextField
-              label="Filter by problem name"
-              id="outlined-size-small"
-              defaultValue="Problem name"
-              size="small"
-              value={problemFilter}
-              onChange={filterByProblem}
-            />
-          </Box>
-
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  {ColumnArray.map((column: any) => (
-                    <TableCell>
-                      <h3>{column}</h3>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {algorithmNames.map((row: any) => (
-                  <TableRow>
-                    {AlgorithmNameDefinitons.map((ColumnName: any) => {
-                      if (row[ColumnName] != null) {
-                        return <TableCell>{row[ColumnName]}</TableCell>;
-                      } else {
-                        return (
-                          <TableCell>
-                            <Button
-                              color="success"
-                              variant="contained"
-                              onClick={() => {
-                                executeAlgorithm(
-                                  row["algorithmName"],
-                                  row["problemName"]
-                                );
-                              }}
-                              sx={{ width: 200, margin: 2 }}
-                            >
-                              Execute
-                            </Button>
-                          </TableCell>
-                        );
-                      }
-                    })}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          <div className="columnDivStyle">
-            <Button
-              variant="contained"
-              onClick={() => {
-                changePage(false);
-              }}
-              sx={{ width: 75, height: 20, margin: 2 }}
-            >
-              previous
-            </Button>
-            page : {page}
-            <Button
-              variant="contained"
-              onClick={() => {
-                changePage(true);
-              }}
-              sx={{ width: 75, height: 20, margin: 2 }}
-            >
-              next
-            </Button>
-            <Button
-              id="basic-button"
-              aria-controls={limitOpen ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={limitOpen ? "true" : undefined}
-              onClick={handleLimitClick}
-            >
-              Set Limit
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={limitOpen}
-              onClose={handleLimitClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={setNewLimitTo5}>
-                5 algorithms per page:
-              </MenuItem>
-              <MenuItem onClick={setNewLimitTo10}>
-                10 algorithms per page:
-              </MenuItem>
-              <MenuItem onClick={setNewLimitTo20}>
-                20 algorithms per page:
-              </MenuItem>
-            </Menu>
-          </div>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setShowAlgorithms(false);
-            }}
-            sx={{ width: 300, height: 60, margin: 2 }}
-          >
-            Add new Algorithm
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate("/addDataset");
-            }}
-            sx={{ width: 300, height: 60, margin: 2 }}
-          >
-            Add new Dataset
-          </Button>
+          <TextField
+            label="Filter by problem name"
+            id="outlined-size-small"
+            defaultValue="Problem name"
+            size="small"
+            value={problemFilter}
+            onChange={filterByProblem}
+          />
         </Box>
-      ) : (
-        <AddAlgorithmScreen
-          showAlgorithm={setShowAlgorithms}
-          userName={userName}
-        />
-      )}
+
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {ColumnArray.map((column: any) => (
+                  <TableCell>
+                    <h3>{column}</h3>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {algorithmNames.map((row: any) => (
+                <TableRow>
+                  {AlgorithmNameDefinitons.map((ColumnName: any) => {
+                    if (row[ColumnName] != null) {
+                      return <TableCell>{row[ColumnName]}</TableCell>;
+                    } else {
+                      return (
+                        <TableCell>
+                          <Button
+                            color="success"
+                            variant="contained"
+                            onClick={() => {
+                              executeAlgorithm(
+                                row["algorithmName"],
+                                row["problemName"]
+                              );
+                            }}
+                            sx={{ width: 200, margin: 2 }}
+                          >
+                            Execute
+                          </Button>
+                        </TableCell>
+                      );
+                    }
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <div className="columnDivStyle">
+          <Button
+            variant="contained"
+            onClick={() => {
+              changePage(false);
+            }}
+            sx={{ width: 75, height: 20, margin: 2 }}
+          >
+            previous
+          </Button>
+          page : {page}
+          <Button
+            variant="contained"
+            onClick={() => {
+              changePage(true);
+            }}
+            sx={{ width: 75, height: 20, margin: 2 }}
+          >
+            next
+          </Button>
+          <Button
+            id="basic-button"
+            aria-controls={limitOpen ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={limitOpen ? "true" : undefined}
+            onClick={handleLimitClick}
+          >
+            Set Limit
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={limitOpen}
+            onClose={handleLimitClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={setNewLimitTo5}>5 algorithms per page:</MenuItem>
+            <MenuItem onClick={setNewLimitTo10}>
+              10 algorithms per page:
+            </MenuItem>
+            <MenuItem onClick={setNewLimitTo20}>
+              20 algorithms per page:
+            </MenuItem>
+          </Menu>
+        </div>
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigate("/addAlgorithm");
+          }}
+          sx={{ width: 300, height: 60, margin: 2 }}
+        >
+          Add new Algorithm
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigate("/addDataset");
+          }}
+          sx={{ width: 300, height: 60, margin: 2 }}
+        >
+          Add new Dataset
+        </Button>
+      </Box>
+      )
     </div>
   );
 };

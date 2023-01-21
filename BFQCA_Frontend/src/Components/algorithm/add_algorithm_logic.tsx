@@ -6,6 +6,7 @@ import "../styles.css";
 import { algorithmExecuteEndpoint } from "../../constants";
 import axios from "axios";
 import { Box, Menu, MenuItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   display: "flex",
@@ -14,11 +15,11 @@ const styles = {
 };
 
 type Props = {
-  showAlgorithm: (value: boolean) => void;
   userName: string;
 };
 
-const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
+const AddAlgorithmScreen: React.FC<Props> = ({ userName }) => {
+  const navigate = useNavigate();
   const [algName, setAlgName] = useState("");
   const [problemName, setProblemName] = useState("");
   const [problemDescription, setProblemDescription] = useState("");
@@ -95,7 +96,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
   };
 
   return (
-    <div>
+    <div style={styles}>
       <Box
         sx={{
           display: "grid",
@@ -104,7 +105,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
           width: "75%",
         }}
       >
-        <div style={styles}>
+        <div>
           Selected Problem:
           <Button
             id="basic-button"
@@ -175,7 +176,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
             color="success"
             onClick={() => {
               sendNewAlgorithm();
-              showAlgorithm(true);
+              navigate(-1);
             }}
             sx={{ width: 300, height: 60, margin: 2 }}
           >
@@ -185,7 +186,7 @@ const AddAlgorithmScreen: React.FC<Props> = ({ showAlgorithm, userName }) => {
             variant="contained"
             color="error"
             onClick={() => {
-              showAlgorithm(true);
+              navigate(-1);
             }}
             sx={{ width: 300, height: 60, margin: 2 }}
           >

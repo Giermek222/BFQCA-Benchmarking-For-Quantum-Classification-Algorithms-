@@ -1,13 +1,11 @@
 import cowskit
-import argparse
 from argparse import Namespace, ArgumentParser
 from typing import Tuple
 
 from backend.logger import Log
 
-PREDEFINED_ALGORITHMS = ['qknn', 'qvm', 'qcnn', 'qgenetic']
+PREDEFINED_ALGORITHMS = ['qgenetic', 'qvm', 'qcnn', 'qknn']
 PREDEFINED_DATASETS = ['iris', 'palmer_penguin', 'pima_indians_diabetic', 'lines']
-PREDEFINED_ENCODINGS = ['angle', 'amplitude', 'binary']
 
 def parse_args() -> Namespace:
     parser = ArgumentParser(
@@ -23,8 +21,7 @@ def parse_args() -> Namespace:
                         help = f'Name of the predefined/custom dataset to use. Predefined values: {PREDEFINED_DATASETS}'
     )
     parser.add_argument('-e', '--encoding', 
-                        required = False, # should be True
-                        help = f'Name of the predefined/custom encoding to use. Predefined values: {PREDEFINED_ENCODINGS}'
+                        help = f'Name of the predefined/custom encoding to use. Predefined values: NONE'
     )
     parser.add_argument('-t', '--tries',
                         default = 10,
@@ -69,21 +66,21 @@ def parse_dataset(dataset_name: str) -> cowskit.datasets.Dataset:
 
     return dataset
 
-def parse_algorithm(algorithm_name: str) -> cowskit.algorithms.Algorithm:
+def parse_algorithm(algorithm_name: str, dataset: cowskit.datasets.Dataset) -> cowskit.algorithms.Algorithm:
     algorithm_name = algorithm_name.lower()
 
     if algorithm_name == 'qknn':
-        algorithm = cowskit.algorithms.KNearestNeighbors()
+        algorithm = cowskit.algorithms.KNearestNeighbors(dataset)
     elif algorithm_name == 'qgenetic':
-        algorithm = cowskit.algorithms.GeneticAlgorithm()
+        algorithm = cowskit.algorithms.GeneticAlgorithm(dataset)
     elif algorithm_name == 'qvm':
-        algorithm = cowskit.models.VariationalModelV2()
+        algorithm = cowskit.models.VariationalModel(dataset)
     elif algorithm_name == 'qcnn':
-        algorithm = cowskit.models.ConvolutionalModelV2()
+        algorithm = cowskit.models.ConvolutionalModel(dataset)
     else:
         try:
             file = __import__(algorithm_name)
-            algorithm = getattr(file, algorithm_name)()
+            algorithm = getattr(file, algorithm_name)(dataset)
         except Exception as e:
             Log.error(f'No algorithm with name: {algorithm_name}')
             raise e
@@ -92,43 +89,12 @@ def parse_algorithm(algorithm_name: str) -> cowskit.algorithms.Algorithm:
 
     return algorithm
 
-def parse_encoding(encoding_name: str) -> cowskit.encodings.Encoding:
-    encoding_name = encoding_name.lower()
-
-    if encoding_name == 'binary':
-        encoding = cowskit.encodings.BinaryEncoding()
-    elif encoding_name == 'angle':
-        encoding = cowskit.encodings.AngleEncoding()
-    elif encoding_name == 'amplitude':
-        encoding = cowskit.encodings.AmplitudeEncodingV2()
-    else:
-        try:
-            file = __import__(encoding_name)
-            encoding = getattr(file, encoding_name)()
-        except Exception as e:
-            Log.error(f'No encoding with name: {encoding_name}')
-            raise e
-
-    Log.info("Loaded encoding: ", encoding_name)
-
-    return encoding
-
-def construct_instances_from_args(args: Namespace) -> Tuple[cowskit.datasets.Dataset, cowskit.encodings.Encoding, cowskit.algorithms.Algorithm]:
+def construct_instances_from_args(args: Namespace) -> Tuple[cowskit.datasets.Dataset, cowskit.algorithms.Algorithm]:
 
     dataset = parse_dataset(args.dataset)
-    algorithm = parse_algorithm(args.algorithm)
-    encoding = parse_encoding(args.encoding)
+    algorithm = parse_algorithm(args.algorithm, dataset)
 
-    algorithm.input_size = dataset.input_size
-    algorithm.output_size = dataset.output_size
-
-    # To be removed
-    if isinstance(algorithm, cowskit.algorithms.KNearestNeighbors):
-        encoding.__init__(n_features = dataset.input_size)
-        algorithm.encoding = encoding
-    # ===
-
-    return dataset, algorithm, encoding 
+    return dataset, algorithm
 
 def check_debug_mode(args: Namespace) -> bool:
     return True if args.debug else False

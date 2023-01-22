@@ -1,7 +1,7 @@
 from backend.request import make_request, send_request
 from backend.argparser import parse_args, check_debug_mode, construct_instances_from_args
 from backend.files import get_logs_folder_path, get_log_file_path, get_file_realpath, add_custom_folders_to_path
-from backend.benchmark import train_algorithm, benchmark_training, benchmark_test, benchmark_inference
+from backend.benchmark import debug_dataset_info, train_algorithm, benchmark_training, benchmark_test, benchmark_inference
 from backend.commands import construct_debug_launch_command, run_command
 
 from backend.argparser import Namespace
@@ -11,12 +11,13 @@ Log.level = LogLevel.DEBUG
 
 def main(path_to_main_file: str, args: Namespace) -> None:
     add_custom_folders_to_path(path_to_main_file)
-    dataset, algorithm, encoding = construct_instances_from_args(args)
+    dataset, algorithm = construct_instances_from_args(args)
 
-    benchmark_cache = train_algorithm(dataset, algorithm, encoding)
-    benchmark_cache = benchmark_training(benchmark_cache, dataset, algorithm, encoding)
-    benchmark_cache = benchmark_test(benchmark_cache,dataset, algorithm, encoding)
-    benchmark_cache = benchmark_inference(benchmark_cache,dataset, algorithm, encoding, args.tries, args.latency_percentile)
+    debug_dataset_info(dataset)
+    benchmark_cache = train_algorithm(dataset, algorithm)
+    benchmark_cache = benchmark_training(benchmark_cache, dataset, algorithm)
+    benchmark_cache = benchmark_test(benchmark_cache, dataset, algorithm)
+    benchmark_cache = benchmark_inference(benchmark_cache,dataset, algorithm, args.tries, args.latency_percentile)
 
     body = make_request(args, benchmark_cache)
     send_request(body)

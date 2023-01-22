@@ -25,14 +25,11 @@ def add_custom_folders_to_path(path_to_main_file: str) -> None:
     Log.info("Quantum Benchmarking initializing...")
 
     algorithms_path = f"{path_to_main_file}/custom_algorithms"
-    encodings_path = f"{path_to_main_file}/custom_encodings"
     datasets_path = f"{path_to_main_file}/custom_datasets"
 
-    Log.debug("Added ", algorithms_path, " to system PATH")
-    Log.debug("Added ", encodings_path, " to system PATH")
-    Log.debug("Added ", datasets_path, " to system PATH")
+    Log.debug("Temporarily added ", algorithms_path, " to system PATH")
+    Log.debug("Temporarily added ", datasets_path, " to system PATH")
 
     sys.path.append(algorithms_path)
-    sys.path.append(encodings_path)
     sys.path.append(datasets_path)
 

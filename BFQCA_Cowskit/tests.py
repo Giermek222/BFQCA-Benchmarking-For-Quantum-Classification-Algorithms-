@@ -1,14 +1,32 @@
-import numpy as np
-import struct
+import backend.argparser as ba
+import backend.files as fl
+import os
 
-from cowskit.datasets import IrisDataset, LinesDataset, PalmerPenguinDataset, DiabetesDataset
-from cowskit.utils import bin_to_floatV2, float_to_binV2
+import subprocess
+from cowskit.datasets import LinesDataset
 
-t = "11111111101010000110001101110101"
-n = bin_to_floatV2(t)
-b = float_to_binV2(n)
-print(t)
-print(n)
-print(b)
+for alg in ba.PREDEFINED_ALGORITHMS:
+    for ds in ba.PREDEFINED_DATASETS:
+        path = fl.get_file_realpath(__file__)
+        command = f"python \"{path}/main.py\" -a {alg} -d {ds}"
 
-LinesDataset()
+        logs_folder = fl.get_logs_folder_path(path)
+        logs_file = f"{logs_folder}/test_{alg}_{ds}.txt"
+        with open(logs_file, "w") as log_file:
+            try:
+                subprocess.run(command,
+                            shell=True,
+                            check=True,
+                            stdout=log_file,
+                            stderr=log_file,
+                            cwd=os.getcwd(),
+                            env=os.environ.copy())
+            except: pass
+        with open(logs_file, "r") as log_file:
+            full_output = "".join(log_file.readlines())
+
+            if full_output.find("Request body:") != -1:
+                print(f"+ {alg} + {ds} passed")
+            else:
+                print(f"- {alg} + {ds} failed")
+

@@ -4,7 +4,7 @@ import numpy as np
 
 class PalmerPenguinDataset(Dataset):
     def __init__(self):
-        Dataset.__init__(self, test_split=0.1)
+        Dataset.__init__(self)
 
     def generate_dataset(self):
         with open(PENGUINS_DATASET, 'r') as file:

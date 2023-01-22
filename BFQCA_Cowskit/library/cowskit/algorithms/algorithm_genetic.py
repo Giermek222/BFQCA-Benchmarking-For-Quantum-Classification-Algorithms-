@@ -1,19 +1,19 @@
 import numpy as np
-import struct
 
-from typing import List,Tuple
+from typing import List
 from cowskit.algorithms import Algorithm
-from cowskit.utils import get_shape_size, compute_categorical_crossentropy_loss, softmax
-# from cowskit.utils import bin_to_float, float_to_bin
-from cowskit.utils import bin_to_floatV2 as bin_to_float, float_to_binV2 as float_to_bin
+from cowskit.datasets import Dataset
+from cowskit.utils import get_shape_size, compute_crossentropy_loss
+from cowskit.utils import bin_to_float, float_to_bin
 
-from qiskit import QuantumCircuit, Aer, QuantumRegister, ClassicalRegister, transpile
+from qiskit import QuantumCircuit, Aer, QuantumRegister, ClassicalRegister
 from qiskit_aer import AerSimulator
 
 class GeneticAlgorithm(Algorithm):
-    def __init__(self) -> None:
-        Algorithm.__init__(self)
+    def __init__(self, dataset: Dataset = None) -> None:
+        Algorithm.__init__(self, dataset)
 
+        self.precision = 16
         self.epochs = 10
         self.population = 1000
         self.best_performers_count = 10
@@ -21,12 +21,12 @@ class GeneticAlgorithm(Algorithm):
         self.trained_network:List[np.ndarray] = []
 
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
-        samples_count = X.shape[0]
+        # samples_count = X.shape[0]
         n_features = get_shape_size(X)
         n_classes = get_shape_size(Y)
         
-        X = X.reshape((samples_count, n_features))
-        Y = Y.reshape((samples_count, n_classes))
+        # X = X.reshape((samples_count, n_features))
+        # Y = Y.reshape((samples_count, n_classes))
 
         networks = self.construct_starting_networks(n_features, n_classes)
         best_performers_priority_queue: List[List[np.ndarray]] = []
@@ -40,8 +40,7 @@ class GeneticAlgorithm(Algorithm):
                     result = result @ layer
                     result = (result > 0) * result # relu activation
                 
-                result = softmax(result)
-                loss = compute_categorical_crossentropy_loss(Y, result)
+                loss = compute_crossentropy_loss(Y, result)
                 best_performers_priority_queue.append((loss, network))
 
             # Get best performers
@@ -64,7 +63,6 @@ class GeneticAlgorithm(Algorithm):
         for layer in self.trained_network:
             Y = Y @ layer
             Y = (Y > 0) * Y
-        Y = softmax(Y)
         return Y
 
     def construct_new_networks(self, best_performers:List[List[np.ndarray]],neruons_per_layer:int, output_classes:int):
@@ -78,7 +76,7 @@ class GeneticAlgorithm(Algorithm):
                 shape = layer.shape
                 for x in range(shape[0]):
                     for y in range(shape[1]):
-                        binary = float_to_bin(layer[x][y])
+                        binary = float_to_bin(layer[x][y], self.precision)
                         for i,b in enumerate(binary):
                             probability_network[layer_idx][x][y][i] += 1 if b == "1" else 0
 
@@ -119,15 +117,15 @@ class GeneticAlgorithm(Algorithm):
 
             return job.result().get_memory()
 
-        
-        first_8_bits  = get_result(0,  probabilities_array, backend)
-        second_8_bits = get_result(8,  probabilities_array, backend)
-        third_8_bits  = get_result(16, probabilities_array, backend)
-        fourth_8_bits = get_result(24, probabilities_array, backend)
+        float_bits = []
+        for i in range(self.precision // 8):
+            float_bits.append( get_result(i * 8,  probabilities_array, backend))
 
         for i in range(self.population):
-            full_binary_float = first_8_bits[i]+second_8_bits[i]+third_8_bits[i]+fourth_8_bits[i]
-            generated_float = bin_to_float(full_binary_float)
+            full_binary_float = ""
+            for bit_arr in float_bits:
+                full_binary_float += bit_arr[i]
+            generated_float = bin_to_float(full_binary_float, self.precision)
             results[i] = generated_float
 
         return results

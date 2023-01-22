@@ -1,90 +1,110 @@
 import qiskit
-from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit
+from qiskit import QuantumCircuit
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import ZFeatureMap
 from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifier
 from qiskit_machine_learning.neural_networks import EstimatorQNN
 from qiskit.algorithms.optimizers.adam_amsgrad import ADAM
+from qiskit.quantum_info import SparsePauliOp
+import random
 
 import numpy as np
 
 from cowskit.models.model import Model
 from cowskit.datasets.dataset import Dataset
-from cowskit.encodings.encoding import Encoding
 
 class VariationalModel(Model):
-    def __init__(self, dataset: Dataset = None, encoding: Encoding = None, depth: int = 1, learning_rate = 0.0001) -> None:
-        self.dataset = dataset
-        self.encoding = encoding
-
-        self.n_qubits = self.encoding.output_shape
-        self.all_qubits = list(range(0, self.n_qubits))
-
-        self.depth = depth
-
-        self.learning_rate = learning_rate
-
-        assert(self.n_qubits <= 32)
-
-        self.register = QuantumRegister(self.encoding.output_shape, 'q')
-        self.output = ClassicalRegister(self.encoding.output_shape, 'c')
-        self.circuit = QuantumCircuit(self.n_qubits + 1) # + 1 bcoz encoding?
+    def __init__(self, dataset: Dataset) -> None:
+        Model.__init__(self, dataset)
+        self.EPOCHS = 1
         
+    def train(self, X: np.ndarray, Y: np.ndarray) -> None:
+        if self.get_output_size() == 1:
+            Y = Y.flatten()
+
         self.build_circuit()
-        
-    def infer(self):
-        def one_iteration(params = None, s = 0):
-            encoded_value = self.encoding.encode(value)
-            #self.register._bits = encoded_value
-            self.circuit.append(encoded_value, self.all_qubits)
-            if params is None:
-                updated_params = self.build_circuit(params, s = s)
-            else:
-                updated_params = self.build_circuit(params, s = s)
-            self.circuit.measure(self.all_qubits, self.output)
+        self.classifier.fit(X, Y)
 
-            return updated_params, self.loss(label, self.output)
+    def predict(self, value: np.ndarray):
+        return self.classifier.predict(value)
+            
+    def build_circuit(self):
+        in_size = self.get_input_size()
+        out_size = self.get_output_size()
 
-        params, _ = one_iteration()
-        for value, label in iter(self.dataset):
-            for i in range(len(params)):
-                s = 0.0001
-                _, loss_s_positive = one_iteration(params, s = s)
-                _, loss_s_negative = one_iteration(params, s = -s)
+        self.feature_map = ZFeatureMap(in_size)
+        self.instruction_set = QuantumCircuit(in_size)
 
-                gradient = loss_s_positive - loss_s_negative
-                params[i] += self.learning_rate * gradient
+        all_qubits = list(range(in_size))
+        layer_id = 0
+        while True:
+            self.instruction_set.compose(self.dense_layer(in_size, layer_id), all_qubits, inplace=True)
+            layer_id += 1
 
+            if layer_id == in_size:
+                break
 
-    def build_circuit(self, old_params, s = 0):        
-        params = []
-        param_idx = 0
-        for i in range(self.depth):
-            if old_params is None:
-                param1 = np.random.rand()
-                param2 = np.random.rand()
-                param3 = np.random.rand()
-            else:
-                param1 = old_params[param_idx] + s
-                param2 = old_params[param_idx+1] + s
-                param3 = old_params[param_idx+2] + s
-                param_idx+=3
-
-            self.circuit.rx(param1, self.all_qubits)
-            self.circuit.ry(param2, self.all_qubits)
-            self.circuit.rz(param3, self.all_qubits)
-
-            params.append(param1)
-            params.append(param2)
-            params.append(param3)
-
-            for j in range(self.n_qubits):
-                self.circuit.cnot(j, j+1)
-            self.circuit.cnot(self.n_qubits - 1, 0)
-
-        return params
+        self.circuit = QuantumCircuit(in_size)
+        self.circuit.compose(self.feature_map,     all_qubits, inplace=True)
+        self.circuit.compose(self.instruction_set, all_qubits, inplace=True)
 
 
-    def loss(self, label, output):
-        return ((label - output) ** 2).mean(axis=None)
+        observables = [0]*out_size
+        for i in range(out_size):
+            ignore_string = ["I"] * in_size
+            ignore_string[i] = "Z"
+            measure_single_z_string = "".join(ignore_string)
+            observables[i] = SparsePauliOp.from_list([(measure_single_z_string, 1)])
 
+        self.network = EstimatorQNN(
+            circuit=self.circuit.decompose(),
+            input_params=self.feature_map.parameters,
+            weight_params=self.instruction_set.parameters,
+            observables=observables
+        )
+
+        self.classifier = NeuralNetworkClassifier(
+            self.network,
+            one_hot=True if out_size != 1 else False,
+            optimizer=ADAM(maxiter=self.EPOCHS),
+        )
+
+
+    def dense_layer(self, num_qubits, id):
+        def weights_circuit(params):
+            target = QuantumCircuit(num_qubits)
+            layer = 0
+            for i in range(num_qubits):
+                target.rx(params[3*i + 0], i)
+                target.ry(params[3*i + 1], i)
+                target.rz(params[3*i + 2], i)
+                layer += 1
+            return target
+
+        def entanglement_circuit(offset):
+            target = QuantumCircuit(num_qubits)
+            for i in range(num_qubits):
+                src = offset + i
+                dst = offset + i + 1
+                if src >= num_qubits:
+                    src -= num_qubits
+                if dst >= num_qubits:
+                    dst -= num_qubits
+                
+                target.cx(dst, src)
+            return target
+
+        qc = QuantumCircuit(num_qubits, name="Dense Layer")
+        qubits = list(range(num_qubits))
+        params = ParameterVector(f"dense_{str(id+1)}", length=num_qubits * 3)
+
+        offset = id - 1
+        qc = qc.compose(weights_circuit(params), qubits)
+        qc = qc.compose(entanglement_circuit(offset), qubits)
+        qc.barrier()
+
+        qc_inst = qc.to_instruction()
+
+        qc = QuantumCircuit(num_qubits)
+        qc.append(qc_inst, qubits)
+        return qc

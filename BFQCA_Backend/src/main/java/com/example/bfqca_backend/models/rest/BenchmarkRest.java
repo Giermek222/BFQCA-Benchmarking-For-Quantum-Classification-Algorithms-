@@ -14,10 +14,10 @@ public class BenchmarkRest implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty(value = "problemName")
+    @JsonProperty(value = "problem_name")
     private final String problemName;
 
-    @JsonProperty(value = "algorithmName")
+    @JsonProperty(value = "algorithm_name")
     private final String algorithmName;
 
     @JsonProperty(value = "training_accuracy")

@@ -1,14 +1,14 @@
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
- ('qknn', 'Iris', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
+ ('qknn', 'iris', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qgenetic', 'Iris', 'Krówcia Crew', '');
+    ('qgenetic', 'iris', 'Krówcia Crew', '');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qcnn', 'Iris', 'Krówcia Crew', '');
+    ('qcnn', 'iris', 'Krówcia Crew', '');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qvm', 'Iris', 'Krówcia Crew', '');
+    ('qvm', 'iris', 'Krówcia Crew', '');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
     ('qknn', 'lines', 'Krówcia Crew', 'Quantum k-nearest neighbours with 3 neighbours');

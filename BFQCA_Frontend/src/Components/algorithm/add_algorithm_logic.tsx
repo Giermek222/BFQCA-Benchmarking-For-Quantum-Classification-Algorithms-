@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import "../styles.css";
-import { algorithmExecuteEndpoint } from "../../constants";
+import { algorithmExecuteEndpoint, datasetEndpoint } from "../../constants";
 import axios from "axios";
 import { Box, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +27,22 @@ const AddAlgorithmScreen: React.FC<Props> = ({ userName }) => {
   const [code, setCode] = useState("");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const limitOpen = Boolean(anchorEl);
+
+  const [datasets, setDatasets] = useState<string[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(datasetEndpoint, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "---",
+        },
+      })
+      .then((response) => {
+        setDatasets(response.data);
+        console.log(datasets);
+      });
+  }, []);
 
   const onChangeAlgorithmName = (e: ChangeEvent<HTMLInputElement>) => {
     const searchTitle: string = e.target.value;
@@ -95,6 +111,8 @@ const AddAlgorithmScreen: React.FC<Props> = ({ userName }) => {
     setAnchorEl(null);
   };
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <div style={styles}>
       <Box
@@ -125,11 +143,14 @@ const AddAlgorithmScreen: React.FC<Props> = ({ userName }) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
+            {datasets.map((dataset: string) => (
+              <MenuItem>{dataset}</MenuItem>
+            ))}
+            {/* <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
             <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
             <MenuItem onClick={setProblemToDiabetes}>
               Pima Indians Diabetic
-            </MenuItem>
+            </MenuItem> */}
           </Menu>
         </div>
 

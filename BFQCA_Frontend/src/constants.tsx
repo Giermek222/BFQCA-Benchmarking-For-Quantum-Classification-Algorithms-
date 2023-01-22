@@ -4,6 +4,7 @@ const algorithmExecuteEndpoint = backend + "/algorithms/execute";
 const algorithmsGetEndpoint = backend + "/algorithms/get";
 const userLoginEndpoint = backend + "/user/login";
 const userRegisterEndpoint = backend + "/user/register";
+const datasetEndpoint = backend + "/dataset";
 
 export {
   backend,
@@ -12,4 +13,5 @@ export {
   algorithmExecuteEndpoint,
   userLoginEndpoint,
   userRegisterEndpoint,
+  datasetEndpoint,
 };

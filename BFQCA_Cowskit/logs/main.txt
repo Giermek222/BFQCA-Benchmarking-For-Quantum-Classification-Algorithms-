@@ -1,17 +1,26 @@
-[DEBUG] Added "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/custom_algorithms" to system PATH
-[DEBUG] Added "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/custom_encodings" to system PATH
-[DEBUG] Added "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/custom_datasets" to system PATH
-[ERROR] No dataset with name: iris
+[INFO] Quantum Benchmarking initializing...
+[DEBUG] Added D:\Wladek\repos\inzynierka\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/custom_algorithms to system PATH
+[DEBUG] Added D:\Wladek\repos\inzynierka\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/custom_encodings to system PATH
+[DEBUG] Added D:\Wladek\repos\inzynierka\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/custom_datasets to system PATH
+[INFO] Loaded dataset: lines
+[INFO] Loaded algorithm: qknn
+[INFO] Loaded encoding: amplitude
+[INFO] Features amount: 8
+[INFO] Start algorithm training
+[INFO] Training finished, total time (ms): 0.0
+[INFO] Computing training benchmarks
 Traceback (most recent call last):
-  File "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\main.py", line 53, in <module>
+  File "D:\Wladek\repos\inzynierka\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\main.py", line 45, in <module>
     main(path_to_main_file, args)
-  File "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\main.py", line 13, in main
-    dataset, encoding, algorithm = construct_instances_from_args(args)
-  File "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\backend\argparser.py", line 112, in construct_instances_from_args
-    dataset = parse_dataset(args.dataset)
-  File "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\backend\argparser.py", line 62, in parse_dataset
-    raise e
-  File "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\backend\argparser.py", line 58, in parse_dataset
-    file = __import__(dataset_name)
-ModuleNotFoundError: No module named 'iris'
-Command 'python "C:\Users\pkrzemin\OneDrive - Intel Corporation\Desktop\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/main.py" -a qknn -d iris -e amplitude' returned non-zero exit status 1.
+  File "D:\Wladek\repos\inzynierka\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\main.py", line 17, in main
+    benchmark_cache = benchmark_training(benchmark_cache, dataset, algorithm, encoding)
+  File "D:\Wladek\repos\inzynierka\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit\backend\benchmark.py", line 35, in benchmark_training
+    training_accuracy = compute_accuracy(y_train, y_pred)
+  File "C:\Users\Wojtek\AppData\Local\Programs\Python\Python310\lib\site-packages\cowskit\utils.py", line 18, in compute_accuracy
+    Y_pred = one_hot(Y_pred)
+  File "C:\Users\Wojtek\AppData\Local\Programs\Python\Python310\lib\site-packages\cowskit\utils.py", line 12, in one_hot
+    return (x == x.max(axis=1)[:,None]).astype(int)
+  File "C:\Users\Wojtek\AppData\Local\Programs\Python\Python310\lib\site-packages\numpy\core\_methods.py", line 40, in _amax
+    return umr_maximum(a, axis, None, out, keepdims, initial, where)
+numpy.AxisError: axis 1 is out of bounds for array of dimension 1
+Command 'python "D:\Wladek\repos\inzynierka\BFQCA-Benchmarking-For-Quantum-Classification-Algorithms-\BFQCA_Cowskit/main.py" -a qknn -d lines -e amplitude' returned non-zero exit status 1.

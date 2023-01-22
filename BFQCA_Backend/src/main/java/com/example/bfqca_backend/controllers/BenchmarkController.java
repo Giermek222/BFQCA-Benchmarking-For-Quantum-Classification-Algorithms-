@@ -29,14 +29,20 @@ public class BenchmarkController {
     public ResponseEntity<Object> addBenchmarks(@RequestHeader HttpHeaders headers, @RequestBody @Valid BenchmarkRest benchmarkRest) throws IOException {
         if (Objects.isNull(benchmarkRest.getAlgorithmName()) ||
                 Objects.isNull(benchmarkRest.getProblemName()) ||
-                Objects.isNull(benchmarkRest.getAccuracyLearning()) ||
-                Objects.isNull(benchmarkRest.getAccuracyTest()) ||
-                Objects.isNull(benchmarkRest.getAvgLatency()) ||
-                Objects.isNull(benchmarkRest.getMaxLatency()) ||
-                Objects.isNull(benchmarkRest.getMinLatency()) ||
-                Objects.isNull(benchmarkRest.getLatencyPercentile()) ||
-                Objects.isNull(benchmarkRest.getLossLearning()) ||
-                Objects.isNull(benchmarkRest.getLossTest()) ||
+                Objects.isNull(benchmarkRest.getTrainingAccuracy()) ||
+                Objects.isNull(benchmarkRest.getTrainingPrecision()) ||
+                Objects.isNull(benchmarkRest.getTrainingRecall()) ||
+                Objects.isNull(benchmarkRest.getTrainingF1Score()) ||
+                Objects.isNull(benchmarkRest.getTrainingLoss()) ||
+                Objects.isNull(benchmarkRest.getTestAccuracy()) ||
+                Objects.isNull(benchmarkRest.getTestPrecision()) ||
+                Objects.isNull(benchmarkRest.getTestRecall()) ||
+                Objects.isNull(benchmarkRest.getTestF1Score()) ||
+                Objects.isNull(benchmarkRest.getTestLoss()) ||
+                Objects.isNull(benchmarkRest.getMinLatencyMs()) ||
+                Objects.isNull(benchmarkRest.getMaxLatencyMs()) ||
+                Objects.isNull(benchmarkRest.getAvgLatencyMs()) ||
+                Objects.isNull(benchmarkRest.getPercentileLatencyMs()) ||
                 Objects.isNull(benchmarkRest.getTime())) {
             return ResponseEntity.badRequest().build();
         }

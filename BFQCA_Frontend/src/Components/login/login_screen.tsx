@@ -211,7 +211,7 @@ const LoginScreen: React.FC<Props> = ({ logged, setUserName }) => {
                 height: "50vh",
               }}
             >
-              {isLoginOpen ? <LoginSection logged={logged} setUserName={setUserName} /> : <RegisterSection />}
+              {isLoginOpen ? <LoginSection logged={logged} setUserName={setUserName} /> : <RegisterSection logged={logged} setUserName={setUserName} />}
             </div>
           </div>
           <div />

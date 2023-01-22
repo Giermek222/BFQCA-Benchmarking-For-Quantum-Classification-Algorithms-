@@ -40,7 +40,6 @@ const AddAlgorithmScreen: React.FC<Props> = ({ userName }) => {
       })
       .then((response) => {
         setDatasets(response.data);
-        console.log(datasets);
       });
   }, []);
 
@@ -90,23 +89,6 @@ const AddAlgorithmScreen: React.FC<Props> = ({ userName }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  //TODO::make it dynamic, get datasets names from backend and display them here
-  const setProblemToPenguins = () => {
-    setProblemName("Palmer Penguin");
-    setProblemDescription("Palmer Penguin");
-    handleLimitClose();
-  };
-  const setProblemToIris = () => {
-    setProblemName("Iris");
-    setProblemDescription("Iris");
-    handleLimitClose();
-  };
-  const setProblemToDiabetes = () => {
-    setProblemName("Pima Indians Diabetic");
-    setProblemDescription("Pima Indians Diabetic");
-    handleLimitClose();
-  };
-
   const handleLimitClose = () => {
     setAnchorEl(null);
   };
@@ -144,13 +126,16 @@ const AddAlgorithmScreen: React.FC<Props> = ({ userName }) => {
             }}
           >
             {datasets.map((dataset: string) => (
-              <MenuItem>{dataset}</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setProblemName(dataset);
+                  setProblemDescription(dataset + "Dataset");
+                  handleLimitClose();
+                }}
+              >
+                {dataset}
+              </MenuItem>
             ))}
-            {/* <MenuItem onClick={setProblemToIris}>Iris</MenuItem>
-            <MenuItem onClick={setProblemToPenguins}>Palmer Penguin</MenuItem>
-            <MenuItem onClick={setProblemToDiabetes}>
-              Pima Indians Diabetic
-            </MenuItem> */}
           </Menu>
         </div>
 

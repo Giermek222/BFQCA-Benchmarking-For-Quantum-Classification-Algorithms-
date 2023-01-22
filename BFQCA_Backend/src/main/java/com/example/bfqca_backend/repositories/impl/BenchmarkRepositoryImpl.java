@@ -21,11 +21,11 @@ public class BenchmarkRepositoryImpl  implements BenchmarkRepository {
             Connection connection = DatabaseConnector.connectToDatabase();
             StringBuilder query = new StringBuilder("select * from benchmark");
             if (Objects.nonNull(filter.getAlgorithmname()) && Objects.nonNull(filter.getProblem()))
-                query.append(" where algorithmName LIKE ? and problemName LIKE ? ");
+                query.append(" where algorithm_name LIKE ? and problem_name LIKE ? ");
             else if (Objects.nonNull(filter.getAlgorithmname()))
-                query.append(" where where algorithmName LIKE ?");
+                query.append(" where where algorithm_name LIKE ?");
             else if (Objects.nonNull(filter.getProblem()))
-                query.append(" where problemName LIKE ? ");
+                query.append(" where problem_name LIKE ? ");
 
 
             PreparedStatement statement = connection.prepareStatement(query.toString());

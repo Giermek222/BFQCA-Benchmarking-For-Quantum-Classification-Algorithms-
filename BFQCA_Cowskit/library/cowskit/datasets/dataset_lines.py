@@ -18,7 +18,6 @@ class LinesDataset(Dataset):
         if len(output_shape) == SHAPE_1D:
             assert(output_shape[1] == 1 or output_shape[1] == 2)
 
-
         labels_type = 0
         MULTI_CLASS = 1
         SINGLE_CLASS = 2

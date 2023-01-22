@@ -4,7 +4,6 @@ class Algorithm:
         self.input_size = None
         self.output_size = None
 
-
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
         raise Exception("Unimplemented 'train' function in custom algorithm.")
 

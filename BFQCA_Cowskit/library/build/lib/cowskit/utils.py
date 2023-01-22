@@ -2,6 +2,8 @@ import numpy as np
 import struct
 
 def get_shape_size(data:np.ndarray) -> int:
+    if len(data.shape) == 1:
+        return 1
     features_shape = data.shape[1:]
     return np.prod(features_shape)
 
@@ -9,6 +11,7 @@ def softmax(x):
     return(np.exp(x)/np.exp(x).sum())
 
 def one_hot(x):
+    if len(x.shape) == 1: return x
     return (x == x.max(axis=1)[:,None]).astype(int)
     
 def compute_accuracy(Y_labels:np.ndarray, Y_pred:np.ndarray):
@@ -63,6 +66,8 @@ def compute_f1_score(Y_labels:np.ndarray, Y_pred:np.ndarray):
 
 def compute_categorical_crossentropy_loss(Y_labels:np.ndarray, Y_pred:np.ndarray):
     Y_pred = softmax(Y_pred)
+
+    Y_labels, Y_pred = Y_labels.flatten(), Y_pred.flatten()
     categorical_crossentropy = - np.sum(Y_labels * np.log(Y_pred + 10**-100))
     
     return categorical_crossentropy

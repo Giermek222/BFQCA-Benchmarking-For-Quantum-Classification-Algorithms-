@@ -23,7 +23,7 @@ def parse_args() -> Namespace:
                         help = f'Name of the predefined/custom dataset to use. Predefined values: {PREDEFINED_DATASETS}'
     )
     parser.add_argument('-e', '--encoding', 
-                        required = True,
+                        required = False, # should be True
                         help = f'Name of the predefined/custom encoding to use. Predefined values: {PREDEFINED_ENCODINGS}'
     )
     parser.add_argument('-t', '--tries',
@@ -77,7 +77,7 @@ def parse_algorithm(algorithm_name: str) -> cowskit.algorithms.Algorithm:
     elif algorithm_name == 'qgenetic':
         algorithm = cowskit.algorithms.GeneticAlgorithm()
     elif algorithm_name == 'qvm':
-        algorithm = cowskit.models.VariationalModel()
+        algorithm = cowskit.models.VariationalModelV2()
     elif algorithm_name == 'qcnn':
         algorithm = cowskit.models.ConvolutionalModelV2()
     else:
@@ -119,12 +119,12 @@ def construct_instances_from_args(args: Namespace) -> Tuple[cowskit.datasets.Dat
     algorithm = parse_algorithm(args.algorithm)
     encoding = parse_encoding(args.encoding)
 
+    algorithm.input_size = dataset.input_size
+    algorithm.output_size = dataset.output_size
+
     # To be removed
     if isinstance(algorithm, cowskit.algorithms.KNearestNeighbors):
-        features_amount = cowskit.utils.get_shape_size(dataset.get_random_pair()[0])
-        Log.info(f"Features amount: {features_amount}")
-        encoding.__init__(n_features = features_amount)
-        algorithm.__init__(n_neighbors = features_amount)
+        encoding.__init__(n_features = dataset.input_size)
         algorithm.encoding = encoding
     # ===
 

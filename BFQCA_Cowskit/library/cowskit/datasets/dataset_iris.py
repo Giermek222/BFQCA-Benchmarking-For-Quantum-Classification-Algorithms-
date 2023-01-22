@@ -4,7 +4,7 @@ import numpy as np
 
 class IrisDataset(Dataset):
     def __init__(self):
-        Dataset.__init__(self, test_split=0.1)
+        Dataset.__init__(self, test_split=0.5)
 
     def generate_dataset(self):
         with open(IRIS_DATASET, 'r') as file:
@@ -31,5 +31,6 @@ class IrisDataset(Dataset):
                 else:
                     raise Exception(f"Unknown label in Iris Dataset: '{label}'")
 
-            divisor = np.amax(self.data, axis = 1)
-            self.data = self.data / divisor[:, np.newaxis]
+            divisor = np.amax(self.data, axis = 0)
+            self.data = self.data / divisor[:]
+

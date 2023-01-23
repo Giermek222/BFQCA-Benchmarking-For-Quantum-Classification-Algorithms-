@@ -4,7 +4,7 @@ from typing import List
 from cowskit.algorithms import Algorithm
 from cowskit.datasets import Dataset
 from cowskit.utils import get_shape_size, compute_crossentropy_loss
-from cowskit.utils import bin_to_float, float_to_bin
+from cowskit.utils import bin_to_float, float_to_bin, sigmoid, softmax
 
 from qiskit import QuantumCircuit, Aer, QuantumRegister, ClassicalRegister
 from qiskit_aer import AerSimulator
@@ -21,12 +21,9 @@ class GeneticAlgorithm(Algorithm):
         self.trained_network:List[np.ndarray] = []
 
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
-        # samples_count = X.shape[0]
+
         n_features = get_shape_size(X)
         n_classes = get_shape_size(Y)
-        
-        # X = X.reshape((samples_count, n_features))
-        # Y = Y.reshape((samples_count, n_classes))
 
         networks = self.construct_starting_networks(n_features, n_classes)
         best_performers_priority_queue: List[List[np.ndarray]] = []
@@ -40,6 +37,11 @@ class GeneticAlgorithm(Algorithm):
                     result = result @ layer
                     result = (result > 0) * result # relu activation
                 
+                if n_classes != 1:
+                    result = softmax(result)
+                else:
+                    result = sigmoid(result)
+
                 loss = compute_crossentropy_loss(Y, result)
                 best_performers_priority_queue.append((loss, network))
 
@@ -63,6 +65,10 @@ class GeneticAlgorithm(Algorithm):
         for layer in self.trained_network:
             Y = Y @ layer
             Y = (Y > 0) * Y
+        if Y.shape[1] != 1:
+            Y = softmax(Y)
+        else:
+            Y = sigmoid(Y)
         return Y
 
     def construct_new_networks(self, best_performers:List[List[np.ndarray]],neruons_per_layer:int, output_classes:int):

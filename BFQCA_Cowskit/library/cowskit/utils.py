@@ -1,26 +1,5 @@
 import numpy as np
-
-def remove_padding_from_labels(Y_labels:np.ndarray, Y_pred:np.ndarray, n_padding: int = 0):
-    n_classes = get_shape_size(Y_labels) - n_padding
-    Y_labels = Y_labels[:, :n_classes]
-    Y_pred = Y_pred[:, :n_classes]
-
-    if n_classes != 1:
-        Y_pred = softmax(Y_pred)
-    else:
-        Y_pred = np.round(Y_pred)
-
-def compute_confusion_matrix(Y_labels:np.ndarray, Y_pred:np.ndarray):
-
-    n_classes = get_shape_size(Y_labels)
-    result = np.zeros((n_classes, n_classes))
-
-    possibilities = np.eye(n_classes)
-    for x_idx, x_axis_possibility in enumerate(possibilities):
-        for y_idx, y_axis_possibility in enumerate(possibilities):
-            result[y_idx][x_idx] = ((Y_labels == y_axis_possibility) & (Y_pred == x_axis_possibility)).sum()
-
-    return result
+from cowskit.constants import ROUND_DIGITS
 
 def get_shape_size(data:np.ndarray) -> int:
     if len(data.shape) == 1:
@@ -28,107 +7,121 @@ def get_shape_size(data:np.ndarray) -> int:
     features_shape = data.shape[1:]
     return np.prod(features_shape)
 
+def compute_possibilities(n_classes: int, n_padding: int = 0) -> np.ndarray:
+    if n_classes != 1:
+        possiblities = np.eye(n_classes - n_padding)
+    else:
+        possiblities = np.array([[0], [1]])
+    if n_padding != 0:
+        possiblities = np.pad(possiblities, (0, n_padding), 'constant', constant_values=(0))
+    return possiblities
+
+def sigmoid(x) -> np.ndarray:
+    return 1 / (1 + np.exp(-x))
+
 def softmax(x) -> np.ndarray:
-    return(np.exp(x)/np.exp(x).sum(axis=1)) # was without axis
+    return (np.exp(x)/np.exp(x).sum(axis=1, keepdims = True))
 
 def one_hot(x) -> np.ndarray:
     return (x == x.max(axis=1)[:,None]).astype(int)
 
-def compute_possibilities(n_classes: int, n_padding: int = 0) -> np.ndarray:
-    possiblities = np.eye(n_classes - n_padding)
-    possiblities = np.pad(possiblities, (0,n_padding), 'constant', constant_values=(0))
-    return possiblities
-    
-def compute_accuracy(Y_labels:np.ndarray, Y_pred:np.ndarray, n_padding: int = 0) -> float:
-    Y_labels_copy, Y_pred_copy = Y_labels.copy(), Y_pred.copy()
+def preprocess_labels(Y_labels:np.ndarray, Y_pred:np.ndarray, n_padding: int = 0):
+    n_classes = get_shape_size(Y_labels) - n_padding
+    Y_labels = Y_labels[:, :n_classes]
+    Y_pred = Y_pred[:, :n_classes]
 
-    n_classes = get_shape_size(Y_labels_copy)
     if n_classes != 1:
-        Y_pred_copy = softmax(Y_pred_copy)
-        Y_pred_copy = one_hot(Y_pred_copy)
+        Y_pred = softmax(Y_pred)
     else:
-        Y_pred_copy = np.round(Y_pred_copy)
+        Y_pred = sigmoid(Y_pred)
 
-    N = Y_labels_copy.shape[0]
-    possibilities = compute_possibilities(n_classes, n_padding)
+    return Y_labels, Y_pred
 
-    accuracy = 0
-    for possibility in possibilities:
-        TP = ((Y_pred_copy == possibility) & (Y_labels_copy == possibility)).sum()
-        TN = ((Y_pred_copy != possibility) & (Y_labels_copy != possibility) & (Y_pred_copy == Y_labels_copy)).sum()
-        accuracy += (TP + TN) / N
-    accuracy /= n_classes
+def compute_confusion_matrix(Y_labels:np.ndarray, Y_pred:np.ndarray):           
+    """                             truths
+    \\ tr tr tr                     x y z
+    la                             x
+    la                     labels  y
+    la                             z
     
-    return accuracy
+    """
+    n_classes = get_shape_size(Y_labels)
 
-def compute_precision(Y_labels:np.ndarray, Y_pred:np.ndarray, n_padding: int = 0) -> float:
-    Y_labels_copy, Y_pred_copy = Y_labels.copy(), Y_pred.copy()
-
-    n_classes = get_shape_size(Y_labels_copy)
     if n_classes != 1:
-        Y_pred_copy = softmax(Y_pred_copy)
-        Y_pred_copy = one_hot(Y_pred_copy)
+        result = np.zeros((n_classes, n_classes))
+        Y_pred_copy = one_hot(Y_pred)
     else:
-        Y_pred_copy = np.round(Y_pred_copy)
+        result = np.zeros((2,2))
+        Y_pred_copy = np.round(Y_pred)
 
-    possibilities = compute_possibilities(n_classes, n_padding)
+    possibilities = compute_possibilities(n_classes)  
+
+    for x_idx, x_axis_possibility in enumerate(possibilities):
+        for y_idx, y_axis_possibility in enumerate(possibilities):
+            result[y_idx][x_idx] = ((Y_labels == y_axis_possibility) & (Y_pred_copy == x_axis_possibility)).sum()
+
+    return result
+    
+def compute_accuracy(confusion_matrix: np.ndarray) -> float:
+    dim = confusion_matrix.shape[0]
+    
+    TPTN = (confusion_matrix * np.eye(dim)).sum()
+    accuracy = TPTN / confusion_matrix.sum()
+    
+    return np.round(accuracy, ROUND_DIGITS)
+
+def compute_precision(confusion_matrix: np.ndarray) -> float:
+    dim = confusion_matrix.shape[0]
+
+    sum_columns = np.sum(confusion_matrix, axis = 1)
     precision = 0
-    for possibility in possibilities:
-        TP = ((Y_pred_copy == possibility) & (Y_labels_copy == possibility)).sum()
-        FP = ((Y_pred_copy == possibility) & (Y_labels_copy != possibility)).sum()
-        if TP + FP == 0: FP = 1
-        precision += TP / (TP + FP)
-    precision /= n_classes
-    return precision
+    for i in range(dim):
+        TP = confusion_matrix[i][i]
+        TPFP = sum_columns[i]
+        if TPFP == 0: TPFP = 1
+        precision += TP / TPFP
+    precision /= dim
+    return np.round(precision, ROUND_DIGITS)
 
-def compute_recall(Y_labels:np.ndarray, Y_pred:np.ndarray, n_padding: int = 0) -> float:
-    Y_labels_copy, Y_pred_copy = Y_labels.copy(), Y_pred.copy()
+def compute_recall(confusion_matrix: np.ndarray) -> float:
+    dim = confusion_matrix.shape[0]
 
-    n_classes = get_shape_size(Y_labels_copy)
-    if n_classes != 1:
-        Y_pred_copy = softmax(Y_pred_copy)
-        Y_pred_copy = one_hot(Y_pred_copy)
-    else:
-        Y_pred_copy = np.round(Y_pred_copy)
-
-    possibilities = compute_possibilities(n_classes, n_padding)
+    sum_columns = np.sum(confusion_matrix, axis = 0)
     recall = 0
-    for possibility in possibilities:
-        TP = ((Y_pred_copy == possibility) & (Y_labels_copy == possibility)).sum()
-        FN = ((Y_pred_copy != possibility) & (Y_labels_copy != possibility) & (Y_pred_copy != Y_labels_copy)).sum()
-        if TP + FN == 0: FN = 1
-        recall += TP / (TP + FN)
-    recall /= n_classes
-    return recall
+    for i in range(dim):
+        TP = confusion_matrix[i][i]
+        TPFN = sum_columns[i]
+        if TPFN == 0: TPFN = 1
+        recall += TP / TPFN
+    recall /= dim
+    return np.round(recall, ROUND_DIGITS)
 
-def compute_f1_score(Y_labels:np.ndarray, Y_pred:np.ndarray, n_padding: int = 0) -> float:
-    precision = compute_precision(Y_labels, Y_pred, n_padding)
-    recall = compute_recall(Y_labels, Y_pred, n_padding)
+def compute_f1_score(confusion_matrix: np.ndarray) -> float:
+    precision = compute_precision(confusion_matrix)
+    recall = compute_recall(confusion_matrix)
     if precision + recall == 0:
         f1_score = 0
     else:
         f1_score = 2*precision*recall/(precision+recall)
 
-    return f1_score
+    return np.round(f1_score, ROUND_DIGITS)
 
 def compute_binary_crossentropy_loss(Y_labels:np.ndarray, Y_pred:np.ndarray) -> float:
-    Y_labels_copy, Y_pred_copy = Y_labels.copy(), Y_pred.copy()
-
-    Y_labels_copy, Y_pred_copy = Y_labels_copy.flatten(), Y_pred_copy.flatten()
+    Y_labels_copy, Y_pred_copy = Y_labels.flatten(), Y_pred.flatten()
+    Y_pred_copy = sigmoid(Y_pred_copy)
 
     N = Y_labels_copy.shape[0]
-    binary_crossentropy = -1/N * np.sum(Y_labels_copy * np.log(Y_pred_copy + 10**-100) + (1 - Y_labels_copy) * np.log((1 - Y_pred_copy) + 10**-100))
+    binary_crossentropy = -1/N * np.sum(Y_labels_copy * np.log(Y_pred_copy + 10**-100) + (1 - Y_labels_copy) * np.log(1 - Y_pred_copy + 10**-100))
 
-    return binary_crossentropy
+    return np.round(binary_crossentropy, ROUND_DIGITS)
     
 def compute_categorical_crossentropy_loss(Y_labels:np.ndarray, Y_pred:np.ndarray) -> float:
     Y_labels_copy, Y_pred_copy = Y_labels.copy(), Y_pred.copy()
 
     Y_pred_copy = softmax(Y_pred_copy)
-    Y_labels_copy, Y_pred_copy = Y_labels_copy.flatten(), Y_pred_copy.flatten()
     categorical_crossentropy = -np.sum(Y_labels_copy * np.log(Y_pred_copy + 10**-100))
-    
-    return categorical_crossentropy
+
+    return np.round(categorical_crossentropy, ROUND_DIGITS)
 
 def compute_crossentropy_loss(Y_labels:np.ndarray, Y_pred:np.ndarray) -> float:
     if len(Y_labels.shape) == 1 or Y_labels.shape[1] == 1:

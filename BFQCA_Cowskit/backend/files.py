@@ -8,11 +8,11 @@ def get_file_realpath(file: str) -> str:
     
     return path
 
-def get_logs_folder_path(path_to_main_file: str) -> str:
-    path = f"{path_to_main_file}/logs"
+def get_logs_folder_path(path_to_main_file: str, logs_folder_name: str = "logs") -> str:
+    path = f"{path_to_main_file}/{logs_folder_name}"
 
-    if not os.path.exists(path_to_main_file):
-        os.mkdir(path_to_main_file)
+    if not os.path.exists(path):
+        os.mkdir(path)
 
     return path
 

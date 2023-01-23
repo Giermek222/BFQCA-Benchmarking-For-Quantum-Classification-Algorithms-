@@ -4,7 +4,7 @@ from typing import Dict
 
 from cowskit.datasets import Dataset
 from cowskit.algorithms import Algorithm
-from cowskit.utils import compute_accuracy, compute_precision, compute_recall, compute_f1_score, compute_crossentropy_loss
+from cowskit.utils import compute_accuracy, compute_precision, compute_recall, compute_f1_score, compute_crossentropy_loss, preprocess_labels, compute_confusion_matrix
 
 from backend.logger import Log
 
@@ -47,23 +47,29 @@ def benchmark_training(benchmark_cache: Dict[str, str], dataset: Dataset, algori
     X_train, y_train = dataset.get_train_data()
     y_pred = algorithm.predict_safe(X_train, y_train.shape[1])
 
-    training_accuracy = compute_accuracy(y_train, y_pred, output_padding)
-    training_precision = compute_precision(y_train, y_pred, output_padding)
-    training_recall = compute_recall(y_train, y_pred, output_padding)
-    training_f1_score = compute_f1_score(y_train, y_pred, output_padding)
+    y_train, y_pred = preprocess_labels(y_train, y_pred, output_padding)
+    confusion_matrix = compute_confusion_matrix(y_train, y_pred)
     training_loss = compute_crossentropy_loss(y_train, y_pred)
+    training_accuracy = compute_accuracy(confusion_matrix)
+    training_precision = compute_precision(confusion_matrix)
+    training_recall = compute_recall(confusion_matrix)
+    training_f1_score = compute_f1_score(confusion_matrix)
 
+    benchmark_cache['training_loss'] = training_loss
     benchmark_cache['training_accuracy'] = training_accuracy
     benchmark_cache['training_precision'] = training_precision
     benchmark_cache['training_recall'] = training_recall
     benchmark_cache['training_f1_score'] = training_f1_score
-    benchmark_cache['training_loss'] = training_loss
+
+    Log.debug(f"Confusion matrix:")
+    Log.debug(np.array2string(confusion_matrix, prefix=Log.debug_prefix))
 
     Log.info(f"  Accuracy:            {training_accuracy}")
     Log.info(f"  Precision:           {training_precision}")
     Log.info(f"  Recall:              {training_recall}")
     Log.info(f"  F1 score:            {training_f1_score}")
     Log.info(f"  Logistic loss:       {training_loss}")
+    
 
     return benchmark_cache
 
@@ -74,17 +80,22 @@ def benchmark_test(benchmark_cache: Dict[str, float], dataset: Dataset, algorith
     X_test, y_test = dataset.get_test_data()
     y_pred = algorithm.predict_safe(X_test, y_test.shape[1])
 
-    test_accuracy = compute_accuracy(y_test, y_pred, output_padding)
-    test_precision = compute_precision(y_test, y_pred, output_padding)
-    test_recall = compute_recall(y_test, y_pred, output_padding)
-    test_f1_score = compute_f1_score(y_test, y_pred, output_padding)
+    y_test, y_pred = preprocess_labels(y_test, y_pred, output_padding)
+    confusion_matrix = compute_confusion_matrix(y_test, y_pred)
     test_loss = compute_crossentropy_loss(y_test, y_pred)
+    test_accuracy = compute_accuracy(confusion_matrix)
+    test_precision = compute_precision(confusion_matrix)
+    test_recall = compute_recall(confusion_matrix)
+    test_f1_score = compute_f1_score(confusion_matrix)
 
     benchmark_cache['test_accuracy'] = test_accuracy
     benchmark_cache['test_precision'] = test_precision
     benchmark_cache['test_recall'] = test_recall
     benchmark_cache['test_f1_score'] = test_f1_score
     benchmark_cache['test_loss'] = test_loss
+
+    Log.debug(f"Confusion matrix:")
+    Log.debug(np.array2string(confusion_matrix, prefix=Log.debug_prefix))
 
     Log.info(f"  Accuracy:            {test_accuracy}")
     Log.info(f"  Precision:           {test_precision}")

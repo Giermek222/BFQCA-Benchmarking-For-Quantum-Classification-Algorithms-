@@ -10,7 +10,7 @@ for alg in ba.PREDEFINED_ALGORITHMS:
         path = fl.get_file_realpath(__file__)
         command = f"python \"{path}/main.py\" -a {alg} -d {ds}"
 
-        logs_folder = fl.get_logs_folder_path(path)
+        logs_folder = fl.get_logs_folder_path(path, "logs_tests")
         logs_file = f"{logs_folder}/test_{alg}_{ds}.txt"
         with open(logs_file, "w") as log_file:
             try:

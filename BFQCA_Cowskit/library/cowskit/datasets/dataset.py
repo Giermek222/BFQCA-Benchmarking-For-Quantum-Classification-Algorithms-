@@ -8,7 +8,7 @@ from cowskit.utils import get_shape_size
 
 class Dataset:
 
-    def __init__(self, test_split: float = 0.3, limit: int = 20):
+    def __init__(self, test_split: float = 0.5, limit: int = 20):
         """
         This function must be called when creating a custom instance of a dataset class.\n
         Dataset.__init__(self) or Dataset.__init__(self, test_split)\n

@@ -7,3 +7,6 @@ SHAPE_3D = 4 # 3D + input count
 
 ## QUBITS
 MAX_QUBITS = 32
+
+## ROUNDING
+ROUND_DIGITS = 2

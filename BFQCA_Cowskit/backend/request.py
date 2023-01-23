@@ -24,10 +24,10 @@ def make_request(args, benchmark_cache: Dict[str, float]):
         "test_recall": benchmark_cache["test_recall"],
         "test_f1_score": benchmark_cache["test_f1_score"],
         "test_loss": benchmark_cache["test_loss"],
-        "maxLatency": benchmark_cache["max_latency_ms"],
-        "minLatency": benchmark_cache["min_latency_ms"],
-        "avgLatency": benchmark_cache["avg_latency_ms"],
-        "latencyPercentile": benchmark_cache["percentile_latency_ms"],
+        "max_latency_ms": benchmark_cache["max_latency_ms"],
+        "min_latency_ms": benchmark_cache["min_latency_ms"],
+        "avg_latency_ms": benchmark_cache["avg_latency_ms"],
+        "percentile_latency_ms": benchmark_cache["percentile_latency_ms"],
         "time": benchmark_cache["training_time_ms"]
     }
 

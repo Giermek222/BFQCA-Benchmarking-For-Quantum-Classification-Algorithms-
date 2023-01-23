@@ -8,19 +8,26 @@ class LogLevel(Enum):
     DEBUG   = 4
 
 class Log:
+    debug_prefix = "[DEBUG] "
+    info_prefix = "[INFO] "
+    warning_prefix = "[WARN] "
+    error_prefix = "[ERROR] "
+    fatal_prefix = "[FATAL] "
+
+
     level = LogLevel.INFO
     def debug(*args):
         if Log.level.value >= LogLevel.DEBUG.value:
-            print("[DEBUG] " + "".join(str(arg) for arg in args))
+            print(Log.debug_prefix + "".join(str(arg) for arg in args))
     def info(*args):
         if Log.level.value >= LogLevel.INFO.value:
-            print("[INFO] " + "".join(str(arg) for arg in args))
+            print(Log.info_prefix + "".join(str(arg) for arg in args))
     def warning(*args):
         if Log.level.value >= LogLevel.WARNING.value:
-            print("[WARN] " + "".join(str(arg) for arg in args))
+            print(Log.warning_prefix + "".join(str(arg) for arg in args))
     def error(*args):
         if Log.level.value >= LogLevel.ERROR.value:
-            print("[ERROR] " + "".join(str(arg) for arg in args))
+            print(Log.error_prefix + "".join(str(arg) for arg in args))
     def fatal(*args):
         if Log.level.value >= LogLevel.FATAL.value:
-            print("[FATAL] " + "".join(str(arg) for arg in args))
+            print(Log.fatal_prefix + "".join(str(arg) for arg in args))

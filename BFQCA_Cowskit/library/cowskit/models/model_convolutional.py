@@ -1,76 +1,80 @@
-import qiskit
-from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit
+import numpy as np
+
+from qiskit import QuantumCircuit
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import ZFeatureMap
 from qiskit_machine_learning.algorithms.classifiers import NeuralNetworkClassifier
 from qiskit_machine_learning.neural_networks import EstimatorQNN
 from qiskit.algorithms.optimizers.adam_amsgrad import ADAM
-
-import numpy as np
+from qiskit.quantum_info import SparsePauliOp
 
 from cowskit.models.model import Model
 from cowskit.datasets.dataset import Dataset
-from cowskit.encodings.encoding import Encoding
 
 class ConvolutionalModel(Model):
-    def __init__(self, dataset: Dataset = None, encoding: Encoding = None) -> None:
-        self.dataset = dataset
-        self.encoding = encoding
-
-        self.n_qubits = self.encoding.output_shape
-        self.all_qubits = list(range(0, self.n_qubits))
-
-        assert(self.n_qubits <= 32)
-
-        self.register = QuantumRegister(self.n_qubits, 'q')
-        self.output = ClassicalRegister(self.n_qubits, 'c')
-
-        self.feature_map = ZFeatureMap(self.n_qubits)  # This should be encoder
-        self.instruction_set = QuantumCircuit(self.n_qubits, name = "Conv Network Instruction Set")
-
-        self.circuit = QuantumCircuit(self.register, self.output)
+    def __init__(self, dataset: Dataset = None) -> None:
+        Model.__init__(self, dataset)
+        self.EPOCHS = 1
         
+    def train(self, X: np.ndarray, Y: np.ndarray) -> None:
+        if self.get_output_size() == 1:
+            Y = Y.flatten()
+
         self.build_circuit()
-        
-    def infer(self):
-
-        self.network = EstimatorQNN(
-            circuit=self.circuit.decompose(),
-            input_params=self.feature_map.parameters,
-            weight_params=self.instruction_set.parameters,
-            observables=self.output
-        )
-
-        self.classifier = NeuralNetworkClassifier(
-            self.network,
-            optimizer=ADAM(maxiter=200), 
-            initial_point=self.register,  # ? should be array
-        )
-
-        for value, label in self.dataset:
-            #Logger.info(f"Processing pair")
-            self.classifier.fit(value, label)
+        self.classifier.fit(X, Y)
 
     def predict(self, value: np.ndarray):
         return self.classifier.predict(value)
             
     def build_circuit(self):
+        in_size = self.get_input_size()
+        out_size = self.get_output_size()
 
-        n_qubits = self.n_qubits
-        layer = 0
-        while(n_qubits != 1):
-            # Convolutional & Pooling Layer
-            layer += 1
-            self.instruction_set.compose(self.conv_layer(n_qubits, f"с{layer}"), list(range(n_qubits)), inplace=True)
-            self.instruction_set.compose(self.pool_layer(list(range(0,n_qubits//2)), list(range(n_qubits//2,n_qubits)), f"p{layer}"), list(range(n_qubits)), inplace=True)
+        self.feature_map = ZFeatureMap(in_size)
+        self.instruction_set = QuantumCircuit(in_size)
 
-            n_qubits = n_qubits//2
+        layer_id = 0
+        sources = list(range(in_size))
+        all_qubits = list(range(in_size))
+        
+        while True:
+            sources_split = len(sources) // 2
+            pooling_sources = sources[:sources_split]
+            pooling_sinks = sources[sources_split:]
+            self.instruction_set.compose(self.conv_layer(sources, layer_id),                        all_qubits, inplace=True)
+            self.instruction_set.compose(self.pool_layer(pooling_sources, pooling_sinks, layer_id), all_qubits, inplace=True)
+            sources = sources[:sources_split]
+            layer_id += 1
 
-        self.circuit.compose(self.feature_map, self.all_qubits, inplace=True) # inplace to replace ?
-        self.circuit.compose(self.instruction_set, self.all_qubits, inplace=True)
+            if len(sources) == out_size:
+                break
+
+        self.circuit = QuantumCircuit(in_size)
+        self.circuit.compose(self.feature_map,     all_qubits, inplace=True)
+        self.circuit.compose(self.instruction_set, all_qubits, inplace=True)
+
+        observables = [0]*out_size
+        for i in range(out_size):
+            ignore_string = ["I"] * in_size
+            ignore_string[i] = "Z"
+            measure_single_z_string = "".join(ignore_string)
+            observables[i] = SparsePauliOp.from_list([(measure_single_z_string, 1)])
+
+        self.network = EstimatorQNN(
+            circuit=self.circuit.decompose(),
+            input_params=self.feature_map.parameters,
+            weight_params=self.instruction_set.parameters,
+            observables=observables
+        )
+
+        self.classifier = NeuralNetworkClassifier(
+            self.network,
+            one_hot=True if out_size != 1 else False,
+            optimizer=ADAM(maxiter=self.EPOCHS),
+        )
 
 
-    def conv_layer(self, num_qubits, param_prefix):
+    def conv_layer(self, sources, id):
         def conv_circuit(params):
             target = QuantumCircuit(2)
             target.rz(-np.pi / 2, 1)
@@ -83,10 +87,11 @@ class ConvolutionalModel(Model):
             target.rz(np.pi / 2, 0)
             return target
 
+        num_qubits = len(sources)
         qc = QuantumCircuit(num_qubits, name="Convolutional Layer")
         qubits = list(range(num_qubits))
         param_index = 0
-        params = ParameterVector(param_prefix, length=num_qubits * 3)
+        params = ParameterVector(f"conv_{str(id + 1)}", length=num_qubits * 3)
         for q1, q2 in zip(qubits[0::2], qubits[1::2]):
             qc = qc.compose(conv_circuit(params[param_index : (param_index + 3)]), [q1, q2])
             qc.barrier()
@@ -97,12 +102,11 @@ class ConvolutionalModel(Model):
             param_index += 3
 
         qc_inst = qc.to_instruction()
-
         qc = QuantumCircuit(num_qubits)
         qc.append(qc_inst, qubits)
         return qc
 
-    def pool_layer(self, sources, sinks, param_prefix):
+    def pool_layer(self, sources, sinks, id):
         def pool_circuit(params):
             target = QuantumCircuit(2)
             target.rz(-np.pi / 2, 1)
@@ -116,16 +120,13 @@ class ConvolutionalModel(Model):
         num_qubits = len(sources) + len(sinks)
         qc = QuantumCircuit(num_qubits, name="Pooling Layer")
         param_index = 0
-        params = ParameterVector(param_prefix, length=num_qubits // 2 * 3)
+        params = ParameterVector(f"pool_{str(id + 1)}", length=num_qubits // 2 * 3)
         for source, sink in zip(sources, sinks):
             qc = qc.compose(pool_circuit(params[param_index : (param_index + 3)]), [source, sink])
             qc.barrier()
             param_index += 3
 
         qc_inst = qc.to_instruction()
-
         qc = QuantumCircuit(num_qubits)
         qc.append(qc_inst, range(num_qubits))
         return qc
-
-        

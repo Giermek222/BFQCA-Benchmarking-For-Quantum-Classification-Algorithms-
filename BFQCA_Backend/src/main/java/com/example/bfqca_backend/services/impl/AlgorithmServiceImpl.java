@@ -58,25 +58,12 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     }
 
     private void runAlgorithm(Algorithm algorithm) throws IOException {
-        StringBuilder command = new StringBuilder();
-        command.append(pathToPythonScript);
-        command.append(" -a " + algorithm.getAlgorithmName());
-        command.append(" -d " + algorithm.getProblemName());
-        command.append(" -e " + "amplitude");
-        command.append(" -debug ");
-
-
-        ProcessBuilder pb = new ProcessBuilder(
-            "python ", pathToPythonScript,
-            " -a " + algorithm.getAlgorithmName(),
-            " -d " + algorithm.getProblemName(),
-            " -e " + "amplitude",
-            " -debug "
-        );
-
-        pb.directory(new File(pathToExecutionFolder));
-
-        Process p = pb.start();
+        Process p = new ProcessBuilder(
+            "python",
+                pathToPythonScript,
+                "-a", algorithm.getAlgorithmName(),
+                "-d", algorithm.getProblemName()
+        ).directory(new File(pathToExecutionFolder)).start();
     }
 
 }

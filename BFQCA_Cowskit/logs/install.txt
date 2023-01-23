@@ -1,7 +1,30 @@
 running bdist_wheel
 running build
 running build_py
+creating build\lib
+creating build\lib\cowskit
+copying cowskit\constants.py -> build\lib\cowskit
+copying cowskit\utils.py -> build\lib\cowskit
+copying cowskit\__init__.py -> build\lib\cowskit
+creating build\lib\cowskit\algorithms
+copying cowskit\algorithms\algorithm.py -> build\lib\cowskit\algorithms
+copying cowskit\algorithms\algorithm_genetic.py -> build\lib\cowskit\algorithms
 copying cowskit\algorithms\algorithm_qknn.py -> build\lib\cowskit\algorithms
+copying cowskit\algorithms\__init__.py -> build\lib\cowskit\algorithms
+creating build\lib\cowskit\datasets
+copying cowskit\datasets\dataset.py -> build\lib\cowskit\datasets
+copying cowskit\datasets\dataset_diabetes.py -> build\lib\cowskit\datasets
+copying cowskit\datasets\dataset_iris.py -> build\lib\cowskit\datasets
+copying cowskit\datasets\dataset_lines.py -> build\lib\cowskit\datasets
+copying cowskit\datasets\dataset_palmer_penguin.py -> build\lib\cowskit\datasets
+copying cowskit\datasets\__init__.py -> build\lib\cowskit\datasets
+creating build\lib\cowskit\files
+copying cowskit\files\__init__.py -> build\lib\cowskit\files
+creating build\lib\cowskit\models
+copying cowskit\models\model.py -> build\lib\cowskit\models
+copying cowskit\models\model_convolutional.py -> build\lib\cowskit\models
+copying cowskit\models\model_variational.py -> build\lib\cowskit\models
+copying cowskit\models\__init__.py -> build\lib\cowskit\models
 running egg_info
 writing cowskit.egg-info\PKG-INFO
 writing dependency_links to cowskit.egg-info\dependency_links.txt
@@ -9,6 +32,9 @@ writing requirements to cowskit.egg-info\requires.txt
 writing top-level names to cowskit.egg-info\top_level.txt
 reading manifest file 'cowskit.egg-info\SOURCES.txt'
 writing manifest file 'cowskit.egg-info\SOURCES.txt'
+copying cowskit\files\iris.dataset -> build\lib\cowskit\files
+copying cowskit\files\penguins.dataset -> build\lib\cowskit\files
+copying cowskit\files\diabetes.dataset -> build\lib\cowskit\files
 installing to build\bdist.win-amd64\wheel
 running install
 running install_lib
@@ -40,7 +66,7 @@ copying build\lib\cowskit\models\__init__.py -> build\bdist.win-amd64\wheel\.\co
 copying build\lib\cowskit\utils.py -> build\bdist.win-amd64\wheel\.\cowskit
 copying build\lib\cowskit\__init__.py -> build\bdist.win-amd64\wheel\.\cowskit
 running install_egg_info
-Copying cowskit.egg-info to build\bdist.win-amd64\wheel\.\cowskit-1.0.0-py3.9.egg-info
+Copying cowskit.egg-info to build\bdist.win-amd64\wheel\.\cowskit-1.0.0-py3.10.egg-info
 running install_scripts
 creating build\bdist.win-amd64\wheel\cowskit-1.0.0.dist-info\WHEEL
 creating 'dist\cowskit-1.0.0-py3-none-any.whl' and adding 'build\bdist.win-amd64\wheel' to it
@@ -70,104 +96,58 @@ adding 'cowskit-1.0.0.dist-info/WHEEL'
 adding 'cowskit-1.0.0.dist-info/top_level.txt'
 adding 'cowskit-1.0.0.dist-info/RECORD'
 removing build\bdist.win-amd64\wheel
-Processing c:\users\pkrzemin\onedrive - intel corporation\desktop\bfqca-benchmarking-for-quantum-classification-algorithms-\bfqca_cowskit\library\dist\cowskit-1.0.0-py3-none-any.whl
-<<<<<<< HEAD
-Requirement already satisfied: numpy in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (1.23.1)
-Requirement already satisfied: scipy in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (1.9.2)
-Requirement already satisfied: matplotlib in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (3.6.2)
-Requirement already satisfied: unittest2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (1.1.0)
-Requirement already satisfied: qiskit[machine-learning] in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (0.39.2)
-=======
-Requirement already satisfied: unittest2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (1.1.0)
-Requirement already satisfied: numpy in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (1.23.1)
-Requirement already satisfied: scipy in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (1.9.2)
->>>>>>> main
-Requirement already satisfied: requests in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (2.28.1)
-Requirement already satisfied: qiskit[machine-learning] in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (0.39.2)
-Requirement already satisfied: sklearn in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (0.0.post1)
-<<<<<<< HEAD
-Requirement already satisfied: fonttools>=4.22.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (4.38.0)
-Requirement already satisfied: packaging>=20.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (21.3)
-Requirement already satisfied: pillow>=6.2.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (9.3.0)
-Requirement already satisfied: pyparsing>=2.2.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (3.0.9)
-Requirement already satisfied: kiwisolver>=1.0.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (1.4.4)
-Requirement already satisfied: python-dateutil>=2.7 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (2.8.2)
-Requirement already satisfied: contourpy>=1.0.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (1.0.6)
-Requirement already satisfied: cycler>=0.10 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (0.11.0)
-Requirement already satisfied: qiskit-aer==0.11.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.11.1)
-Requirement already satisfied: qiskit-ibmq-provider==0.19.2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.19.2)
-=======
-Requirement already satisfied: matplotlib in c:\users\pkrzemin\programs\python390\lib\site-packages (from cowskit==1.0.0) (3.6.2)
-Requirement already satisfied: cycler>=0.10 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (0.11.0)
-Requirement already satisfied: packaging>=20.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (21.3)
-Requirement already satisfied: pyparsing>=2.2.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (3.0.9)
-Requirement already satisfied: kiwisolver>=1.0.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (1.4.4)
-Requirement already satisfied: pillow>=6.2.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (9.3.0)
-Requirement already satisfied: contourpy>=1.0.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (1.0.6)
-Requirement already satisfied: fonttools>=4.22.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (4.38.0)
-Requirement already satisfied: python-dateutil>=2.7 in c:\users\pkrzemin\programs\python390\lib\site-packages (from matplotlib->cowskit==1.0.0) (2.8.2)
->>>>>>> main
-Requirement already satisfied: qiskit-terra==0.22.2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.22.2)
-Requirement already satisfied: qiskit-ibmq-provider==0.19.2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.19.2)
-Requirement already satisfied: qiskit-aer==0.11.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.11.1)
-Requirement already satisfied: qiskit-machine-learning>=0.4.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.5.0)
-<<<<<<< HEAD
-Requirement already satisfied: requests-ntlm>=1.1.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.1.0)
-Requirement already satisfied: websocket-client>=1.0.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.4.2)
-Requirement already satisfied: websockets>=10.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (10.4)
-Requirement already satisfied: urllib3>=1.21.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.26.12)
-Requirement already satisfied: stevedore>=3.0.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (4.1.1)
-=======
-Requirement already satisfied: urllib3>=1.21.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.26.12)
-Requirement already satisfied: websocket-client>=1.0.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.4.2)
-Requirement already satisfied: requests-ntlm>=1.1.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.1.0)
-Requirement already satisfied: websockets>=10.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (10.4)
->>>>>>> main
-Requirement already satisfied: ply>=3.10 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (3.11)
-Requirement already satisfied: psutil>=5 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (5.9.4)
-Requirement already satisfied: dill>=0.3 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (0.3.5.1)
-Requirement already satisfied: retworkx>=0.11.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (0.12.0)
-Requirement already satisfied: sympy>=1.3 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (1.11.1)
-<<<<<<< HEAD
-=======
-Requirement already satisfied: dill>=0.3 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (0.3.5.1)
-Requirement already satisfied: psutil>=5 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (5.9.4)
-Requirement already satisfied: retworkx>=0.11.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (0.12.0)
-Requirement already satisfied: stevedore>=3.0.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (4.1.1)
->>>>>>> main
-Requirement already satisfied: tweedledum<2.0,>=1.1 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (1.1.1)
-Requirement already satisfied: certifi>=2017.4.17 in c:\users\pkrzemin\programs\python390\lib\site-packages (from requests->cowskit==1.0.0) (2022.9.24)
-Requirement already satisfied: idna<4,>=2.5 in c:\users\pkrzemin\programs\python390\lib\site-packages (from requests->cowskit==1.0.0) (3.4)
-<<<<<<< HEAD
-Requirement already satisfied: charset-normalizer<3,>=2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from requests->cowskit==1.0.0) (2.1.1)
-Requirement already satisfied: traceback2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from unittest2->cowskit==1.0.0) (1.4.0)
-Requirement already satisfied: six>=1.4 in c:\users\pkrzemin\programs\python390\lib\site-packages (from unittest2->cowskit==1.0.0) (1.16.0)
+Processing d:\wladek\repos\inzynierka\bfqca-benchmarking-for-quantum-classification-algorithms-\bfqca_cowskit\library\dist\cowskit-1.0.0-py3-none-any.whl
+Requirement already satisfied: sklearn in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cowskit==1.0.0) (0.0.post1)
+Requirement already satisfied: qiskit[machine-learning] in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cowskit==1.0.0) (0.39.4)
+Requirement already satisfied: requests in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cowskit==1.0.0) (2.27.1)
+Requirement already satisfied: unittest2 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cowskit==1.0.0) (1.1.0)
+Requirement already satisfied: numpy in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cowskit==1.0.0) (1.22.4)
+Requirement already satisfied: scipy in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cowskit==1.0.0) (1.9.3)
+Requirement already satisfied: matplotlib in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cowskit==1.0.0) (3.5.2)
+Requirement already satisfied: cycler>=0.10 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from matplotlib->cowskit==1.0.0) (0.11.0)
+Requirement already satisfied: pyparsing>=2.2.1 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from matplotlib->cowskit==1.0.0) (3.0.9)
+Requirement already satisfied: kiwisolver>=1.0.1 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from matplotlib->cowskit==1.0.0) (1.4.2)
+Requirement already satisfied: packaging>=20.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from matplotlib->cowskit==1.0.0) (21.3)
+Requirement already satisfied: python-dateutil>=2.7 in c:\users\wojtek\appdata\roaming\python\python310\site-packages (from matplotlib->cowskit==1.0.0) (2.8.2)
+Requirement already satisfied: pillow>=6.2.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from matplotlib->cowskit==1.0.0) (9.1.1)
+Requirement already satisfied: fonttools>=4.22.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from matplotlib->cowskit==1.0.0) (4.33.3)
+Requirement already satisfied: qiskit-aer==0.11.2 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.11.2)
+Requirement already satisfied: qiskit-ibmq-provider==0.19.2 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.19.2)
+Requirement already satisfied: qiskit-terra==0.22.3 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.22.3)
+Requirement already satisfied: qiskit-machine-learning>=0.4.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit[machine-learning]->cowskit==1.0.0) (0.5.0)
+Requirement already satisfied: websockets>=10.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (10.4)
+Requirement already satisfied: requests-ntlm>=1.1.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.1.0)
+Requirement already satisfied: urllib3>=1.21.1 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.26.9)
+Requirement already satisfied: websocket-client>=1.0.1 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.4.2)
+Requirement already satisfied: stevedore>=3.0.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (4.1.1)
+Requirement already satisfied: ply>=3.10 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (3.11)
+Requirement already satisfied: dill>=0.3 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (0.3.5.1)
+Requirement already satisfied: psutil>=5 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (5.9.4)
+Requirement already satisfied: sympy>=1.3 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (1.11.1)
+Requirement already satisfied: tweedledum<2.0,>=1.1 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (1.1.1)
+Requirement already satisfied: retworkx>=0.11.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (0.12.1)
+Requirement already satisfied: charset-normalizer~=2.0.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from requests->cowskit==1.0.0) (2.0.12)
+Requirement already satisfied: idna<4,>=2.5 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from requests->cowskit==1.0.0) (3.3)
+Requirement already satisfied: certifi>=2017.4.17 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from requests->cowskit==1.0.0) (2022.5.18.1)
+Requirement already satisfied: six>=1.4 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from unittest2->cowskit==1.0.0) (1.16.0)
+Requirement already satisfied: traceback2 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from unittest2->cowskit==1.0.0) (1.4.0)
 Collecting argparse
   Using cached argparse-1.4.0-py2.py3-none-any.whl (23 kB)
-Requirement already satisfied: scikit-learn>=0.20.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (1.1.3)
-Requirement already satisfied: setuptools>=40.1.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (49.2.1)
-Requirement already satisfied: fastdtw in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (0.3.4)
-=======
-Requirement already satisfied: six>=1.4 in c:\users\pkrzemin\programs\python390\lib\site-packages (from unittest2->cowskit==1.0.0) (1.16.0)
-Requirement already satisfied: traceback2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from unittest2->cowskit==1.0.0) (1.4.0)
-Collecting argparse
-  Using cached argparse-1.4.0-py2.py3-none-any.whl (23 kB)
-Requirement already satisfied: setuptools>=40.1.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (49.2.1)
-Requirement already satisfied: fastdtw in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (0.3.4)
-Requirement already satisfied: scikit-learn>=0.20.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (1.1.3)
->>>>>>> main
-Requirement already satisfied: linecache2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from traceback2->unittest2->cowskit==1.0.0) (1.0.0)
-Requirement already satisfied: cryptography>=1.3 in c:\users\pkrzemin\programs\python390\lib\site-packages (from requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (38.0.3)
-Requirement already satisfied: ntlm-auth>=1.0.2 in c:\users\pkrzemin\programs\python390\lib\site-packages (from requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.5.0)
-Requirement already satisfied: rustworkx==0.12.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from retworkx>=0.11.0->qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (0.12.0)
-Requirement already satisfied: threadpoolctl>=2.0.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from scikit-learn>=0.20.0->qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (3.1.0)
-Requirement already satisfied: joblib>=1.0.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from scikit-learn>=0.20.0->qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (1.2.0)
-Requirement already satisfied: pbr!=2.1.0,>=2.0.0 in c:\users\pkrzemin\programs\python390\lib\site-packages (from stevedore>=3.0.0->qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (5.11.0)
-Requirement already satisfied: mpmath>=0.19 in c:\users\pkrzemin\programs\python390\lib\site-packages (from sympy>=1.3->qiskit-terra==0.22.2->qiskit[machine-learning]->cowskit==1.0.0) (1.2.1)
-Requirement already satisfied: cffi>=1.12 in c:\users\pkrzemin\programs\python390\lib\site-packages (from cryptography>=1.3->requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.15.1)
-Requirement already satisfied: pycparser in c:\users\pkrzemin\programs\python390\lib\site-packages (from cffi>=1.12->cryptography>=1.3->requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (2.21)
+Requirement already satisfied: fastdtw in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (0.3.4)
+Requirement already satisfied: scikit-learn>=0.20.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (1.2.0)
+Requirement already satisfied: setuptools>=40.1.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (57.4.0)
+Requirement already satisfied: linecache2 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from traceback2->unittest2->cowskit==1.0.0) (1.0.0)
+Requirement already satisfied: cryptography>=1.3 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (39.0.0)
+Requirement already satisfied: ntlm-auth>=1.0.2 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.5.0)
+Requirement already satisfied: rustworkx==0.12.1 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from retworkx>=0.11.0->qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (0.12.1)
+Requirement already satisfied: joblib>=1.1.1 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from scikit-learn>=0.20.0->qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (1.2.0)
+Requirement already satisfied: threadpoolctl>=2.0.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from scikit-learn>=0.20.0->qiskit-machine-learning>=0.4.0->qiskit[machine-learning]->cowskit==1.0.0) (3.1.0)
+Requirement already satisfied: pbr!=2.1.0,>=2.0.0 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from stevedore>=3.0.0->qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (5.11.0)
+Requirement already satisfied: mpmath>=0.19 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from sympy>=1.3->qiskit-terra==0.22.3->qiskit[machine-learning]->cowskit==1.0.0) (1.2.1)
+Requirement already satisfied: cffi>=1.12 in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cryptography>=1.3->requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (1.15.1)
+Requirement already satisfied: pycparser in c:\users\wojtek\appdata\local\programs\python\python310\lib\site-packages (from cffi>=1.12->cryptography>=1.3->requests-ntlm>=1.1.0->qiskit-ibmq-provider==0.19.2->qiskit[machine-learning]->cowskit==1.0.0) (2.21)
 Installing collected packages: argparse, cowskit
 Successfully installed argparse-1.4.0 cowskit-1.0.0
 
-[notice] A new release of pip available: 22.2.2 -> 22.3.1
+[notice] A new release of pip available: 22.1.2 -> 22.3.1
 [notice] To update, run: python.exe -m pip install --upgrade pip

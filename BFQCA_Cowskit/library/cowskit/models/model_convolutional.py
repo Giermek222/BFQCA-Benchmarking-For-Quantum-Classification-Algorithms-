@@ -36,18 +36,19 @@ class ConvolutionalModel(Model):
         layer_id = 0
         sources = list(range(in_size))
         all_qubits = list(range(in_size))
-        
-        while True:
-            sources_split = len(sources) // 2
-            pooling_sources = sources[:sources_split]
-            pooling_sinks = sources[sources_split:]
-            self.instruction_set.compose(self.conv_layer(sources, layer_id),                        all_qubits, inplace=True)
-            self.instruction_set.compose(self.pool_layer(pooling_sources, pooling_sinks, layer_id), all_qubits, inplace=True)
-            sources = sources[:sources_split]
-            layer_id += 1
 
-            if len(sources) == out_size:
-                break
+        if in_size == out_size:
+            self.instruction_set.compose(self.conv_layer(sources, layer_id), all_qubits, inplace=True)
+        else:
+            while len(sources) != out_size:
+                sources_split = len(sources) // 2
+                pooling_sources = sources[:sources_split]
+                pooling_sinks = sources[sources_split:]
+                compose_targets = list(range(in_size - len(sources), in_size))
+                self.instruction_set.compose(self.conv_layer(sources, layer_id), compose_targets, inplace=True)
+                self.instruction_set.compose(self.pool_layer(pooling_sources, pooling_sinks, layer_id), compose_targets, inplace=True)
+                sources = sources[:sources_split]
+                layer_id += 1
 
         self.circuit = QuantumCircuit(in_size)
         self.circuit.compose(self.feature_map,     all_qubits, inplace=True)

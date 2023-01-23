@@ -8,7 +8,7 @@ class LinesDataset(Dataset):
         Dataset.__init__(self)
 
     def generate_dataset(self):
-        amount = 20
+        amount = 40
         input_shape =  [amount, 2, 2]
         output_shape = [amount, 1]
         line_len = input_shape[1]
@@ -60,7 +60,8 @@ class LinesDataset(Dataset):
                     self.data[idx, start_spot_coords[0]:end_spot_coords[0] + 1, start_spot_coords[1]:end_spot_coords[1] + 1] = np.ones(block_of_data.shape)
                 else:
                     self.data[idx, start_spot_coords[0]:end_spot_coords[0] + 1, start_spot_coords[1]:end_spot_coords[1] + 1] = 1
-
+            else:
+                self.labels[idx] = -1
         if len(self.data.shape) == SHAPE_2D:
             self.data = self.data.reshape((amount, input_shape[1]*input_shape[2]))
         elif len(self.data.shape) == SHAPE_3D:

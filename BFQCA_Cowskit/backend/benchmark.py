@@ -48,6 +48,9 @@ def benchmark_training(benchmark_cache: Dict[str, str], dataset: Dataset, algori
     y_pred = algorithm.predict_safe(X_train, y_train.shape[1])
 
     y_train, y_pred = preprocess_labels(y_train, y_pred, output_padding)
+    print(y_train)
+    print(y_pred)
+
     confusion_matrix = compute_confusion_matrix(y_train, y_pred)
     training_loss = compute_crossentropy_loss(y_train, y_pred)
     training_accuracy = compute_accuracy(confusion_matrix)

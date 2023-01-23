@@ -17,9 +17,10 @@ class ConvolutionalModel(Model):
         self.EPOCHS = 1
         
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
-        if self.get_output_size() == 1:
-            Y = Y.flatten()
+        if self.get_output_size() != 1:
+            raise Exception("Convolutional model accepts only binary classification data")
 
+        Y = Y.flatten()
         self.build_circuit()
         self.classifier.fit(X, Y)
 
@@ -28,7 +29,6 @@ class ConvolutionalModel(Model):
             
     def build_circuit(self):
         in_size = self.get_input_size()
-        out_size = self.get_output_size()
 
         self.feature_map = ZFeatureMap(in_size)
         self.instruction_set = QuantumCircuit(in_size)
@@ -37,10 +37,10 @@ class ConvolutionalModel(Model):
         sources = list(range(in_size))
         all_qubits = list(range(in_size))
 
-        if in_size == out_size:
+        if in_size == 1:
             self.instruction_set.compose(self.conv_layer(sources, layer_id), all_qubits, inplace=True)
         else:
-            while len(sources) != out_size:
+            while len(sources) != 1:
                 sources_split = len(sources) // 2
                 pooling_sources = sources[:sources_split]
                 pooling_sinks = sources[sources_split:]
@@ -54,23 +54,14 @@ class ConvolutionalModel(Model):
         self.circuit.compose(self.feature_map,     all_qubits, inplace=True)
         self.circuit.compose(self.instruction_set, all_qubits, inplace=True)
 
-        observables = [0]*out_size
-        for i in range(out_size):
-            ignore_string = ["I"] * in_size
-            ignore_string[i] = "Z"
-            measure_single_z_string = "".join(ignore_string)
-            observables[i] = SparsePauliOp.from_list([(measure_single_z_string, 1)])
-
         self.network = EstimatorQNN(
             circuit=self.circuit.decompose(),
             input_params=self.feature_map.parameters,
             weight_params=self.instruction_set.parameters,
-            observables=observables
         )
 
         self.classifier = NeuralNetworkClassifier(
             self.network,
-            one_hot=True if out_size != 1 else False,
             optimizer=ADAM(maxiter=self.EPOCHS),
         )
 

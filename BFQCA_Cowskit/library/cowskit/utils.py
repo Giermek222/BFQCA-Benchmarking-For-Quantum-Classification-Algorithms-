@@ -11,7 +11,7 @@ def compute_possibilities(n_classes: int, n_padding: int = 0) -> np.ndarray:
     if n_classes != 1:
         possiblities = np.eye(n_classes - n_padding)
     else:
-        possiblities = np.array([[0], [1]])
+        possiblities = np.array([[-1], [1]])
     if n_padding != 0:
         possiblities = np.pad(possiblities, (0, n_padding), 'constant', constant_values=(0))
     return possiblities
@@ -32,8 +32,6 @@ def preprocess_labels(Y_labels:np.ndarray, Y_pred:np.ndarray, n_padding: int = 0
 
     if n_classes != 1:
         Y_pred = softmax(Y_pred)
-    else:
-        Y_pred = sigmoid(Y_pred)
 
     return Y_labels, Y_pred
 

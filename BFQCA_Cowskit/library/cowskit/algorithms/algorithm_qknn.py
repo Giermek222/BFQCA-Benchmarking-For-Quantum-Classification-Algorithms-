@@ -295,14 +295,12 @@ def _kneighbors(y_train: np.ndarray,
     # extract indices according to number of neighbors
     # and dimension
     n_queries, _ = fidelities.shape
-    if n_queries == 1:
-        indices_of_sorted_fidelities = indices_of_sorted_fidelities[n_neighbours:]
-    else:
-        indices_of_sorted_fidelities = indices_of_sorted_fidelities[:, -n_neighbours:]
+    if(len(indices_of_sorted_fidelities) > n_neighbours):
+        if n_queries == 1:
+            indices_of_sorted_fidelities = indices_of_sorted_fidelities[n_neighbours:]
+        else:
+            indices_of_sorted_fidelities = indices_of_sorted_fidelities[:, -n_neighbours:]
 
     sorted_labels = y_train[indices_of_sorted_fidelities]
 
-    if return_indices:
-        return sorted_labels, indices_of_sorted_fidelities
-    else:
-        return sorted_labels
+    return sorted_labels

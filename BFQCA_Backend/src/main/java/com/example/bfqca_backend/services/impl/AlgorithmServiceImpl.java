@@ -62,7 +62,8 @@ public class AlgorithmServiceImpl implements AlgorithmService {
             "python",
                 pathToPythonScript,
                 "-a", algorithm.getAlgorithmName(),
-                "-d", algorithm.getProblemName()
+                "-d", algorithm.getProblemName(),
+                "-debug"
         ).directory(new File(pathToExecutionFolder)).start();
     }
 

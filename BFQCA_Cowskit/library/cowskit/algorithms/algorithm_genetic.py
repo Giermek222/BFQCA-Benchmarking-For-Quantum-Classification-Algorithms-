@@ -115,8 +115,9 @@ class GeneticAlgorithm(Algorithm):
             quantum_circuit.add_register(cr)
 
             for i in range(8):
-                quantum_circuit.h(qr[i])
-                quantum_circuit.rx(probabilities_array[idx+i], qr[i])
+                quantum_circuit.rx(probabilities_array[idx+i] * 3.1416, qr[i])
+                quantum_circuit.ry(probabilities_array[idx+i] * 3.1416, qr[i])
+                quantum_circuit.rz(probabilities_array[idx+i] * 3.1416, qr[i])
                 quantum_circuit.measure(qr[i],cr[i])
 
             job = backend.run(quantum_circuit, shots = self.population, memory=True)

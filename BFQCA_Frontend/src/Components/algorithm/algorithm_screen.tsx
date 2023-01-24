@@ -72,7 +72,7 @@ const AlgorithmScreen: React.FC<Props> = ({
   let navigate = useNavigate();
   return (
     <div style={styles}>
-      (
+
       <Box
         sx={{
           display: "grid",
@@ -221,7 +221,7 @@ const AlgorithmScreen: React.FC<Props> = ({
         </Button>
         </div>
       </Box>
-      )
+
     </div>
   );
 };

@@ -8,7 +8,7 @@ from cowskit.utils import get_shape_size
 
 class Dataset:
 
-    def __init__(self, test_split: float = 0.5, limit: int = 20):
+    def __init__(self, test_split: float = 0.2, limit: int = -1):
         """
         This function must be called when creating a custom instance of a dataset class.\n
         Dataset.__init__(self) or Dataset.__init__(self, test_split)\n
@@ -31,7 +31,7 @@ class Dataset:
 
         self._validated = False
         self.generate_dataset()
-        self.pad_and_validate()
+        self.validate()
         self.train_test_split()
 
     def generate_dataset(self) -> None:
@@ -56,7 +56,7 @@ class Dataset:
         y = np.expand_dims(self.labels[idx], axis=0)
         return x,y
 
-    def pad_and_validate(self):
+    def validate(self):
         assert(self.data is not None)
         assert(self.labels is not None)
         assert(self.data.shape[0] == self.labels.shape[0])
@@ -67,10 +67,8 @@ class Dataset:
         self.input_size = self.data.shape[1]
         self.output_size = self.labels.shape[1]
 
-        self.add_quantum_padding()
-
-        self.input_padding_amount = self.data.shape[1] - self.input_size
-        self.output_padding_amount = self.labels.shape[1] - self.output_size
+        self.input_padding_amount = 0
+        self.output_padding_amount = 0
 
         assert(self.get_input_size() <= MAX_QUBITS)
         assert(self.get_output_size() <= MAX_QUBITS)
@@ -78,22 +76,28 @@ class Dataset:
         self.len = self.data.shape[0]
         self._validated = True
 
-    def add_quantum_padding(self) -> None:
-        data_pad_amount = get_shape_size(self.data)
-        data_nearest_pow_of_two = int(math.pow(2, math.ceil(math.log2(data_pad_amount))))
-        data_pad_amount = data_nearest_pow_of_two - data_pad_amount
+    # def add_quantum_padding(self) -> None:
+    #     data_pad_amount = get_shape_size(self.data)
+    #     data_nearest_pow_of_two = int(math.pow(2, math.ceil(math.log2(data_pad_amount))))
+    #     data_pad_amount = data_nearest_pow_of_two - data_pad_amount
 
-        if data_pad_amount != 0:
-            data_padding = np.zeros((self.data.shape[0], data_pad_amount))
-            self.data = np.concatenate((self.data, data_padding), axis = 1)
+    #     if data_pad_amount != 0:
+    #         data_padding = np.zeros((self.data.shape[0], data_pad_amount))
+    #         self.data = np.concatenate((self.data, data_padding), axis = 1)
 
-        labels_pad_amount = get_shape_size(self.labels)
-        labels_nearest_pow_of_two = int(math.pow(2, math.ceil(math.log2(labels_pad_amount))))
-        labels_pad_amount = labels_nearest_pow_of_two - labels_pad_amount
+    #     labels_pad_amount = get_shape_size(self.labels)
+    #     labels_nearest_pow_of_two = int(math.pow(2, math.ceil(math.log2(labels_pad_amount))))
+    #     labels_pad_amount = labels_nearest_pow_of_two - labels_pad_amount
 
-        if labels_pad_amount != 0:
-            labels_padding = np.zeros((self.labels.shape[0], labels_pad_amount))
-            self.labels = np.concatenate((self.labels, labels_padding), axis = 1)
+    #     if labels_pad_amount != 0:
+    #         labels_padding = np.zeros((self.labels.shape[0], labels_pad_amount))
+    #         self.labels = np.concatenate((self.labels, labels_padding), axis = 1)
+
+    #     self.input_padding_amount = self.data.shape[1] - self.input_size
+    #     self.output_padding_amount = self.labels.shape[1] - self.output_size
+
+    #     assert(self.get_input_size() <= MAX_QUBITS)
+    #     assert(self.get_output_size() <= MAX_QUBITS)
 
     def shuffle(self) -> None:
         indices = np.arange(0, self.data.shape[0])

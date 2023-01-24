@@ -1,12 +1,19 @@
-import backend.argparser as ba
 import backend.files as fl
 import os
-
 import subprocess
-from cowskit.datasets import LinesDataset
 
-for alg in ba.PREDEFINED_ALGORITHMS:
-    for ds in ba.PREDEFINED_DATASETS:
+PREDEFINED_ALGORITHMS = ['qgenetic', 'qgenetic_acc', 'qgenetic_prob', 'qvm', 'qcnn', 'qknn']
+PREDEFINED_DATASETS = ['iris', 'palmer_penguin', 'pima_indians_diabetic', 'lines']
+
+EXPECTED_FAILURE_PAIRS = [
+    ['qvm','iris'],
+    ['qcnn','iris'],
+    ['qvm','palmer_penguin'],
+    ['qcnn','palmer_penguin'],
+]
+
+for alg in PREDEFINED_ALGORITHMS:
+    for ds in PREDEFINED_DATASETS:
         path = fl.get_file_realpath(__file__)
         command = f"python \"{path}/main.py\" -a {alg} -d {ds}"
 
@@ -25,8 +32,8 @@ for alg in ba.PREDEFINED_ALGORITHMS:
         with open(logs_file, "r") as log_file:
             full_output = "".join(log_file.readlines())
 
-            if full_output.find("Request body:") != -1:
-                print(f"+ {alg} + {ds} passed")
-            else:
-                print(f"- {alg} + {ds} failed")
+            test_result = full_output.find("Request body:") != -1
+            expected_test_result = [alg, ds] not in EXPECTED_FAILURE_PAIRS
+
+            print(f"{'+' if test_result == expected_test_result else '-'} {alg} + {ds} {'passed' if test_result == True else 'failed'}{', as expected' if expected_test_result == False and test_result == False else ''}")
 

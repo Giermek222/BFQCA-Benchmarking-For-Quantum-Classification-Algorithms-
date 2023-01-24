@@ -4,7 +4,7 @@ from typing import Dict
 
 from cowskit.datasets import Dataset
 from cowskit.algorithms import Algorithm
-from cowskit.utils import compute_accuracy, compute_precision, compute_recall, compute_f1_score, compute_crossentropy_loss, preprocess_labels, compute_confusion_matrix
+from cowskit.utils import compute_accuracy, compute_precision, compute_recall, compute_f1_score, compute_crossentropy_loss, compute_confusion_matrix
 
 from backend.logger import Log
 
@@ -43,11 +43,9 @@ def train_algorithm(dataset: Dataset, algorithm: Algorithm) -> Dict[str, float]:
 def benchmark_training(benchmark_cache: Dict[str, str], dataset: Dataset, algorithm: Algorithm) -> Dict[str, float]:
     Log.info("Computing training benchmarks")
 
-    output_padding = dataset.output_padding_amount
     X_train, y_train = dataset.get_train_data()
     y_pred = algorithm.predict_safe(X_train, y_train.shape[1])
 
-    y_train, y_pred = preprocess_labels(y_train, y_pred, output_padding)
     confusion_matrix = compute_confusion_matrix(y_train, y_pred)
     training_loss = compute_crossentropy_loss(y_train, y_pred)
     training_accuracy = compute_accuracy(confusion_matrix)
@@ -76,11 +74,9 @@ def benchmark_training(benchmark_cache: Dict[str, str], dataset: Dataset, algori
 def benchmark_test(benchmark_cache: Dict[str, float], dataset: Dataset, algorithm: Algorithm) -> Dict[str, float]:
     Log.info("Computing test benchmarks")
 
-    output_padding = dataset.output_padding_amount
     X_test, y_test = dataset.get_test_data()
     y_pred = algorithm.predict_safe(X_test, y_test.shape[1])
 
-    y_test, y_pred = preprocess_labels(y_test, y_pred, output_padding)
     confusion_matrix = compute_confusion_matrix(y_test, y_pred)
     test_loss = compute_crossentropy_loss(y_test, y_pred)
     test_accuracy = compute_accuracy(confusion_matrix)

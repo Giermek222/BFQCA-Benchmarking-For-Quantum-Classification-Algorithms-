@@ -11,7 +11,7 @@ class DiabetesDataset(Dataset):
             diabetes_array = file.readlines()
             
             input_shape = (len(diabetes_array), 8)
-            output_shape = (len(diabetes_array), 2)
+            output_shape = (len(diabetes_array), 1)
 
             self.data = np.zeros(shape=input_shape, dtype=np.float64)
             self.labels = np.zeros(shape=output_shape, dtype=np.float64)
@@ -22,10 +22,7 @@ class DiabetesDataset(Dataset):
                 label = int(values[-1])
 
                 self.data[idx,:] = data
-                if(label == 0):
-                    self.labels[idx,:] = np.array([1,0])
-                else:
-                    self.labels[idx,:] = np.array([0,1])
+                self.labels[idx, :] = 1 if label == 1 else -1
 
             divisor = np.amax(self.data, axis = 1)
             self.data = self.data / divisor[:, np.newaxis]

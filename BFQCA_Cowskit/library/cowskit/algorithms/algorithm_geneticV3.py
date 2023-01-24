@@ -1,0 +1,179 @@
+import numpy as np
+
+from typing import List, Tuple
+from cowskit.algorithms import Algorithm
+from cowskit.datasets import Dataset
+from cowskit.utils import get_shape_size, compute_binary_crossentropy_loss, compute_categorical_crossentropy_loss
+from cowskit.utils import bin_to_float, float_to_bin, sigmoid, softmax, relu, tanh, one_hot
+from cowskit.utils import compute_confusion_matrix, compute_accuracy
+
+from qiskit import QuantumCircuit, Aer, QuantumRegister, ClassicalRegister
+from qiskit_aer import AerSimulator
+
+class AccuracyStoppedGeneticAlgorithm(Algorithm):
+    def __init__(self, dataset: Dataset = None) -> None:
+        Algorithm.__init__(self, dataset)
+        self.PI = 3.1416
+        self.float_precision = 8
+        self.epochs = 1000
+        self.population = 256
+        self.best_performers_count = 16
+        self.deep_layers = 2
+        self.angle_nudge_radians = self.PI/3
+        self.accuracy_stop_property_threshold = 0.8
+        self.trained_network:List[np.ndarray] = []
+
+        assert(self.population % self.best_performers_count == 0)
+        assert(self.float_precision % 8 == 0)
+
+    def train(self, X: np.ndarray, Y: np.ndarray) -> None:
+
+        n_features = get_shape_size(X)
+        n_classes = get_shape_size(Y)
+
+        networks = self.construct_starting_networks(n_features, n_classes)
+        best_performers_priority_queue: List[Tuple[float, List[np.ndarray]]] = []
+        best_performers: List[List[np.ndarray]] = []
+
+        for epoch in range(self.epochs):
+            best_performers_priority_queue.clear()
+            best_performers.clear()
+
+            # Evaluate all networks
+            for network in networks:
+                result = X.copy()
+                for deep_layer in range(self.deep_layers):
+                    result = result @ network[deep_layer]
+                    if n_classes == 1:
+                        result = tanh(result)
+                    else:
+                        result = sigmoid(result)
+                
+                result = result @ network[self.deep_layers]
+
+                if n_classes == 1:
+                    result = tanh(result)     
+                else:
+                    result = softmax(result)
+
+                accuracy = compute_accuracy(compute_confusion_matrix(Y, result))
+                
+                best_performers_priority_queue.append((accuracy, network))
+
+            # Get best performers
+            best_performers_priority_queue.sort(key=lambda x:x[0], reverse=True)
+            best_performers_priority_queue = best_performers_priority_queue[:self.best_performers_count]
+            top_accuracy = best_performers_priority_queue[0][0]
+            best_performers = list(map( lambda x:x[1], best_performers_priority_queue))
+            print(f"Epoch: {epoch} Accuracy: {top_accuracy}")
+            if epoch == self.epochs - 1 or top_accuracy > self.accuracy_stop_property_threshold:
+                break
+            
+            # construct new population
+            networks = self.construct_new_networks(best_performers, n_features, n_classes)
+        
+        self.trained_network = best_performers[0]
+
+    def predict(self, X: np.ndarray) -> np.ndarray:
+        Y = X.copy()
+
+        n_classes = self.trained_network[self.deep_layers].shape[1]
+
+        for deep_layer in range(self.deep_layers):
+            Y = Y @ self.trained_network[deep_layer]
+            if n_classes == 1:
+                Y = tanh(Y)
+            else:
+                Y = sigmoid(Y)
+
+        Y = Y @ self.trained_network[self.deep_layers]
+
+        if n_classes == 1:
+            Y = tanh(Y)
+            Y = Y/np.abs(Y)
+        else:
+            Y = softmax(Y)
+            Y = one_hot(Y)
+
+        return Y
+
+    def construct_new_networks(self, best_performers:List[List[np.ndarray]], neruons_per_layer:int, output_classes:int):
+
+
+        new_networks = best_performers.copy()
+        children_amount = self.population // self.best_performers_count - 1
+        # get probabilities of each float-bit to be equal to 1
+        for network_idx in range(self.best_performers_count):
+            mutated_networks = self.construct_empty_networks(children_amount, neruons_per_layer, output_classes)
+            for layer_idx in range(self.deep_layers+1):
+                layer = best_performers[network_idx][layer_idx]
+                shape = layer.shape
+                for x in range(shape[0]):
+                    for y in range(shape[1]):
+                        binary = float_to_bin(layer[x][y], self.float_precision)
+                        mutated_float_weights = self.generate_quantum_population(children_amount, binary)
+                        for i,f in enumerate(mutated_float_weights):
+                            mutated_networks[i][layer_idx][x][y] = f
+            new_networks.extend(mutated_networks)
+
+        return new_networks
+
+    def generate_quantum_population(self, amount: int, binary: str):
+        backend = Aer.get_backend('aer_simulator')
+        results = np.zeros((amount), dtype=np.float32)
+
+        def get_result(idx:int, binary: str, backend:AerSimulator):
+            quantum_circuit = QuantumCircuit()
+            qr = QuantumRegister(8)
+            cr = ClassicalRegister(8)
+            quantum_circuit.add_register(qr)
+            quantum_circuit.add_register(cr)
+
+            for i in range(8):
+                quantum_circuit.h(qr[i])
+                rotation_angle = 0 if binary[idx+i] == '0' else self.PI
+                quantum_circuit.rx(rotation_angle, qr[i])
+                quantum_circuit.rx(self.angle_nudge_radians, qr[i])
+                quantum_circuit.ry(self.angle_nudge_radians, qr[i])
+                quantum_circuit.rz(self.angle_nudge_radians, qr[i])
+                quantum_circuit.measure(qr[i],cr[i])
+
+            job = backend.run(quantum_circuit, shots = amount, memory=True)
+            return job.result().get_memory()
+
+        float_bits = [] 
+        for i in range(self.float_precision // 8):
+            float_bits.append(get_result(i * 8,  binary, backend))
+        float_bits = list(zip(*float_bits))
+        for i in range(amount):
+            binary_float = "".join(float_bits[i])
+            generated_float = bin_to_float(binary_float, self.float_precision)
+            results[i] = generated_float
+            
+        return results
+
+    def construct_starting_networks(self, neruons_per_layer:int, output_classes:int) -> List[List[np.ndarray]]:
+        starting_networks: List[List[np.ndarray]] = [[]]*self.population
+        for i in range(self.population):
+            network = [0]*(self.deep_layers+1)
+            for d in range(self.deep_layers):
+                network[d] = np.random.rand(neruons_per_layer, neruons_per_layer).astype(np.float32)
+            network[self.deep_layers] = np.random.rand(neruons_per_layer, output_classes).astype(np.float32)
+            starting_networks[i] = network
+
+        return starting_networks
+
+    def construct_empty_networks(self, amount:int, neruons_per_layer:int, output_classes:int) -> List[List[np.ndarray]]:
+        construct_empty_networks: List[List[np.ndarray]] = [[]]*amount
+        for i in range(amount):
+            network = [0]*(self.deep_layers+1)
+            for d in range(self.deep_layers):
+                network[d] = np.zeros((neruons_per_layer, neruons_per_layer))
+            network[self.deep_layers] = np.zeros((neruons_per_layer, output_classes))
+            construct_empty_networks[i] = network
+
+        return construct_empty_networks
+
+
+
+

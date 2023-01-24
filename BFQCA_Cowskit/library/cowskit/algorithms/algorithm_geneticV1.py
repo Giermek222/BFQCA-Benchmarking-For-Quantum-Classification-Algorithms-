@@ -9,12 +9,12 @@ from cowskit.utils import bin_to_float, float_to_bin, sigmoid, softmax
 from qiskit import QuantumCircuit, Aer, QuantumRegister, ClassicalRegister
 from qiskit_aer import AerSimulator
 
-class GeneticAlgorithm(Algorithm):
+class FloatBitsProbabilityGeneticAlgorithm(Algorithm):
     def __init__(self, dataset: Dataset = None) -> None:
         Algorithm.__init__(self, dataset)
 
-        self.precision = 16
-        self.epochs = 10
+        self.precision = 8
+        self.epochs = 40
         self.population = 1000
         self.best_performers_count = 10
         self.deep_layers = 2

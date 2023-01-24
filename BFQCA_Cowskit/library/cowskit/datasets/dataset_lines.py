@@ -8,7 +8,7 @@ class LinesDataset(Dataset):
         Dataset.__init__(self)
 
     def generate_dataset(self):
-        amount = 40
+        amount = 100
         input_shape =  [amount, 2, 2]
         output_shape = [amount, 1]
         line_len = input_shape[1]

@@ -16,7 +16,7 @@ from cowskit.datasets.dataset import Dataset
 class VariationalModel(Model):
     def __init__(self, dataset: Dataset) -> None:
         Model.__init__(self, dataset)
-        self.EPOCHS = 10
+        self.EPOCHS = 40
         self.deep_layers = 4
         
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:

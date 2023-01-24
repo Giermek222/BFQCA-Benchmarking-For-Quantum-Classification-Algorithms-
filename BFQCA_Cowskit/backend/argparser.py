@@ -4,7 +4,7 @@ from typing import Tuple
 
 from backend.logger import Log
 
-PREDEFINED_ALGORITHMS = ['qgenetic', 'qvm', 'qcnn', 'qknn']
+PREDEFINED_ALGORITHMS = ['qgenetic', 'qgenetic_acc', 'qgenetic_prob', 'qvm', 'qcnn', 'qknn']
 PREDEFINED_DATASETS = ['iris', 'palmer_penguin', 'pima_indians_diabetic', 'lines']
 
 def parse_args() -> Namespace:
@@ -21,7 +21,7 @@ def parse_args() -> Namespace:
                         help = f'Name of the predefined/custom dataset to use. Predefined values: {PREDEFINED_DATASETS}'
     )
     parser.add_argument('-e', '--encoding', 
-                        help = f'Name of the predefined/custom encoding to use. Predefined values: NONE'
+                        help = f'DEPRECATED. Name of the predefined/custom encoding to use.'
     )
     parser.add_argument('-t', '--tries',
                         default = 10,
@@ -30,10 +30,6 @@ def parse_args() -> Namespace:
     parser.add_argument('-l', '--latency_percentile',
                         default = 95,
                         help = 'Latency percentile to report. Default: 90'
-    )
-    parser.add_argument('-i', '--include_dataset_loading',
-                        action = 'store_true',
-                        help = 'Determines whether to include dataset loading and encoding in the benchmarking results. Default: False'
     )
     parser.add_argument('-debug', '--debug',
                         action = 'store_true',
@@ -73,6 +69,10 @@ def parse_algorithm(algorithm_name: str, dataset: cowskit.datasets.Dataset) -> c
         algorithm = cowskit.algorithms.KNearestNeighbors(dataset)
     elif algorithm_name == 'qgenetic':
         algorithm = cowskit.algorithms.GeneticAlgorithm(dataset)
+    elif algorithm_name == 'qgenetic_acc':
+        algorithm = cowskit.algorithms.AccuracyGeneticAlgorithm(dataset)
+    elif algorithm_name == 'qgenetic_prob':
+        algorithm = cowskit.algorithms.ProbabilityGeneticAlgorithm(dataset)
     elif algorithm_name == 'qvm':
         algorithm = cowskit.models.VariationalModel(dataset)
     elif algorithm_name == 'qcnn':

@@ -154,6 +154,7 @@ const AlgorithmScreen: React.FC<Props> = ({
         <div className="columnDivStyle">
           <Button
             variant="contained"
+            disabled={page===0}
             onClick={() => {
               changePage(false);
             }}

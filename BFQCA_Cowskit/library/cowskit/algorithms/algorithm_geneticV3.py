@@ -15,13 +15,13 @@ class AccuracyStoppedGeneticAlgorithm(Algorithm):
         Algorithm.__init__(self, dataset)
         self.PI = 3.1416
         self.float_precision = 8
-        self.epochs = 1000
+        self.epochs = 100
         self.population = 256
-        self.best_performers_count = 16
-        self.deep_layers = 2
+        self.best_performers_count = 8
+        self.deep_layers = 1
         self.angle_nudge_radians = self.PI/3
-        self.accuracy_stop_property_threshold = 0.8
         self.trained_network:List[np.ndarray] = []
+        self.accuracy_stop_property_threshold = 0.8
 
         assert(self.population % self.best_performers_count == 0)
         assert(self.float_precision % 8 == 0)
@@ -52,21 +52,22 @@ class AccuracyStoppedGeneticAlgorithm(Algorithm):
                 result = result @ network[self.deep_layers]
 
                 if n_classes == 1:
-                    result = tanh(result)     
+                    result = tanh(result)
+                    loss = compute_binary_crossentropy_loss(Y, result)
                 else:
                     result = softmax(result)
+                    loss = compute_categorical_crossentropy_loss(Y, result)
 
                 accuracy = compute_accuracy(compute_confusion_matrix(Y, result))
                 
-                best_performers_priority_queue.append((accuracy, network))
+                best_performers_priority_queue.append((accuracy, loss, network))
 
             # Get best performers
             best_performers_priority_queue.sort(key=lambda x:x[0], reverse=True)
             best_performers_priority_queue = best_performers_priority_queue[:self.best_performers_count]
-            top_accuracy = best_performers_priority_queue[0][0]
-            best_performers = list(map( lambda x:x[1], best_performers_priority_queue))
-            print(f"Epoch: {epoch} Accuracy: {top_accuracy}")
-            if epoch == self.epochs - 1 or top_accuracy > self.accuracy_stop_property_threshold:
+            print(f"Epoch: {epoch} Accuracy: {best_performers_priority_queue[0][0]} Loss: {best_performers_priority_queue[0][1]}")
+            best_performers = list(map( lambda x:x[2], best_performers_priority_queue))
+            if epoch == self.epochs - 1 or best_performers_priority_queue[0][0] > self.accuracy_stop_property_threshold:
                 break
             
             # construct new population

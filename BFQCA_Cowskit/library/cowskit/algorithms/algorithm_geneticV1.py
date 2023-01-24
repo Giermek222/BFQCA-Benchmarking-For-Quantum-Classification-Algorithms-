@@ -14,10 +14,10 @@ class FloatBitsProbabilityGeneticAlgorithm(Algorithm):
         Algorithm.__init__(self, dataset)
 
         self.precision = 8
-        self.epochs = 40
-        self.population = 1000
-        self.best_performers_count = 10
-        self.deep_layers = 2
+        self.epochs = 100
+        self.population = 256
+        self.best_performers_count = 8
+        self.deep_layers = 1
         self.trained_network:List[np.ndarray] = []
 
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
@@ -35,7 +35,7 @@ class FloatBitsProbabilityGeneticAlgorithm(Algorithm):
                 result = X.copy()
                 for layer in network:
                     result = result @ layer
-                    result = (result > 0) * result # relu activation
+                    result = sigmoid(result)
                 
                 if n_classes != 1:
                     result = softmax(result)
@@ -64,7 +64,7 @@ class FloatBitsProbabilityGeneticAlgorithm(Algorithm):
         Y = X.copy()
         for layer in self.trained_network:
             Y = Y @ layer
-            Y = (Y > 0) * Y
+            Y = sigmoid(Y)
         if Y.shape[1] != 1:
             Y = softmax(Y)
         else:

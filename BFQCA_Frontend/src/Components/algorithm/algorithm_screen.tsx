@@ -28,6 +28,7 @@ type Props = {
   algorithmNames: any;
   problemFilter: string;
   ColumnArray: string[];
+  buttonIsEnabled:boolean;
   algorithmFilter: string;
   setNewLimitTo5: () => void;
   setNewLimitTo10: () => void;
@@ -58,6 +59,7 @@ const AlgorithmScreen: React.FC<Props> = ({
   AlgorithmNameDefinitons,
   executeAlgorithm,
   changePage,
+  buttonIsEnabled,
   page,
   limitOpen,
   handleLimitClick,
@@ -161,6 +163,7 @@ const AlgorithmScreen: React.FC<Props> = ({
           </Button>
           page : {page}
           <Button
+              disabled={!buttonIsEnabled}
             variant="contained"
             onClick={() => {
               changePage(true);

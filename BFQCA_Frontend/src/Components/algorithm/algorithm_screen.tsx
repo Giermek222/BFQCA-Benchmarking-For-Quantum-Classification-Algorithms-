@@ -196,6 +196,7 @@ const AlgorithmScreen: React.FC<Props> = ({
             </MenuItem>
           </Menu>
         </div>
+        <div>
         <Button
           variant="contained"
           onClick={() => {
@@ -214,6 +215,7 @@ const AlgorithmScreen: React.FC<Props> = ({
         >
           Add new Dataset
         </Button>
+        </div>
       </Box>
       )
     </div>

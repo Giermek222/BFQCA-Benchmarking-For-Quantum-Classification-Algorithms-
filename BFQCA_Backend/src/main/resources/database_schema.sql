@@ -33,7 +33,7 @@ create table benchmark (
                            min_latency_ms numeric(9,3),
                            avg_latency_ms numeric(9,3),
                            percentile_latency_ms numeric(9,3),
-                           time numeric(9,3),
+                           time numeric(18,3),
                            constraint benchmark_pk primary key (id)
 );
 

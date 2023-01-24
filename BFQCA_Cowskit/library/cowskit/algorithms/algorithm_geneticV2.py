@@ -4,7 +4,8 @@ from typing import List, Tuple
 from cowskit.algorithms import Algorithm
 from cowskit.datasets import Dataset
 from cowskit.utils import get_shape_size, compute_binary_crossentropy_loss, compute_categorical_crossentropy_loss
-from cowskit.utils import bin_to_float, float_to_bin, sigmoid, softmax, relu, tanh, one_hot
+from cowskit.utils import bin_to_float, float_to_bin, sigmoid, softmax, relu, tanh, one_hot, sign
+from cowskit.utils import fast_binary_accuracy, fast_categorical_accuracy
 
 from qiskit import QuantumCircuit, Aer, QuantumRegister, ClassicalRegister
 from qiskit_aer import AerSimulator
@@ -14,10 +15,10 @@ class MutatedChampionsGeneticAlgorithm(Algorithm):
         Algorithm.__init__(self, dataset)
         self.PI = 3.1416
         self.float_precision = 8
-        self.epochs = 40
+        self.epochs = 100
         self.population = 256
-        self.best_performers_count = 16
-        self.deep_layers = 2
+        self.best_performers_count = 8
+        self.deep_layers = 1
         self.angle_nudge_radians = self.PI/3
         self.trained_network:List[np.ndarray] = []
 
@@ -52,17 +53,21 @@ class MutatedChampionsGeneticAlgorithm(Algorithm):
                 if n_classes == 1:
                     result = tanh(result)
                     loss = compute_binary_crossentropy_loss(Y, result)
+                    result = sign(result)
+                    acc = fast_binary_accuracy(Y, result)
                 else:
                     result = softmax(result)
                     loss = compute_categorical_crossentropy_loss(Y, result)
+                    result = one_hot(result)
+                    acc = fast_categorical_accuracy(Y, result)
                 
-                best_performers_priority_queue.append((loss, network))
+                best_performers_priority_queue.append((acc, loss, network))
 
             # Get best performers
-            best_performers_priority_queue.sort(key=lambda x:x[0])
+            best_performers_priority_queue.sort(key=lambda x:x[0], reverse=True)
             best_performers_priority_queue = best_performers_priority_queue[:self.best_performers_count]
-            print(f"Epoch: {epoch} Loss: {best_performers_priority_queue[0][0]}")
-            best_performers = list(map( lambda x:x[1], best_performers_priority_queue))
+            print(f"Epoch: {epoch} Est.Accuracy: {best_performers_priority_queue[0][0]} Loss: {best_performers_priority_queue[0][1]}")
+            best_performers = list(map( lambda x:x[2], best_performers_priority_queue))
             
             if epoch == self.epochs - 1:
                 break

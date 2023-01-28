@@ -204,7 +204,6 @@ class SwaptestCircuit(QuantumCircuit):
         # eventually reapply hadamard
         self.h(0)
 
-        self.barrier()
+        # self.barrier()
         # measure
         self.measure(0, 0)
-

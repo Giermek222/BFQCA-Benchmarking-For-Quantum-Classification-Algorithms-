@@ -17,6 +17,7 @@ def compute_possibilities(n_classes: int) -> np.ndarray:
 
 
 def sign(x: np.ndarray) -> np.ndarray:
+    x[x==0] = 1
     return np.round(x / np.abs(x), 0)
 
 def relu(x: np.ndarray) -> np.ndarray:
@@ -33,6 +34,15 @@ def softmax(x: np.ndarray) -> np.ndarray:
 
 def one_hot(x: np.ndarray) -> np.ndarray:
     return (x == x.max(axis=1)[:,None]).astype(int)
+
+def fast_binary_accuracy(Y_labels:np.ndarray, Y_pred:np.ndarray):
+    Y_labels_copy, Y_pred_copy = Y_labels.flatten(), Y_pred.flatten()
+    N = Y_labels_copy.shape[0]
+    return np.round(1/N*(Y_labels_copy == Y_pred_copy).sum(), ROUND_DIGITS)
+
+def fast_categorical_accuracy(Y_labels:np.ndarray, Y_pred:np.ndarray):
+    N = Y_labels.shape[0]
+    return np.round(1/N*np.all(Y_labels==Y_pred, axis=1).sum(), ROUND_DIGITS)
 
 def compute_confusion_matrix(Y_labels:np.ndarray, Y_pred:np.ndarray):           
     """                             truths
@@ -116,7 +126,8 @@ def compute_binary_crossentropy_loss(Y_labels:np.ndarray, Y_pred:np.ndarray) -> 
     
 def compute_categorical_crossentropy_loss(Y_labels:np.ndarray, Y_pred:np.ndarray) -> float:
     Y_labels_copy, Y_pred_copy = Y_labels.copy(), Y_pred.copy()
-    categorical_crossentropy = -np.sum(Y_labels_copy * np.log(Y_pred_copy + 10**-100))
+    N = Y_labels_copy.shape[0]
+    categorical_crossentropy = -1/N*np.sum(Y_labels_copy * np.log(Y_pred_copy + 10**-100))
 
     return np.round(categorical_crossentropy, ROUND_DIGITS)
 
@@ -176,3 +187,15 @@ def remove_quantum_padding(X:np.ndarray, n_padding: int = 0):
     n_classes = get_shape_size(X) - n_padding
     X = X[:, :n_classes].copy()
     return X
+
+def save_circuit_drawing(circuit, name) -> None:
+    drawing = circuit.draw(
+        output='mpl', 
+        filename = f"renders/{name}.png",
+        fold=-1,
+        style = {
+            'name': 'iqx',
+            'fontsize': 12,
+            'subfontsize': 0
+        }
+    )

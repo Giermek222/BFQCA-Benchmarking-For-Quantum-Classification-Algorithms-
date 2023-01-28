@@ -16,7 +16,7 @@ insert into algorithm (algorithmName, problemName, author, algorithmDescription)
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
     ('qgenetic_acc', 'lines', 'Krówcia Crew', '');
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
-    ('qgenetic_prob_prob', 'lines', 'Krówcia Crew', '');
+    ('qgenetic_prob', 'lines', 'Krówcia Crew', '');
 
 insert into algorithm (algorithmName, problemName, author, algorithmDescription) values
     ('qcnn', 'lines', 'Krówcia Crew', '');

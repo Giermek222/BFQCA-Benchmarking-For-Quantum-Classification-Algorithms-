@@ -28,7 +28,7 @@ def make_request(args, benchmark_cache: Dict[str, float]):
         "min_latency_ms": benchmark_cache["min_latency_ms"],
         "avg_latency_ms": benchmark_cache["avg_latency_ms"],
         "percentile_latency_ms": benchmark_cache["percentile_latency_ms"],
-        "time": benchmark_cache["training_time_ms"]
+        "time": benchmark_cache["training_time_sec"]
     }
 
     Log.debug("Request body:")

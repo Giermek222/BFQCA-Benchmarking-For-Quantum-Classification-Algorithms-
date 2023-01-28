@@ -1,6 +1,8 @@
 import backend.files as fl
 import os
 import subprocess
+import qiskit
+
 
 PREDEFINED_ALGORITHMS = ['qgenetic', 'qgenetic_acc', 'qgenetic_prob', 'qvm', 'qcnn', 'qknn']
 PREDEFINED_DATASETS = ['iris', 'palmer_penguin', 'pima_indians_diabetic', 'lines']
@@ -11,6 +13,7 @@ EXPECTED_FAILURE_PAIRS = [
     ['qvm','palmer_penguin'],
     ['qcnn','palmer_penguin'],
 ]
+
 
 for alg in PREDEFINED_ALGORITHMS:
     for ds in PREDEFINED_DATASETS:

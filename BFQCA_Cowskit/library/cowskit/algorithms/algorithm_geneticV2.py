@@ -93,7 +93,7 @@ class MutatedChampionsGeneticAlgorithm(Algorithm):
 
         if n_classes == 1:
             Y = tanh(Y)
-            Y = Y/np.abs(Y)
+            Y = sign(Y)
         else:
             Y = softmax(Y)
             Y = one_hot(Y)

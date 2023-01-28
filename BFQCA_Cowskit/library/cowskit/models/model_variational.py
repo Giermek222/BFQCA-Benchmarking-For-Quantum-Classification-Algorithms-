@@ -12,12 +12,13 @@ import numpy as np
 
 from cowskit.models.model import Model
 from cowskit.datasets.dataset import Dataset
+from cowskit.utils import save_circuit_drawing
 
 class VariationalModel(Model):
     def __init__(self, dataset: Dataset) -> None:
         Model.__init__(self, dataset)
         self.EPOCHS = 40
-        self.deep_layers = 4
+        self.deep_layers = 3
         
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
         if self.get_output_size() != 1:
@@ -79,12 +80,11 @@ class VariationalModel(Model):
 
         qc = QuantumCircuit(num_qubits, name="Dense Layer")
         qubits = list(range(num_qubits))
-        params = ParameterVector(f"dense_{str(id+1)}", length=num_qubits * 3)
+        params = ParameterVector(f"w{str(id+1)}", length=num_qubits * 3)
 
         qc = qc.compose(weights_circuit(params), qubits)
         qc = qc.compose(entanglement_circuit(), qubits)
         qc.barrier()
-
         qc_inst = qc.to_instruction()
 
         qc = QuantumCircuit(num_qubits)

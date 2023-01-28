@@ -31,12 +31,12 @@ def train_algorithm(dataset: Dataset, algorithm: Algorithm) -> Dict[str, float]:
     start = time.time()
     algorithm.train_safe(X_train, y_train)
     end = time.time()
-    training_time_ms = round((end-start)*1000, 2)
+    training_time_seconds = round((end-start), 2)
 
     benchmark_cache: Dict[str, float] = {}
-    benchmark_cache['training_time_ms'] = training_time_ms
+    benchmark_cache['training_time_sec'] = training_time_seconds
 
-    Log.info("Training finished, total time (ms): ", training_time_ms)
+    Log.info("Training finished, total time (seconds): ", training_time_seconds)
 
     return benchmark_cache
 

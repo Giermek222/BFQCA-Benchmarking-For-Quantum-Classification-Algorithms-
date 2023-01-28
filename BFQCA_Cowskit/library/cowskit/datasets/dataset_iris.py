@@ -33,4 +33,5 @@ class IrisDataset(Dataset):
 
             divisor = np.amax(self.data, axis = 0)
             self.data = self.data / divisor[:]
+            print(self.data)
 

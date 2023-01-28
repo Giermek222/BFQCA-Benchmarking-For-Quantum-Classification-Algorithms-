@@ -187,3 +187,15 @@ def remove_quantum_padding(X:np.ndarray, n_padding: int = 0):
     n_classes = get_shape_size(X) - n_padding
     X = X[:, :n_classes].copy()
     return X
+
+def save_circuit_drawing(circuit, name) -> None:
+    drawing = circuit.draw(
+        output='mpl', 
+        filename = f"renders/{name}.png",
+        fold=-1,
+        style = {
+            'name': 'iqx',
+            'fontsize': 12,
+            'subfontsize': 0
+        }
+    )

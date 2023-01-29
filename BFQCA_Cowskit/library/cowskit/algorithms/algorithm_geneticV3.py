@@ -4,7 +4,7 @@ from typing import List, Tuple
 from cowskit.algorithms import Algorithm
 from cowskit.datasets import Dataset
 from cowskit.utils import get_shape_size, compute_binary_crossentropy_loss, compute_categorical_crossentropy_loss
-from cowskit.utils import bin_to_float, float_to_bin, sigmoid, softmax, relu, tanh, one_hot
+from cowskit.utils import bin_to_float, float_to_bin, sigmoid, softmax, relu, tanh, one_hot, sign
 from cowskit.utils import compute_confusion_matrix, compute_accuracy
 
 from qiskit import QuantumCircuit, Aer, QuantumRegister, ClassicalRegister
@@ -91,7 +91,7 @@ class AccuracyStoppedGeneticAlgorithm(Algorithm):
 
         if n_classes == 1:
             Y = tanh(Y)
-            Y = Y/np.abs(Y)
+            Y = sign(Y)
         else:
             Y = softmax(Y)
             Y = one_hot(Y)

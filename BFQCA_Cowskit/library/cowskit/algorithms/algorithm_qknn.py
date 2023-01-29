@@ -204,5 +204,6 @@ class SwaptestCircuit(QuantumCircuit):
             self.cswap(0, alpha_qubit + 1, 1 + alpha_qubit + 2)
         # eventually reapply hadamard
         self.h(0)
+
         # measure
         self.measure(0, 0)

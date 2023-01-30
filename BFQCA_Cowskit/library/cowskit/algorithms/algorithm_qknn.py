@@ -15,6 +15,7 @@ from cowskit.algorithms import Algorithm
 from cowskit.datasets import Dataset
 from cowskit.utils import add_quantum_padding, remove_quantum_padding
 
+
 class AmplitudeEncoding:
     def __init__(self, n_features: int = 2):
         n_qubits = np.log2(n_features)
@@ -29,7 +30,7 @@ class AmplitudeEncoding:
     def _check_feature_vector(self, x):
         if len(x) != self.num_features:
             raise ValueError(f"Expected features dimension "
-                            f"{self.num_features}, but {len(x)} was passed")
+                             f"{self.num_features}, but {len(x)} was passed")
 
     def construct_circuit(self, x) -> QuantumCircuit:
         def encode(classical_data):
@@ -54,6 +55,7 @@ class AmplitudeEncoding:
         qc.data = [d for d in qc.data if d[0].name != "reset"]
         return qc
 
+
 class KNearestNeighbors(ClassifierMixin, Algorithm):
 
     def __init__(self, dataset: Dataset = None):
@@ -68,9 +70,9 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
         self.training_parameters = np.asarray([])
         self.training_labels = np.asarray([])
         self.quantum_instance = QuantumInstance(BasicAer.get_backend('qasm_simulator'),
-                            shots=1024,
-                            optimization_level=1)
-        
+                                                shots=512,
+                                                optimization_level=1)
+
         self.x_pad_amount = 0
         self.y_pad_amount = 0
 
@@ -85,7 +87,8 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
 
         circuits = []
 
-        def _construct_circuit(feature_vector_1: np.ndarray, feature_vector_2: np.ndarray, encoding: AmplitudeEncoding = None):
+        def _construct_circuit(feature_vector_1: np.ndarray, feature_vector_2: np.ndarray,
+                               encoding: AmplitudeEncoding = None):
             encoded_data1 = encoding.construct_circuit(feature_vector_1)
             encoded_data2 = encoding.construct_circuit(feature_vector_2)
             return SwaptestCircuit(encoded_data1, encoded_data2)
@@ -95,7 +98,7 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
                 _construct_circuit,
                 self.training_parameters,
                 task_args=[test_point,
-                        self.encoding]
+                           self.encoding]
             )
             circuits = circuits + circuits_line
 
@@ -104,7 +107,7 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
         Y_out = self._majority_voting(self.training_labels, fidelities)
         if len(Y_out.shape) == 1:
             N = X_test.shape[0]
-            Y_out = Y_out.reshape(N, Y_out.shape[0]//N)
+            Y_out = Y_out.reshape(N, Y_out.shape[0] // N)
         Y_out = remove_quantum_padding(Y_out, self.y_pad_amount)
         return Y_out
 
@@ -112,19 +115,14 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
                          y_train: np.ndarray,
                          fidelities: np.ndarray) -> np.ndarray:
 
-        def _kneighbors(y_train: np.ndarray,
-                fidelities: np.ndarray,
-                n_neighbours):
-
-            if np.any(fidelities < -0.2) or np.any(fidelities > 1.2):
-                raise ValueError("Detected fidelities values not in range 0<=F<=1:"
-                                f"{fidelities[fidelities < -0.2]}"
-                                f"{fidelities[fidelities > 1.2]}")
+        def _get_k_nearest(y_train: np.ndarray,
+                           fidelities: np.ndarray,
+                           n_neighbours):
 
             indices_of_sorted_fidelities = np.argsort(fidelities)
-            n_queries, _ = fidelities.shape
-            if(len(indices_of_sorted_fidelities) > n_neighbours):
-                if n_queries == 1:
+            data_dimension, _ = fidelities.shape
+            if len(indices_of_sorted_fidelities) > n_neighbours:
+                if data_dimension == 1:
                     indices_of_sorted_fidelities = indices_of_sorted_fidelities[n_neighbours:]
                 else:
                     indices_of_sorted_fidelities = indices_of_sorted_fidelities[:, -n_neighbours:]
@@ -133,9 +131,9 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
 
             return sorted_labels
 
-        k_nearest = _kneighbors(y_train, fidelities, self.n_neighbors)
-        n_queries = self.training_parameters.shape[0]
-        if n_queries == 1:
+        k_nearest = _get_k_nearest(y_train, fidelities, self.n_neighbors)
+        data_dimension = self.training_parameters.shape[0]
+        if data_dimension == 1:
             labels, _ = stats.mode(k_nearest, keepdims=True)
         else:
             labels, _ = stats.mode(k_nearest, axis=1, keepdims=True)
@@ -144,7 +142,9 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
 
     def _compute_fidelity(self, counts: Dict[str, int]):
 
+        # number of shots that simulator rolled 0
         counts_0 = counts.get('0', 0)
+        # number of shots the simulator rolled 1
         counts_1 = counts.get('1', 1)
         # squared fidelity
         f_2 = np.abs(counts_0 - counts_1) / self.quantum_instance.run_config.shots
@@ -173,13 +173,14 @@ class KNearestNeighbors(ClassifierMixin, Algorithm):
             fidelities[i // train_size][i % train_size] = fidelity
 
         return fidelities
+
+
 class SwaptestCircuit(QuantumCircuit):
 
     def __init__(self,
                  qc_state_1: QuantumCircuit,
                  qc_state_2: QuantumCircuit,
                  name: str = None):
-
         def Create_Single_Circuit(qc_alpha: QuantumCircuit, qc_beta: QuantumCircuit) -> QuantumCircuit:
             qc = QuantumCircuit(qc_alpha.num_qubits + qc_beta.num_qubits + 1, 1)
 
@@ -204,6 +205,5 @@ class SwaptestCircuit(QuantumCircuit):
         # eventually reapply hadamard
         self.h(0)
 
-        # self.barrier()
         # measure
         self.measure(0, 0)

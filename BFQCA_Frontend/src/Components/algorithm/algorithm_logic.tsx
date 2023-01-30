@@ -20,7 +20,7 @@ const MainScreen: React.FC<Props> = ({ userName }) => {
   const [algorithmFilter, setAlgorithmFilter] = useState("");
   const [problemFilter, setProblemFilter] = useState("");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+  const [buttonIsEnabled, setButtonIsEnabled] = React.useState(true);
   const limitOpen = Boolean(anchorEl);
   const ColumnArray = Array.from(AlgorithmModel.values());
   const AlgorithmNameDefinitons = Array.from(AlgorithmModel.keys());
@@ -108,10 +108,18 @@ const MainScreen: React.FC<Props> = ({ userName }) => {
     );
     await benchmarksPromise.then((response) => {
       setAlgorithmNames(response.data);
+      checkNextButtonIfEnabled(response.data)
     });
     console.info(algorithmNames);
   };
 
+  const checkNextButtonIfEnabled = (algNames:string[])=>{
+    if(algNames.length<limit){
+      setButtonIsEnabled(false);
+    }else{
+      setButtonIsEnabled(true);
+    }
+  }
   const executeAlgorithm = (algName: string, probName: string) => {
     axios
       .post(
@@ -147,6 +155,7 @@ const MainScreen: React.FC<Props> = ({ userName }) => {
       algorithmNames={algorithmNames}
       algorithmFilter={algorithmFilter}
       AlgorithmNameDefinitons={AlgorithmNameDefinitons}
+      buttonIsEnabled={buttonIsEnabled}
       changePage={changePage}
       setNewLimitTo5={setNewLimitTo5}
       setNewLimitTo10={setNewLimitTo10}

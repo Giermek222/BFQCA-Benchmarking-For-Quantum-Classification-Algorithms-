@@ -28,6 +28,7 @@ type Props = {
   algorithmNames: any;
   problemFilter: string;
   ColumnArray: string[];
+  buttonIsEnabled:boolean;
   algorithmFilter: string;
   setNewLimitTo5: () => void;
   setNewLimitTo10: () => void;
@@ -58,6 +59,7 @@ const AlgorithmScreen: React.FC<Props> = ({
   AlgorithmNameDefinitons,
   executeAlgorithm,
   changePage,
+  buttonIsEnabled,
   page,
   limitOpen,
   handleLimitClick,
@@ -70,7 +72,7 @@ const AlgorithmScreen: React.FC<Props> = ({
   let navigate = useNavigate();
   return (
     <div style={styles}>
-      (
+
       <Box
         sx={{
           display: "grid",
@@ -152,6 +154,7 @@ const AlgorithmScreen: React.FC<Props> = ({
         <div className="columnDivStyle">
           <Button
             variant="contained"
+            disabled={page===0}
             onClick={() => {
               changePage(false);
             }}
@@ -161,6 +164,7 @@ const AlgorithmScreen: React.FC<Props> = ({
           </Button>
           page : {page}
           <Button
+              disabled={!buttonIsEnabled}
             variant="contained"
             onClick={() => {
               changePage(true);
@@ -196,6 +200,7 @@ const AlgorithmScreen: React.FC<Props> = ({
             </MenuItem>
           </Menu>
         </div>
+        <div>
         <Button
           variant="contained"
           onClick={() => {
@@ -214,8 +219,9 @@ const AlgorithmScreen: React.FC<Props> = ({
         >
           Add new Dataset
         </Button>
+        </div>
       </Box>
-      )
+
     </div>
   );
 };

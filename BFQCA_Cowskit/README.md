@@ -23,7 +23,7 @@ Install logs can be found inside `logs` folder.
 #### Basic usage
 
 ```http
-  python hook.py [-FLAGS]
+  python main.py [-FLAGS]
 ```
 
 | Flag      | Type     | Description                |

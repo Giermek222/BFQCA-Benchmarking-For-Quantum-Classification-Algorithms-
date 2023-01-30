@@ -1,12 +1,7 @@
 package com.example.bfqca_backend.controllers;
 
-import com.example.bfqca_backend.models.business.Algorithm;
 import com.example.bfqca_backend.models.business.User;
-import com.example.bfqca_backend.models.filters.RestFilter;
-import com.example.bfqca_backend.services.interfaces.AlgorithmService;
-import com.example.bfqca_backend.services.interfaces.SecurityService;
 import com.example.bfqca_backend.services.interfaces.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,10 +17,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
